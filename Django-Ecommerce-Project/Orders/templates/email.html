@@ -1,0 +1,380 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation</title>
+</head>
+
+<style>
+
+.box {
+  padding-right: 2%;
+  border-radius: 5px;
+}
+
+
+</style>
+
+<body>
+    
+
+    <table class="m_7665698931421758823header" id="m_7665698931421758823section-header" border="0" width="100%" cellpadding="0" cellspacing="0" align="center" style="min-width:100%" role="presentation" bgcolor="#ffffff">
+        <tbody><tr>
+          <td style="padding-top:22px;padding-bottom:22px" bgcolor="#ffffff">
+            <table border="0" width="100%" cellpadding="0" cellspacing="0" align="center" style="min-width:100%" role="presentation">
+              <tbody><tr>
+                <th class="m_7665698931421758823column_logo" style="padding-top:0;padding-bottom:0" align="center" bgcolor="#ffffff">
+                  
+                  <a href="home" style="color:#c3c3c3;text-decoration:none!important" target="_blank" >
+                    <img src="/static/img/home/logo.png" width="160" border="0" style="width:160px;height:auto!important;display:block;text-align:center;margin:auto" class="CToWUd">
+                  </a>
+                  
+                </th>
+              </tr>
+            </tbody></table>
+          </td>
+        </tr>
+      </tbody></table>
+      
+      <center><img src="{% static 'checked.png' %}" height="200px"><br><br>
+        <h1 style="font-family:bold;color: #333333;font-size:60px;">THANK YOU</h1>
+        <h1 style="font-family:bold;font-size:24px;line-height:36px;font-weight:700;color:#333333;text-transform:uppercase;margin:0">Order Confirmation</h1>
+
+    </center>
+    
+
+
+    <table class="m_7665698931421758823main" id="m_7665698931421758823section-main" border="0" width="100%" cellpadding="0" cellspacing="0" align="center" style="min-width:100%" role="presentation" bgcolor="#ffffff">
+        <tbody><tr>
+          <td bgcolor="#ffffff">
+            <table border="0" width="100%" cellpadding="0" cellspacing="0" align="center" style="min-width:100%" id="m_7665698931421758823mixContainer" role="presentation">
+              
+              <tbody>
+              
+              <tr id="m_7665698931421758823section-333087" class="m_7665698931421758823section m_7665698931421758823divider">
+                <th style="padding:22px 8%" bgcolor="#ffffff">
+                  <table cellspacing="0" cellpadding="0" border="0" width="100%" role="presentation">
+                    <tbody><tr>
+                      <th style="border-top-width:1px;border-top-color:#e5e5e5;border-top-style:solid" bgcolor="#ffffff" valign="top">
+                      </th>
+                    </tr>
+                  </tbody></table>
+                </th>
+              </tr>
+              
+              
+              <tr id="m_7665698931421758823section-333088" class="m_7665698931421758823section">
+                <th style="padding:11px 44px" bgcolor="#ffffff">
+                  
+                    <p style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,'Roboto';font-size:15px;line-height:22px;font-weight:400;color:#333333;margin:0 0 11px" align="left">
+                      <span style="text-align:left;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,'Roboto';font-size:15px;line-height:22px;font-weight:400;color:#333333">
+                        Hey
+                      </span>
+                      {{request.user.username|capfirst}} ,
+                    </p>
+                  
+                  
+                  <span style="text-align:left;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,'Roboto';font-size:15px;line-height:22px;font-weight:400;color:#333333">
+                    <p style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,'Roboto';font-size:15px;line-height:22px;font-weight:400;color:#333333;margin:11px 0 0" align="left"></p>
+                    <p style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,'Roboto';font-size:15px;line-height:22px;font-weight:400;color:#333333;margin:11px 0 0" align="left">Thank you for your purchase! This email is to confirm your order with SmartEcom.<br>
+                    </p>
+                    <p style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,'Roboto';font-size:15px;line-height:22px;font-weight:400;color:#333333;margin:11px 0 0" align="left">This order will be delivered to you within 2 to 3 working days (upto 10 working days during our special sales event/ Eid &amp; Muharram Holidays) via Registered Courier. <br>
+                    </p>
+                    <p style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,'Roboto';font-size:15px;line-height:22px;font-weight:400;color:#333333;margin:11px 0 0" align="left">We will send you another email with your shipment tracking details as soon as we ship your order.</p>
+                  </span>
+                </th>
+              </tr>
+              
+              
+              <tr id="m_7665698931421758823section-333089" class="m_7665698931421758823section">
+                <th style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,'Roboto';font-size:15px;line-height:22px;font-weight:400;color:#333333;padding:0 44px 11px" align="left" bgcolor="#ffffff">
+                  <p style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,'Roboto';font-size:15px;line-height:22px;font-weight:400;color:#333333;margin:0" align="left">Please do not hesitate to send us an email at&nbsp;<a href="mailto:orders@smartecom.com" style="color:#a3a4c2;text-decoration:none!important;word-wrap:break-word" target="_blank">orders@smartecom.com</a> if you have any questions at all.</p>
+                  <p style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,'Roboto';font-size:15px;line-height:22px;font-weight:400;color:#333333;margin:11px 0 0" align="left"><br>
+                    Thanks,<br>
+                    Team elo</p>
+                </th>
+              </tr>
+              
+              
+              <tr id="m_7665698931421758823section-333090" class="m_7665698931421758823section m_7665698931421758823divider">
+                <th style="padding:22px 8%" bgcolor="#ffffff">
+                  <table cellspacing="0" cellpadding="0" border="0" width="100%" role="presentation">
+                    <tbody><tr>
+                      <th style="border-top-width:1px;border-top-color:#e5e5e5;border-top-style:solid" bgcolor="#ffffff" valign="top">
+                      </th>
+                    </tr>
+                  </tbody></table>
+                </th>
+              </tr>
+              
+              
+              <tr id="m_7665698931421758823section-333091" class="m_7665698931421758823section">
+                <th style="padding:11px 44px" bgcolor="#ffffff">
+                  <h2 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,'Roboto';color:#333333;font-size:20px;line-height:28px;font-weight:700;text-transform:uppercase;margin:0" align="left">
+                    <span>Order Id</span> {{order.order_id}}
+                  </h2>
+                  <p style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,'Roboto';font-size:13px;line-height:22px;font-weight:normal;color:#c3c3c3;margin:0" align="left">26 January, 2022</p>
+                </th>
+              </tr>
+
+              <tr id="m_7665698931421758823section-333092" class="m_7665698931421758823section m_7665698931421758823customer_and_shipping_address">
+                
+                <th style="padding:11px 44px" bgcolor="#ffffff">
+                  <table border="0" width="100%" cellpadding="0" cellspacing="0" align="center" style="min-width:100%" role="presentation">
+                    <tbody><tr>
+                      
+                      <th width="50%" class="m_7665698931421758823column_1_of_2" align="left" bgcolor="#ffffff" valign="top">
+                        <table align="center" border="0" width="100%" cellpadding="0" cellspacing="0" style="min-width:100%" role="presentation">
+                          
+                            
+                              <tbody><tr>
+                                <th style="padding-right:5%" align="left" bgcolor="#ffffff" valign="top">
+                                  <h3 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,'Roboto';color:#333333;font-size:18px;line-height:28px;font-weight:700;text-transform:uppercase;margin:0" align="left">Shipping Address</h3>
+                                </th>
+                              </tr>
+                              <tr>
+                                <th style="padding-right:5%" align="left" bgcolor="#ffffff" valign="top">
+                                  <p style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,'Roboto';font-size:15px;line-height:22px;font-weight:400;color:#333333;margin:0" align="left">.<br>
+                                      {{order.first_name}} {{order.last_name}}<br>
+                                      {{order.address}}.<br>
+                                      {{order.city}} <br>
+                                      {{order.city}}<br>
+                                      {{order.email}}<br>
+                                      {{order.phone}}<br>
+                                      {{order.country}}
+                                      <br>
+                                      <span style="text-align:left;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,'Roboto';font-size:15px;line-height:22px;font-weight:400;color:#333333">Tel:</span> <span style="color:inherit!important;text-decoration:none!important;text-align:left;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,'Roboto';font-size:15px;line-height:22px;font-weight:400">03350238177</span><br>
+                                      </p>
+                                </th>
+                              </tr>
+                            
+                          
+                        </tbody></table>
+                      </th>
+                      
+                      
+                      <th width="50%" class="m_7665698931421758823column_2_of_2" align="right" bgcolor="#ffffff" valign="top">
+                        <table align="center" border="0" width="100%" cellpadding="0" cellspacing="0" style="min-width:100%" role="presentation">
+                          
+                            <tbody><tr>
+                              <th style="padding-left:5%" align="right" bgcolor="#ffffff" valign="top">
+                                <h3 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,'Roboto';color:#333333;font-size:18px;line-height:28px;font-weight:700;text-transform:uppercase;margin:0" align="right">Customer</h3>
+                              </th>
+                            </tr>
+                            <tr>
+                              <th style="padding-left:5%" align="right" bgcolor="#ffffff" valign="top">
+                                <p style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,'Roboto';font-size:15px;line-height:22px;font-weight:400;color:#333333;margin:0" align="right">.<br>
+                                    Raza Ul Mustafa<br>
+                                    House A#45,Ground floor, saadabad society, block 5, gulistane johar karachi.<br>
+                                    Karachi <br>
+                                    72460<br>
+                                    Pakistan<br>
+                                    <span style="text-align:left;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,'Roboto';font-size:15px;line-height:22px;font-weight:400;color:#333333">Tel:</span> <span style="color:inherit!important;text-decoration:none!important;text-align:left;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,'Roboto';font-size:15px;line-height:22px;font-weight:400">03350238177</span><br>
+                                    </p>
+                              </th>
+                            </tr>
+                          
+                        </tbody></table>
+                      </th>
+                      
+                    </tr>
+                  </tbody></table>
+                </th>
+                
+              </tr>
+              
+              
+              <tr id="m_7665698931421758823section-333093" class="m_7665698931421758823section">
+                
+                  
+                  
+                  
+                  
+                  
+                  <th style="padding:11px 44px" bgcolor="#ffffff">
+                    <table cellspacing="0" cellpadding="0" border="0" width="100%" style="min-width:100%" role="presentation">
+                      <tbody><tr>
+                        <th bgcolor="#ffffff" valign="top">
+                          <table cellspacing="0" cellpadding="0" border="0" width="100%" style="min-width:100%" role="presentation">
+                            <tbody><tr>
+                              <th colspan="2" bgcolor="#ffffff" valign="top">
+                                <h3 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,'Roboto';color:#333333;font-size:18px;line-height:28px;font-weight:700;text-transform:uppercase;border-bottom-width:1px;border-bottom-color:#e5e5e5;border-bottom-style:solid;margin:0" align="left">Item Description</h3>
+                              </th>
+                            </tr>
+                              
+                            {% for c in cart.cart %}
+
+                              <tr class="m_7665698931421758823row-border-bottom">
+                                <th class="m_7665698931421758823table-stack m_7665698931421758823product-image-wrapper m_7665698931421758823stack-column-center" width="1" style="border-bottom-width:1px;border-bottom-color:#e5e5e5;border-bottom-style:solid;padding:11px 11px 11px 0" bgcolor="#ffffff" valign="middle">
+                                    <img width="120" class="m_7665698931421758823product-image CToWUd" src="/{{c.product_variant.images.Image}}/" alt="Product Image" style="vertical-align:middle;text-align:center;width:120px;max-width:120px;height:auto!important;border-radius:0px;padding:0px">
+                                </th>
+                                <th class="m_7665698931421758823table-stack m_7665698931421758823stack-column" style="padding-top:11px;padding-bottom:11px;border-bottom-width:1px;border-bottom-color:#e5e5e5;border-bottom-style:solid" bgcolor="#ffffff" valign="middle">
+                                  
+                                <table cellspacing="0" cellpadding="0" border="0" width="100%" style="min-width:100%" role="presentation">
+                                    <tbody><tr>
+                                      
+                                      <th style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,'Roboto';font-size:15px;line-height:22px;font-weight:400;color:#333333;padding:11px 5px 11px 0" align="left" bgcolor="#ffffff" valign="top">
+                                        <p style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,'Roboto';font-size:15px;line-height:22px;font-weight:400;color:#333333;margin:0" align="left">
+                                          <a href="{{c.product_variant.product.get_absolute_url}}" style="text-decoration:none;color: black;">
+                                            {{c.product_variant.product.Name|capfirst}}
+                                          </a>
+                                          <br>
+                                          <span style="text-align:left;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,'Roboto';font-size:13px;line-height:22px;font-weight:normal;color:#c3c3c3">
+                                              
+                                              <span class="box" style="background-color:{{c.product_variant.color}};"> </span> / <span style="color: black;">
+                                              
+                                                {% for s in c.product_variant.variation.all %}
+                                                {% if s.variation.name == "Size" %}
+                                                    <span>{{s.value}}</span>
+                                                {% endif %}
+                                                {% endfor %}
+  
+                                              </span>
+                                            </span>
+                                            
+                                          </p>
+                                        </th>
+                                        
+                                          <th bgcolor="#ffffff" valign="top"></th>
+                                        
+                                        <th width="1" style="white-space:nowrap;padding:11px 0 11px 11px" align="right" bgcolor="#ffffff" valign="top">
+                                          <p style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,'Roboto';font-size:15px;line-height:22px;font-weight:400;color:#333333;margin:0" align="right">
+                                            x&nbsp;{{c.quantity}}
+                                          </p>
+                                        </th>
+                                        <th width="1" style="white-space:nowrap;padding:11px 0 11px 22px" align="right" bgcolor="#ffffff" valign="top">
+                                          <p style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,'Roboto';font-size:15px;line-height:22px;font-weight:400;color:#333333;margin:0" align="right">
+                                            Rs {{c.price}}.00
+                                          </p>
+                                        </th>
+                                      </tr>
+                                    </tbody></table>
+                                  </th>
+                                </tr>
+
+                                {% endfor %}
+                                
+                                  <tr>
+                                    <th colspan="2" bgcolor="#ffffff" valign="top"></th>
+                                  </tr>
+                                
+                                           
+                            </tbody></table>
+                          </th>
+                        </tr>
+                        <tr>
+                          <th style="padding:11px 0" bgcolor="#ffffff" valign="top">
+                            <table cellspacing="0" cellpadding="0" border="0" width="100%" style="min-width:100%" role="presentation">
+                              
+                                  <tbody>
+
+                                  <tr>
+                                    <th style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,'Roboto';font-size:15px;line-height:22px;font-weight:400;color:#333333;width:65%;padding:5px 0" align="left" bgcolor="#ffffff" valign="top">Discount</th>
+                                    <th style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,'Roboto';font-size:15px;line-height:22px;font-weight:400;color:#333333;width:35%;padding:5px 0" align="right" bgcolor="#ffffff" valign="middle"> {{discount}} %</th>
+                                  </tr>
+  
+                                  <tr>
+                                    <th style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,'Roboto';font-size:15px;line-height:22px;font-weight:400;color:#333333;width:65%;padding:5px 0" align="left" bgcolor="#ffffff" valign="top">Subtotal</th>
+                                    <th style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,'Roboto';font-size:15px;line-height:22px;font-weight:400;color:#333333;width:35%;padding:5px 0" align="right" bgcolor="#ffffff" valign="middle">Rs {{total_amount}}</th>
+                                  </tr>
+                                
+                                
+                                  <tr>
+                                    <th style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,'Roboto';font-size:15px;line-height:22px;font-weight:400;color:#333333;width:65%;padding:5px 0" align="left" bgcolor="#ffffff" valign="top">Free Shipping Across Pakistan</th>
+                                    <th style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,'Roboto';font-size:15px;line-height:22px;font-weight:400;color:#333333;width:35%;padding:5px 0" align="right" bgcolor="#ffffff" valign="middle">Rs 0.00</th>
+                                  </tr>
+                                
+                                
+                                <tr>
+                                  <th style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,'Roboto';font-size:15px;line-height:22px;font-weight:700;color:#333333;width:65%;text-transform:uppercase;padding:5px 0" align="left" bgcolor="#ffffff" valign="top">Total</th>
+                                  <th style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,'Roboto';font-size:15px;line-height:22px;font-weight:700;color:#333333;width:35%;text-transform:uppercase;padding:5px 0" align="right" bgcolor="#ffffff" valign="middle">Rs {{total_amount}}</th>
+                                </tr>
+                                
+                              </tbody></table>
+                            </th>
+                          </tr>
+                        </tbody></table>
+                      </th>
+                    
+                  </tr>
+                  
+                  
+                  <tr id="m_7665698931421758823section-333094" class="m_7665698931421758823section">
+                    <th style="padding:11px 44px" bgcolor="#ffffff">
+                      <table cellspacing="0" cellpadding="0" border="0" width="100%" style="min-width:100%" role="presentation">
+                        
+                      <tbody><tr>
+                            <th colspan="2" bgcolor="#ffffff" valign="top">
+                              <h3 style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,'Roboto';color:#333333;font-size:18px;line-height:28px;font-weight:700;text-transform:uppercase;border-bottom-width:1px;border-bottom-color:#e5e5e5;border-bottom-style:solid;margin:0" align="left">Payment Info</h3>
+                            </th>
+                          </tr>
+                          
+                        <tr>
+                                        <th style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,'Roboto';font-size:15px;line-height:22px;font-weight:400;color:#333333;width:65%;padding:5px 0" align="left" bgcolor="#ffffff" valign="top">
+                                          <table cellspacing="0" cellpadding="0" border="0" width="100%" style="min-width:100%" role="presentation">
+                                            <tbody><tr>
+                                              <th width="40" style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,'Roboto';font-size:15px;line-height:22px;font-weight:400;color:#333333;padding:7px 10px 7px 0" align="left" bgcolor="#ffffff" valign="middle">
+                                                <img width="40" style="width:40px;vertical-align:middle;height:auto!important" alt="Cash on Delivery (COD) Icon" src="https://ci5.googleusercontent.com/proxy/Ft7KRTNPAqK7MMBThssGHdQ3NpkLLViZ9BMrOHIG-4b1fLK6y4x6C_1G7UDeRH-h78qm9lsMAPeA_4ULdboYK1EJ8yM=s0-d-e1-ft#https://orderlyemails.com/mobile-receipt-cash.png" class="CToWUd">
+                                              </th>
+                                              <th style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,'Roboto';font-size:15px;line-height:22px;font-weight:400;color:#333333;padding:7px 0" align="left" bgcolor="#ffffff" valign="middle">
+                                                
+                                                  {{order.delivery_option}}
+                                                
+                                              </th>
+                                            </tr>
+                                          </tbody></table>
+                                        </th>
+                                        <th style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,'Roboto';font-size:15px;line-height:22px;font-weight:400;color:#333333;width:35%;padding:11px 0" align="right" bgcolor="#ffffff" valign="middle">
+                                          Rs {{total_amount}}
+                                          </th>
+                                        </tr>
+                                      
+                                    
+                                  </tbody></table>
+                                </th>
+                              </tr>
+                              
+                              
+                              <tr id="m_7665698931421758823section-333095" class="m_7665698931421758823section">
+                                <th style="padding:11px 44px" bgcolor="#ffffff">
+                                </th>
+                              </tr>
+                              
+                            
+                              <tr>
+                                <td class="m_7665698931421758823menu_bar_6" style="padding:22px 0" bgcolor="#ffffff">
+                                  <table border="0" width="100%" cellpadding="0" cellspacing="0" role="presentation">
+                                    <tbody><tr>
+                                      <th class="m_7665698931421758823first" style="width:33%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,'Roboto';font-size:15px;font-weight:400;line-height:22px;text-transform:uppercase;color:#c3c3c3;border-right-width:1px;border-right-color:#e5e5e5;border-right-style:solid;border-left-width:1px;border-left-color:#e5e5e5;border-left-style:none" align="center" bgcolor="#ffffff">
+                                        <a href="https://www.exportleftovers.com/tools/emails/click/order-confirmation/1/site-link/shop-now?url=http%3A%2F%2Fwww.exportleftovers.com" style="color:#c3c3c3;text-decoration:none!important;word-wrap:break-word;text-align:center!important;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,'Roboto';font-size:15px;font-weight:400;line-height:22px;text-transform:uppercase" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://www.exportleftovers.com/tools/emails/click/order-confirmation/1/site-link/shop-now?url%3Dhttp%253A%252F%252Fwww.exportleftovers.com&amp;source=gmail&amp;ust=1645108240498000&amp;usg=AOvVaw03y6VBCaxVWTb40Od9Y5AF">
+                                          Shop Now
+                                        </a>
+                                      </th>
+                                      <th style="width:33%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,'Roboto';font-size:15px;font-weight:400;line-height:22px;text-transform:uppercase;color:#c3c3c3;border-right-width:1px;border-right-color:#e5e5e5;border-right-style:solid;border-left-width:1px;border-left-color:#e5e5e5;border-left-style:solid" align="center" bgcolor="#ffffff">
+                                        <a href="https://www.exportleftovers.com/tools/emails/click/order-confirmation/1/site-link/on-sale?url=https%3A%2F%2Fwww.exportleftovers.com%2Fcollections%2Fclearance" style="color:#c3c3c3;text-decoration:none!important;word-wrap:break-word;text-align:center!important;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,'Roboto';font-size:15px;font-weight:400;line-height:22px;text-transform:uppercase" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://www.exportleftovers.com/tools/emails/click/order-confirmation/1/site-link/on-sale?url%3Dhttps%253A%252F%252Fwww.exportleftovers.com%252Fcollections%252Fclearance&amp;source=gmail&amp;ust=1645108240498000&amp;usg=AOvVaw3stlNoiWKm_5tk5b4bzcTM">
+                                          On Sale
+                                        </a>
+                                      </th>
+                                      <th class="m_7665698931421758823last" style="width:33%;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,'Roboto';font-size:15px;font-weight:400;line-height:22px;text-transform:uppercase;color:#c3c3c3;border-right-width:1px;border-right-color:#e5e5e5;border-right-style:none;border-left-width:1px;border-left-color:#e5e5e5;border-left-style:solid" align="center" bgcolor="#ffffff">
+                                        <a href="https://www.exportleftovers.com/tools/emails/click/order-confirmation/1/site-link/contact?url=https%3A%2F%2Fwww.exportleftovers.com%2Fpages%2Fcontact-us-1" style="color:#c3c3c3;text-decoration:none!important;word-wrap:break-word;text-align:center!important;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,'Roboto';font-size:15px;font-weight:400;line-height:22px;text-transform:uppercase" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://www.exportleftovers.com/tools/emails/click/order-confirmation/1/site-link/contact?url%3Dhttps%253A%252F%252Fwww.exportleftovers.com%252Fpages%252Fcontact-us-1&amp;source=gmail&amp;ust=1645108240498000&amp;usg=AOvVaw0MXKPK9zAuM4Z8uYdmEaf6">
+                                          Contact
+                                        </a>
+                                      </th>
+                                    </tr>
+                                  </tbody></table>
+                                </td>
+                              </tr>
+                            </tbody></table>
+                          </td>
+                        </tr>
+                      </tbody></table>
+
+
+
+
+</body>
+</html>

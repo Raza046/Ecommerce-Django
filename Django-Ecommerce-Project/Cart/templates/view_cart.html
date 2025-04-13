@@ -1,0 +1,611 @@
+{% extends "base/base1.html" %}
+
+{% load static %}
+
+{% block content %}
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- Boxicons -->
+	<link href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css" rel="stylesheet">
+	<!-- My CSS -->
+	<link rel="stylesheet" href="{% static 'css/admin_style.css' %}">
+
+	<link
+	rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <!-- Google Fonts Roboto -->
+  <link
+	rel="stylesheet"
+	href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap" />
+
+  <script src="{% static 'js/theme.js' %}"></script>
+  <!-- MDB -->
+  <link rel="stylesheet" href="{% static 'css/mdb.min.css' %}" />
+    <!-- ------ -->
+	<!--  Above line of code will blast the admin sidebar -->
+
+</head>
+
+
+<style>
+
+.wrapper{
+    display: flex;
+}
+
+.box {
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  margin-top: 8px;
+  box-shadow: 1px 2px 3px 0px rgb(0 0 0 / 40%);
+}
+
+hr{
+    color:grey;
+}
+
+.shopping-cart {
+
+  transition: all .3s ease-in-out;
+  min-height: 190px;
+  max-height: 190px;
+  overflow: hidden;
+  
+  /* width: auto;
+  height: auto;
+  margin: 0px auto; */
+  background: #FFFFFF;
+  box-shadow: 2px 2px 3px 3px rgb(0 0 0 / 10%);
+  border-radius: 6px;
+  /* display: flex;
+  flex-direction: column; */
+}
+ 
+.item {
+  padding: 20px 30px;
+  height: 120px;
+  display: flex;
+}
+ 
+.item:nth-child(3) {
+  border-top:  1px solid #E1E8EE;
+  border-bottom:  1px solid #E1E8EE;
+}
+
+.buttons {
+  position: relative;
+  padding-top: 30px;
+  margin-right: 60px;
+}
+.delete-btn,
+.like-btn {
+  display: inline-block;
+  Cursor: pointer;
+}
+.delete-btn {
+  width: 18px;
+  height: 17px;
+  background: url(&amp;quot;delete-icn.svg&amp;quot;) no-repeat center;
+}
+ 
+.like-btn {
+  position: absolute;
+  top: 9px;
+  left: 15px;
+  background: url('https://designmodo.com/demo/shopping-cart/twitter-heart.png');
+  width: 60px;
+  height: 60px;
+  background-size: 2900%;
+  background-repeat: no-repeat;
+}
+
+.is-active {
+  animation-name: animate;
+  animation-duration: .8s;
+  animation-iteration-count: 1;
+  animation-timing-function: steps(28);
+  animation-fill-mode: forwards;
+}
+ 
+@keyframes animate {
+  0%   { background-position: left;  }
+  50%  { background-position: right; }
+  100% { background-position: right; }
+}
+
+
+.image {
+  margin-right: 30px;
+}
+ 
+.description {
+  padding-top: 10px;
+  margin-right: 15px;
+  width: 115px;
+}
+ 
+.description span {
+  display: block;
+  font-size: 14px;
+  color: #43484D;
+  font-weight: 400;
+}
+ 
+.description span:first-child {
+  margin-bottom: 5px;
+}
+.description span:last-child {
+  font-weight: 300;
+  margin-top: 8px;
+  color: #86939E;
+}
+
+.quantity {
+  padding-top: 30px;
+  margin-right: 60px;
+}
+.quantity input {
+  -webkit-appearance: none;
+  border: none;
+  text-align: center;
+  width: 32px;
+  font-size: 16px;
+  color: #43484D;
+  font-weight: 300;
+}
+ 
+button[class*=btn] {
+  width: 30px;
+  height: 30px;
+  background-color: #E1E8EE;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+}
+.minus-btn img {
+  margin-bottom: 3px;
+}
+.plus-btn img {
+  margin-top: 2px;
+}
+ 
+button:focus,
+input:focus {
+  outline:0;
+}
+
+.total-price {
+  width: 83px;
+  padding-top: 35px;
+  text-align: center;
+  font-size: 16px;
+  color: #43484D;
+  font-weight: 300;
+}
+
+@media (max-width: 800px) {
+  .shopping-cart {
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+  }
+  .item {
+    height: auto;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .image img {
+    width: 50%;
+  }
+  .image,
+  .quantity,
+  .description {
+    width: 100%;
+    text-align: center;
+    margin: 6px 0;
+  }
+  .buttons {
+    margin-right: 20px;
+  }
+}
+
+.right_grid{
+  width: 100%;
+  margin-left: -100px;
+}
+
+
+/* Notification Alert */
+
+/* The snackbar - position it at the bottom and in the middle of the screen */
+#snackbar {
+  visibility: hidden; /* Hidden by default. Visible on click */
+  min-width: 250px; /* Set a default minimum width */
+  margin-left: -125px; /* Divide value of min-width by 2 */
+  background-color: #039e6a;; /* Black background color */
+  font-family: sans-serif;
+  color: white; /* White text color */
+  text-align: center; /* Centered text */
+  border-radius: 2px; /* Rounded borders */
+  border-color: #08a169;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.5);
+  padding: 16px; /* Padding */
+  position: fixed; /* Sit on top of the screen */
+  z-index: 1; /* Add a z-index if needed */
+  left: 50%; /* Center the snackbar */
+  bottom: 30px; /* 30px from the bottom */
+}
+
+/* Show the snackbar when clicking on a button (class added with JavaScript) */
+#snackbar.show {
+  visibility: visible; /* Show the snackbar */
+  /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+  However, delay the fade out process for 2.5 seconds */
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+/* Animations to fade the snackbar in and out */
+@-webkit-keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
+
+
+/* Notification Alert */
+
+
+.target {
+    height: 100px;
+    transition: opacity 1s;
+}
+
+.maxBar {
+  transition: all 1s ease-in-out;
+  height: 0px;
+  min-height: 0px;
+  box-shadow: 0px 0px 0px 0px rgb(0 0 0 / 0%);
+  opacity: 0;
+}
+
+.check-info{
+    margin-left:-4vw;
+}
+
+
+#cart{
+        animation: fadeInBody ease 2s;
+        animation-iteration-count: 1;
+        animation-fill-mode: forwards;
+    }
+
+@keyframes fadeInBody {
+  from {
+    opacity: 0;
+    /* transform: translateX(-300px); */
+  }
+  to {
+    opacity: 1;
+    /* transform: translateX(0px); */
+  }
+}
+
+
+/* SHINE */
+
+#checkout_btn {
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+  outline: none;
+  transition: all 0.2s ease;
+}
+#checkout_btn:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -200%;
+  width: 50%;
+  height: 100%;
+  transform: skewX(320deg);
+  background-image: linear-gradient(to right, transparent, rgba(255,255,255,0.3), transparent);
+}
+#checkout_btn:after {
+  animation: shine 1.8s ease infinite;
+}
+#checkout_btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+}
+@-moz-keyframes shine {
+  100% {
+    left: 200%;
+  }
+}
+@-webkit-keyframes shine {
+  100% {
+    left: 200%;
+  }
+}
+@-o-keyframes shine {
+  100% {
+    left: 200%;
+  }
+}
+@keyframes shine {
+  100% {
+    left: 200%;
+  }
+}
+
+
+</style>
+
+
+<!--  HEADER ENDS -->
+<body>
+    
+<!-- main content -->
+    <div style="background-color:white !important;padding-top:100px;" class="main-content" id="cart">
+        <!-- main -->
+        <div id="wrapper-site">
+            <!-- breadcrumb -->
+            <div class="container">
+                <div class="row">
+                    <div id="content-wrapper" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 onecol">
+                        <section id="main">
+                            <div class="cart-grid row">
+
+                                {% if cart_items %}
+
+                                <div class="col-md-9 col-xs-12 check-info" style="font-family:bold">
+                                    <h1 style="font-family:bold;" class="title-page">Shopping Cart</h1>
+                                    <div class="cart-container">
+                                        <div class="cart-overview js-cart">
+
+                                            {% for c in cart_items %}
+
+                                            <div class="shopping-cart" id="cart_num_{{c.id}}">
+                                            
+                                                <div class="item target1">
+                                                
+                                                <div class="description">
+                                                    <img style="width:9vw;border-radius:15px;height:9vw;"  src="/{{c.product_variant.images.Image}}" alt="{{c.product_variant.Size_variants.Product.Name}}" />
+                                                </div>
+
+                                                  <div class="description" style="margin-left:1vw;margin-top:0.6vw;">
+                                                    <h6 style="margin-bottom:-0.1vw"><b>{{c.product_variant.product.Name|capfirst|truncatechars:24}}</b></h6>
+                                                    {% for s in c.product_variant.variation.all %}
+                                                        {% if s.variation.name == "Size" %}
+                                                            <span style="margin-bottom:-0.5vw">{{s.value}}</span>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    <div class="box" style="background:{{c.product_variant.color}};"></div>
+
+                                                </div>
+
+                                                  <div class="quantity" style="margin-left:5vw;margin-top:1.5vw">
+                                                    <div class="row">
+                                                      <div class="col-md-4">
+                                                      <button class="plus-btn" onclick="IncreaseQuant('{{c.product_variant.id}}','quant_{{c.quantity}}','price_{{c.id}}','{{c.product_variant.price}}','{{c.id}}')" type="button" name="button">+
+                                                      </button>
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                      <input type="text" id="quant_{{c.product_variant.id}}" name="name" value="{{c.quantity}}"><br>
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                      <button class="minus-btn" onclick="DecreaseQuant('{{c.product_variant.id}}','quant_{{c.quantity}}','price_{{c.id}}','{{c.product_variant.price}}','{{c.id}}')" type="button" name="button">-
+                                                      </button>
+                                                    </div>
+  
+                                                    </div>
+                                                  </div>
+
+                                                  <div id="price_{{c.id}}" class="total-price" style="margin-top:1.5vw">${{c.price}}</div>
+
+                                                  <div class="buttons" style="margin-top:2vw;margin-left:5vw;" onclick="RemoveItemFromCart('{{c.id}}','{{c.price}}')">
+                                                    <!-- <span class="delete-btn"><img style="font-size:2em" src="{% static 'trash.png' %}" alt=""></span> -->
+                                                    <a href="#!" class="text-danger delete-btn"><i class="fas fa-trash fa-lg" style="font-size:1.8em;"></i></a>
+                                                </div>
+
+                                                </div><br><br>
+
+                                                </div>
+                                                
+                                                {% endfor %}
+                                                <br><br>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {% else %}
+                                <div class="col-md-9 col-xs-12 check-info">
+                                    <h1 style="font-family:bold;" class="title-page">Shopping Cart</h1>
+                                    <div class="cart-container">
+
+                                        <center><img src="{% static 'emptyCart.gif' %}" height="300" width="300" alt="empty_cart"></center><br><br>
+                                    </div>
+                                </div>
+                                {% endif %}
+                                
+                                <div class="cart-grid-right col-lg-3" style="width:29%">
+
+                                    <h6 style="margin-left:vw;"><a href="/home" style="color:rgb(56, 56, 56);"><i class="fas fa-long-arrow-alt-left ms-2"></i> Continue Shopping
+                                        <img src="{% static 'shopping.png' %}" style="height:30px"></a></h6><br>
+
+                                          <div class="card text-black" style="padding:0px;margin-top:1vw;font-family:bold; letter-spacing:0.1ch;width:120%">
+                                            <div class="card-body">
+                                              <div class="text-center">
+                                                <h4 class="card-title" style="text-align:left;">Cart Total</h4><hr>
+                                              </div>
+                                                <div class="d-flex justify-content-between">
+                                                  <h6>Sub-Total</h6><span>$<span id="cart_subtotal">{{cart.Total_Price}}</span></span>
+                                                </div>
+                                                <div class="d-flex justify-content-between">
+                                                    <h6>Delivery</h6><span>$0</span>
+                                                </div>
+                                              <hr>
+                                              <div class="d-flex justify-content-between total font-weight-bold mt-4">
+                                                <h5>Total</h5><span>$<b id="cart_total">{{cart.Total_Price}}</b></span>
+                                              </div>
+                                              <br>
+                                              {% if cart %}
+                                              <div class="d-grid gap-2 col-12 mx-auto">
+                                                <a href="javascript:void(0)" class="continue btn btn-lg" id="checkout_btn" style="color:white;padding:7%;background-color:#192552;">
+                                                    <b style="letter-spacing:1px;font-family:sans-serif;">Checkout</b> <i class="fas fa-long-arrow-alt-right ms-2"></i>
+                                                </a>
+                                              </div>
+                                              {% endif %}
+
+                                            </div>
+                                      </div><br><br>
+                                </div>
+                                
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="snackbar"><b>Cart Updated  </b><img src="{% static 'check_mark.png' %}" style="margin-top:-0.4vw;" alt=""></div>
+
+</body>
+
+
+<!-- Material Design for Bootstrap -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<script>
+
+$("#checkout_btn").on("click", function(event) {
+  $('#checkout_btn').html('Processing... <span class="spinner-border spinner-border-sm mr-2" role="status"></span>').attr('disabled', true);
+
+  setTimeout(function(){
+    window.location.href="/ViewOrder"
+    $('#checkout_btn').html('Checkout</b> <i class="fas fa-long-arrow-alt-right ms-2"></i>').attr('disabled', false);
+  },2000)
+
+});
+
+$('.like-btn').on('click', function() {
+    $(this).toggleClass('is-active');
+});
+
+
+function DecreaseQuant(p_id,val,val2,p_val,item_id){
+p = document.getElementById(val2).textContent
+v = document.getElementById(val)
+p_quant = document.getElementById("quant_"+p_id)
+
+    if(p_quant.value>1){
+        --p_quant.value;
+        pr = p_val * p_quant.value;
+        p = '$' + pr.toString()
+        document.getElementById(val2).textContent = p
+        UpdateTheCart(item_id, p_quant.value, "decrement");
+        UpdateCartNotification();
+        document.getElementById('cart_total').innerHTML -= p_val;
+        document.getElementById('cart_subtotal').innerHTML -= p_val;
+    }
+
+}
+
+function IncreaseQuant(p_id,val,val2,p_val,item_id){
+pr = ""
+p = document.getElementById(val2).textContent;
+v = document.getElementById(val);
+p_quant = document.getElementById("quant_"+p_id);
+
+    if(p_quant.value<100){
+        ++p_quant.value;
+        pr = p_val * p_quant.value;
+        p = '$' + pr.toString();
+        document.getElementById(val2).textContent = p;
+        UpdateTheCart(item_id, p_quant.value, "increment");
+        UpdateCartNotification();
+        c_total = parseInt(document.getElementById('cart_total').innerHTML);
+        c_stotal = parseInt(document.getElementById('cart_subtotal').innerHTML);
+        document.getElementById('cart_total').innerHTML = c_total + parseInt(p_val);
+        document.getElementById('cart_subtotal').innerHTML = c_stotal + parseInt(p_val);
+    }
+}
+
+function UpdateTheCart(item_id, quantity, action){
+
+var formdata = new FormData();
+formdata.append("item_id", item_id);
+formdata.append("quantity", quantity);
+formdata.append("action", action);
+formdata.append("csrfmiddlewaretoken", "{{ csrf_token }}");
+
+  $.ajax({
+        method: "POST",
+        url: '/update_cart',
+        processData: false,
+        contentType: false,
+        mimeType: "multipart/form-data",
+        data : formdata,
+        beforeSend: function(xhr, settings) {
+        xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+        },
+    });
+}
+
+function UpdateCartNotification() {
+    // Get the snackbar DIV
+    var x = document.getElementById("snackbar");
+
+    // Add the "show" class to DIV
+    x.className = "show";
+
+    // After 3 seconds, remove the show class from DIV
+    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+}
+
+function RemoveItemFromCart(item_id,item_price){
+
+    document.getElementById("cart_num_" + item_id).classList.toggle('maxBar');
+    console.log(item_id)
+    console.log("------PRINTED-------")
+    $.ajax({
+        url: '/cart/view?item_id='+item_id,
+        type:'DELETE',
+        contentType: "application/json",
+        beforeSend: function(xhr, settings) {
+        xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+        },
+    });
+
+    document.getElementById('cart_total').innerHTML -= item_price;
+    document.getElementById('cart_subtotal').innerHTML -= item_price;
+    
+    // removeFadeOut(document.getElementById("cart_num_"+item_id), 2000);
+}
+
+</script>
+
+
+{% endblock %}

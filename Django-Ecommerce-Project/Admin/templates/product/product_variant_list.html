@@ -1,0 +1,414 @@
+{% extends "dashboard/dashboard_base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<style>
+
+.dot {
+    height: 25px;
+    width: 25px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  
+  .box {
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    margin-top: 2px;
+    box-shadow: 1px 2px 3px 0px rgb(0 0 0 / 40%);
+  }
+  
+  .divWidth{
+      width:50%;
+  }
+  
+  </style>
+  
+  
+<!-- MAIN -->
+<main style="margin-top:8vw;margin-left:2vw;">
+	<div class="head-title">
+		<div class="left">
+			<!-- <h1>{{sub_categories.name}}</h1> -->
+		</div>
+		<a href="#" class="">
+			<button class="btn btn-success"><i class="bx bxs-cloud-download" ></i> Download CSV</button>
+		</a>
+	</div>
+    <br>
+
+    <!-- Adding Variation Modal Button -->
+
+        <div class="text-center">
+            <button class="btn btn-info"  data-mdb-toggle="modal" data-mdb-target="#AddVar">+ Add Products Variation</button>
+        </div>
+    <br>
+
+<!-- Adding Variation Modal -->
+
+<div class="modal fade" id="AddVar" tabindex="-1" aria-labelledby="ProdVarModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-side modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="ProdVarModalLabel">{{c.Size_variants.Product.Name}}</h5>
+          <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">Add Product Variation: <br><br><br>
+
+          <form action="/products/{{ product.id }}/variants/create" method="POST">
+            {% csrf_token %}
+
+            <label for="formFileMultiple" class="form-label">Upload Images For Product:</label>
+            <input required class="form-control divWidth" type="file" id="formFileMultiple" /><br>
+
+              <!-- ADD IMAGES FOR PRODUCT VARIATIONS -->
+
+              {% for variation in variation.all %}
+              <label for="variation_{{ variation.name|slugify }}" style="margin: 20px;">
+                {{ variation.name|title }}:
+            
+                {% if variation.name == "color" %}
+                  <input
+                    required
+                    type="color"
+                    class="form-control form-control-color"
+                    id="variation_color"
+                    name="variation_{{ variation.id|slugify }}"
+                    value="#563d7c"
+                    title="Choose your {{ variation.name|title }}"
+                  />
+                {% else %}
+                  <select
+                    id="variation_{{ variation.name|slugify }}"
+                    name="variation_{{ variation.id|slugify }}"
+                    class="form-control mdb-select"
+                    style="width: 130%;"
+                  >
+                    {% for value in variation.value.all %}
+                      <option value="{{ value.value }}">{{ value.value }}</option>
+                    {% endfor %}
+                  </select>
+                {% endif %}
+              </label><br>
+            {% endfor %}
+
+            <br><br>
+
+            <div class="input-group mb-3 divWidth">
+              <span class="input-group-text">price</span>
+              <input type="number" class="form-control" name="price" aria-label="Amount (to the nearest dollar)" />
+              <span class="input-group-text">0.0</span>
+            </div><br>
+
+            <input type="hidden" name="product" value="{{ product.id }}" />
+
+            <div class="input-group mb-3 divWidth">
+              <span class="input-group-text">stock</span>
+              <input type="number" class="form-control" name="stock" aria-label="Amount (to the nearest dollar)" />
+              <span class="input-group-text">1</span>
+            </div><br>
+
+          </div>
+
+            <div class="modal-footer">
+          <button type="button" class="btn btn-danger" data-mdb-dismiss="modal">Close</button>
+          
+          <button type="submit" class="btn btn-primary">Create Variant</button>
+        </form>
+          {% comment %} <button  class="btn btn-primary" type="submit" onclick="AddVariation('{{product.id}}')">Save changes</button> {% endcomment %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+	<div class="table-data">
+		<div class="order">
+			<div class="head">
+				<h3 style="font-family: bold">All Variations</h3><br>
+				<i class="bx bx-search" ></i>
+				<i class="bx bx-filter" ></i>
+			</div>
+			<div class="card" style="width:95%;margin-bottom:5vw;">
+				<div class="card-body p-0">
+				  <div class="table-responsive" data-mdb-perfect-scrollbar="true" style="position:relative; border-radius:10px;">
+							<table class="table caption-top">
+              <thead style="background-color:#19123b;color:white">
+                <tr>
+                  <th>Image</th>
+                  <th>Price</th>
+                  {% for variation in product_variants.first.variation.all %}
+                      <th>{{variation.variation.name}}</th>
+                  {% endfor %}
+                  <th>Edit</th>
+                  <th>Add Images</th>
+                  <th>Delete</th>
+                </tr>
+              </thead>
+              <tbody>
+
+                {% for p in product_variants.all %}
+                
+                <tr>
+                    {% if p.image.first %}
+                      <td><img style="height:5vw; width:5vw; border-radius:15px;" src="/{{p.image.first.Image}}"></td>
+                    {% else %}
+                      <td>No Image</td>
+                    {% endif %}
+
+                  <td>{{p.price}}</td>
+
+                  {% for variation in p.variation.all %}
+                      {% if variation.variation.name == "color" %}
+                      <td><div class="box" style="background-color:{{variation.value}}"></div></td>
+                      {% else %}
+                      <td>{{variation.value}}</td>
+                      {% endif %}
+                  {% endfor %}
+
+                  <td><button class="btn btn-success" data-mdb-toggle="modal" data-mdb-target="#EditVar_{{p.id}}">Edit</button></td>
+                  <td><button class="btn btn-primary" data-mdb-toggle="modal" data-mdb-target="#Addimg_{{p.id}}">Add Images</button></td>
+                  <td><button class="btn btn-danger" onclick="RemoveVariation('{{p.id}}')" >Delete</button></td>
+                </tr>
+
+                <!-- MODAL starts -->
+
+                    <div class="modal fade" id="EditVar_{{p.id}}" tabindex="-1" aria-labelledby="ProdVarModalLabel_{{p.id}}" aria-hidden="true">
+                      <div class="modal-dialog modal-side modal-lg">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="ProdVarModalLabel_{{p.id}}"></h5>
+                            <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">Edit Product Variation: <br>
+
+                              <section class="w-100 p-4">
+                                  <label for="exampleColorInput" class="form-label">Color Picker:</label>
+                                  <input required type="color" class="form-control form-control-color" id="{{p.id}}_EditColorInput" value="{{p.color}}" title="Choose your color">
+
+                                  <label for="exampleColorInput" class="form-label">Select Previous Colors:</label>
+                                  {% for p in product_variants.all %}
+                                    <label class="box" style="background-color:{{p.color}};cursor:pointer;margin-right:10px" onclick="document.getElementById('{{p.id}}').value='{{p.color}}';"></label>
+                                  {% endfor %}
+                              </section>
+
+                              {% for v in var %}
+
+                              <label for="{{p.id}}_{{v}}_edit" style="margin:20px;">{{v}}:
+                              <select id="{{p.id}}_{{v}}_edit" class="form-control mdb-select" style="width:auto">
+
+                              {% for v_val in variation_value.all %}
+
+                                {% if v_val.variation == v %}
+                                  <option value="{{v.id}}__{{v_val}}">{{v_val}}</option>
+                                {% endif %}
+
+                              {% endfor %}<br>
+                                </select>
+                              </label>
+
+                              {% endfor %} <br><br>
+
+                              <div class="input-group mb-3 divWidth">
+                                <span class="input-group-text">$</span>
+                                <input
+                                id="{{p.id}}_EditTypePrice"
+                                value="{{p.price}}"
+                                  type="text"
+                                  class="form-control"
+                                  aria-label="Amount (to the nearest dollar)"
+                                />
+                                <span class="input-group-text">.00</span>
+                              </div>
+
+                          </div>
+
+                              <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-mdb-dismiss="modal">Close</button>
+                            <button  class="btn btn-primary" type="submit" onclick="EditVariation('{{p.id}}')">Save changes</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- ADD IMAGES MODAL -->
+
+                    <div class="modal fade" id="Addimg_{{p.id}}" tabindex="-1" aria-labelledby="Addimg_ModalLabel_{{p.id}}" aria-hidden="true">
+                      <div class="modal-dialog modal-side modal-lg">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h5 class="modal-title">Add Product Variation Images</h5>
+                            <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                            <label class="form-label">Current Images Of Product:</label>    
+
+                            {% for image in product_img.all %}
+                              {% if image.product_variant == p %}
+                                <img style="height:5vw; width:5vw; border-radius: 15px;" src="/{{image.Image}}">
+                              {% endif %}
+                            {% endfor %}<br><br>
+                            <label class="form-label">Upload Another Image:</label>
+                            <input required class="form-control divWidth" type="file" id="{{p.id}}__VariationImage" /><br>
+                          </div>
+
+                              <div class="modal-footer">
+                            <button type="button" class="btn btn-danger" data-mdb-dismiss="modal">Close</button>
+                            <button  class="btn btn-primary" type="submit" onclick="AddImages('{{p.id}}')">Save changes</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- ADD IMAGES MODAL -->
+
+                {% endfor %}
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+		</div>
+  </div>
+	</div>
+
+
+</main>
+
+
+{% block extrascripts %}
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+
+{% comment %} function AddVariation(product){
+
+
+  var formdata = new FormData();
+
+  p_price = document.getElementById("typePrice").value;
+  p_images = document.getElementById("formFileMultiple").files[0];
+  total_in_stock = document.getElementById("typePrice").value;
+
+  {% for variation in variation.all %}
+    const variationId = 'variation_{{ variation.name|slugify }}';
+    const element = document.getElementById(variationId);
+
+    // Check if element exists before trying to get its value
+    if (element) {
+      // If it's a color input
+      if (element.type === 'color') {
+        formData[variationId] = element.value;
+      }
+      // Otherwise, if it's a select dropdown
+      else if (element.tagName === 'SELECT') {
+        formData[variationId] = element.options[element.selectedIndex].value;
+      }
+    }
+  {% endfor %}
+  
+  formdata.append("stock", total_in_stock);
+  formdata.append("price", p_price);
+  formdata.append("product", product);
+  formdata.append("imgs", p_images);
+  formdata.append("csrfmiddlewaretoken", "{{ csrf_token }}");
+
+
+  console.log("/products/" + product + "/variants/create")
+  $.ajax({
+    method: "POST",
+    url : "/products/" + product + "/variants/create",
+    processData: false,
+    contentType: false,
+    mimeType: "multipart/form-data",
+    data : formdata,
+    success: function(res) {
+        console.log("Successfull Response..!!!")
+    }
+  });
+} {% endcomment %}
+
+function AddImages(product){
+
+  product_images = document.getElementById(product + "__VariationImage").files[0];
+  var formdata = new FormData();
+
+  formdata.append("product_id", product);
+  formdata.append("images", product_images);
+  formdata.append("csrfmiddlewaretoken", "{{ csrf_token }}");
+
+  $.ajax({
+    method: "POST",
+    url : "/add_image_product_var",
+    processData: false,
+    contentType: false,
+    mimeType: "multipart/form-data",
+    data : formdata,
+    success: function(res) {
+        console.log("Successfull Response..!!!")
+    }
+  });
+
+}
+
+
+function RemoveVariation(product_id){
+
+  $.ajax({
+
+    method: "POST", // Django doesn't allow DELETE with form data directly via Ajax
+    url: "/product-variant/" + product_id + "/delete",
+    data: {
+      "product_id": product_id,
+      "csrfmiddlewaretoken": "{{ csrf_token }}", // important for Django
+    },
+    success: function(res) {
+        console.log("Successfull Response..!!!")
+    }
+
+  });
+
+}
+
+
+function EditVariation(product){
+
+var arr = [];
+
+{% for v in var %}
+
+var dis = document.getElementById(product + "_{{v}}_edit");
+dis = dis.options[dis.selectedIndex].value;
+arr.push(dis);
+
+{% endfor %}
+
+p_color = document.getElementById(product + "_EditColorInput").value;
+p_price = document.getElementById(product + "_EditTypePrice").value;
+
+$.ajax({
+  url : "/editproduct_var",
+  data : {
+    "product":product,
+    "p_values":String(arr),
+    "p_color":p_color,
+    "p_price":p_price
+  },
+  success: function(res) {
+      console.log("Successfull Response..!!!")
+  }
+});
+
+}
+
+</script>
+
+{% endblock %}
+
+
+{% endblock %}
+

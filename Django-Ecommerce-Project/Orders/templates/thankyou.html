@@ -1,0 +1,227 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thankyou for Order</title>
+
+  <link rel="stylesheet" href="{% static 'css/mdb.min.css' %}" />
+
+</head>
+
+<style>
+
+
+
+/* General Styling */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #fff;
+    color: #000;
+}
+
+/* Layout */
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    max-width: 1900px;
+    margin: auto;
+}
+
+.order-details, .order-summary {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    flex: 1;
+    min-width: 300px;
+}
+
+h2 {
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+/* Order Details */
+.details-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+}
+
+.details-grid p {
+    margin: 5px 0;
+}
+
+/* Order Summary */
+.product {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.product img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    margin-right: 15px;
+}
+
+.product-details p {
+    margin-left: 3px;
+}
+
+.price {
+    margin-left: auto;
+    font-weight: bold;
+}
+
+.summary {
+    border-top: 1px solid #ddd;
+    padding-top: 15px;
+}
+
+.summary p {
+    display: flex;
+    justify-content: space-between;
+    margin: 5px 0;
+}
+
+.total {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.tax {
+    font-size: 14px;
+    color: gray;
+}
+
+/* Button */
+.btn {
+    background-color: black;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    display: block;
+    margin-top: 20px;
+    width: 100%;
+    text-align: center;
+}
+
+.btn:hover {
+    background-color: #333;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    .details-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.box {
+  width: 20px;
+  height: 20px;
+  border: 1px solid rgba(0, 0, 0, .1);
+  border-radius: 5px;
+}  
+
+</style>
+
+
+
+<body>
+
+{% if Found %}
+
+  <div class="text-center" style="margin-top:30px"><br><br>
+    <img src="{% static 'checked.png' %}" height="200px">
+    <h1 class="display-3"><br> Thank You!</h1>
+    <p class="lead">Your order has been confirmed and will be shiping soon!</p>
+    <hr/>
+
+  <div class="container">
+    <div class="order-details">
+        <h2>Thank you for your order</h2>
+        <div class="details-grid">
+            <div>
+                <p><strong>Order No.</strong></p>
+                <p>{{order.order_id|truncatechars:15}}</p>
+            </div>
+            <div>
+                <p><strong>Payment</strong></p>
+                <p>{{order.delivery_option}}</p>
+            </div>
+            <div>
+                <p><strong>Billing Address</strong></p>
+                <p>{{order.address}}</p>
+            </div>
+            <div>
+                <p><strong>Delivery Address</strong></p>
+                <p>{{order.address}}</p>
+            </div>
+            <div>
+                <p><strong>Email</strong></p>
+                <p>{{order.customer.user.email}}</p>
+            </div>
+            <div>
+                <p><strong>Phone Number</strong></p>
+                <p>{{order.customer.phone}}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="order-summary">
+        <h2>Order Summary</h2>
+          {% for item in order_item.all %}
+            <div class="product">
+              <img src="/{{item.product_variant.images.Image}}" alt="C35 Watch">
+                <div class="product-details">
+                    <p><strong>{{item.product_variant.product.Name|capfirst|truncatechars:15}}</strong></p>
+                </div>
+                <p class="box" style="background:{{item.product_variant.color}};border-color:none; margin-left:3vw"></p>
+                <p style="margin-left:2vw">
+                      {% for s in item.product_variant.variation.all %}
+                            {% if s.variation.name == "Size" %}
+                                {{s.value}}
+                            {% endif %}
+                      {% endfor %}
+                  </p>
+                <p style="margin-left:2vw">(x{{item.quantity}})</p>
+                <p class="price">${{item.product_variant.price}}.00</p>
+            </div>
+          {% endfor %}
+          <div class="summary">
+            <p>Total products <span>{{order_item.count}}</span></p>
+            <p>Shipping <span>Free</span></p>
+            <p>Subtotal <span>${{order.total}}</span></p>
+            <p class="total"><strong>Total</strong> <span><strong>${{order.total}}</strong></span></p>
+            <p class="tax">Including £60.34 in tax</p>
+        </div>
+    </div>
+
+    <button class="btn"><a href="/home" style="color:white">Continue Shopping</a></button>
+
+  </div>
+
+    
+{% else %}
+
+  <div class="text-center"><br><br>
+      <img src="{% static 'not-found.gif' %}" height="300">
+      <h2 class="display-3" style="font-family:bold">Page Not Found!</h2>
+  </div>
+
+{% endif %}
+
+  </body>
+</html>
+
+<script src="{% static 'js/mdb.min.js' %}"></script>

@@ -1,0 +1,632 @@
+
+{% load static %}
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- Boxicons -->
+	<link href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css" rel="stylesheet">
+	<!-- My CSS -->
+	<link rel="stylesheet" href="{% static 'css/admin_style.css' %}">
+
+	<link
+	rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+  />
+  <!-- Google Fonts Roboto -->
+  <link
+	rel="stylesheet"
+	href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap"
+  />
+
+
+  <!-- MDB -->
+  <link rel="stylesheet" href="{% static 'css/mdb.min.css' %}" />
+	<!--  Above line of code will blast the admin sidebar -->
+
+</head>
+
+
+<style>
+
+body {
+        animation: fadeIn ease 3s;
+        animation-iteration-count: 1;
+        animation-fill-mode: forwards;
+    }
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    /* transform: translateX(-300px); */
+  }
+  to {
+    opacity: 1;
+    /* transform: translateX(0px); */
+  }
+}
+
+
+
+* {
+  box-sizing: border-box;
+}
+
+.shopping-cart {
+  width: 450px;
+  height: auto;
+  margin: 80px auto;
+  background: #FFFFFF;
+  box-shadow: 1px 2px 3px 0px rgba(0,0,0,0.10);
+  border-radius: 6px;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.title {
+  height: 60px;
+  border-bottom: 1px solid #E1E8EE;
+  padding: 20px 30px;
+  color: #5E6977;
+  font-size: 18px;
+  font-weight: 400;
+}
+ 
+.item {
+  padding: 20px 30px;
+  height: 120px;
+  display: flex;
+}
+ 
+.item:nth-child(3) {
+  border-top:  1px solid #E1E8EE;
+  border-bottom:  1px solid #E1E8EE;
+}
+
+.buttons {
+  position: relative;
+  padding-top: 30px;
+  margin-right: 60px;
+}
+
+.is-active {
+  animation-name: animate;
+  animation-duration: .8s;
+  animation-iteration-count: 1;
+  animation-timing-function: steps(28);
+  animation-fill-mode: forwards;
+}
+ 
+@keyframes animate {
+  0%   { background-position: left;  }
+  50%  { background-position: right; }
+  100% { background-position: right; }
+}
+
+
+.image {
+  margin-right: 30px;
+}
+ 
+.description {
+  padding-top: 10px;
+  margin-right: 15px;
+  width: 115px;
+}
+ 
+.description span {
+  display: block;
+  font-size: 14px;
+  color: #43484D;
+  font-weight: 400;
+}
+ 
+.description span:first-child {
+  margin-bottom: 5px;
+}
+.description span:last-child {
+  font-weight: 300;
+  margin-top: 8px;
+  color: #86939E;
+}
+
+.quantity {
+  padding-top: 20px;
+  margin-right: 60px;
+}
+.quantity input {
+  -webkit-appearance: none;
+  border: none;
+  text-align: center;
+  width: 32px;
+  font-size: 16px;
+  color: #43484D;
+  font-weight: 300;
+}
+ 
+button:focus,
+input:focus {
+  outline:0;
+}
+
+.total-price {
+  width: 83px;
+  padding-top: 27px;
+  text-align: center;
+  font-size: 16px;
+  color: #43484D;
+  font-weight: 300;
+}
+
+@media (max-width: 800px) {
+  .shopping-cart {
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+  }
+  .item {
+    height: auto;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .image img {
+    width: 50%;
+  }
+  .image,
+  .quantity,
+  .description {
+    width: 100%;
+    text-align: center;
+    margin: 6px 0;
+  }
+  .buttons {
+    margin-right: 20px;
+  }
+}
+
+.right_grid{
+  width: 100%;
+  margin-left: -100px;
+}
+
+.wrapper{
+    display: flex;
+}
+.box {
+  width: 20px;
+  height: 20px;
+  /* border: 1px solid rgba(0, 0, 0, .1); */
+  border-radius: 5px;
+  margin-top: 1vw;
+}
+
+.form button {
+  width: 100%;
+  outline: none !important;
+  background: linear-gradient(90deg, #11998e, #38ef7d);
+  text-transform: uppercase;
+  font-weight: bold;
+  border: none;
+  box-shadow: none;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  margin-top: 90px;
+}
+.form button .fa {
+  margin-right: 6px;
+}
+
+.radio:hover {
+    box-shadow: 2px 2px 2px 2px rgba(0, 0, 0, 0.1);
+}
+
+.radio.selected {
+    box-shadow: 0px 8px 16px 0px #EEEEEE;
+    -webkit-filter: grayscale(0%);
+    -moz-filter: grayscale(0%);
+    -o-filter: grayscale(0%);
+    -ms-filter: grayscale(0%);
+    filter: grayscale(0%);
+}
+
+.selected {
+    background-color: #E0F2F1;
+}
+#customer-form{
+margin-top:0vw;
+}
+
+/*  */
+</style>
+
+<body>
+
+    <form action="{% url 'PlaceOrder' %}" id="customer-form" class="js-customer-form" method="post">
+        {% csrf_token %}
+
+        <div id="wrapper-site">
+                <div class="">
+                    <div class="row">
+                        <div id="content-wrapper" class="col-xs-12 col-sm-12 col-md-12 col-lg-12 onecol">
+                            <div id="main">
+                                <div class="cart-grid row">
+
+                                    <div class="col-md-7 check-info" style="border-right: 0.1px solid #e7e7e7;padding:100px">
+                                      
+                                      <center><img src="{% static 'ecom_logo.png' %}" height="150px" style="margin-top:-30px" alt=""></center>
+                                          <nav aria-label="breadcrumb" style="margin-left:13vw;">
+                                            <ol class="breadcrumb">
+                                              <li class="breadcrumb-item">Cart</li>
+                                              <li class="breadcrumb-item">Information</li>
+                                              <li class="breadcrumb-item"><b>Payment</b></li>
+                                            </ol>
+                                          </nav><br>
+                                      
+                                      <div class="card" style="border:1px solid #dfdddd; border-radius:10px;">
+                                        <div class="card-body">
+                                          <div class="row">
+                                            <div class="col-md-3">
+                                              Email
+                                            </div>
+                                            <div class="col-9">
+                                              {{form.email}}
+                                            </div><hr>
+                                            <div class="col-md-3">
+                                              Ship To
+                                            </div>
+                                            <div class="col-9">
+                                              {{form.address}}
+                                            </div><hr>
+                                            <div class="col-md-3">
+                                              Method
+                                            </div>
+                                            <div class="col-9">
+                                              Shipping Charges $10
+                                            </div>
+                                          </div>
+                                        </div>
+                                      </div>
+
+                                      <div class="card-body show">
+                                        <div class="row text-center">
+                                              <h3 style="font-family:bold"><b>Select Payment Options</b></h3>
+                                        </div><br>
+                                        
+                                        <center><button class="btn btn-primary" type="button" onclick="PaymentTabs('COD')">Cash On Delivery</button>
+                                        <button class="btn btn-primary" type="button" onclick="PaymentTabs('OP')">Online Payment</button></center><br>
+
+                                      <center><div id="showCOD">
+                                        <div class="card tabcontent shadow-5-strong radio card" style="width:80%">
+                                          <div class="card-body">
+                                            <center><h5 class="card-title">Cash on Delivery</h5>
+                                            <img src="{% static 'cash-on-delivery.gif' %}" width="50%" style="border-radius:110px" alt=""></center><br>
+                                            <p class="card-text">You will have to pay for your parcel on delivery at above mentioned address.</p>
+                                          </div>
+                                        </div>
+                                      </div>
+                                      <div id="showOP" style="display:none">
+                                        <div class="card tabcontent shadow-5-strong radio card" style="width:80%">
+                                          <div class="card-body">
+                                            <h5 class="card-title">Online Payment</h5>
+                                            <p class="card-text">We accept following payment methods</p><br>
+                                            <div class="row">
+                                              <div class="col-md-4">
+                                                <img src="{% static 'visa_card.png' %}" class="rounded" width="80" /> <br>
+                                              </div>
+                                              <div class="col-md-4">
+                                                <img src="{% static 'master_card.png' %}" class="rounded" width="90" style="margin-top:-0.35vw" /><br>
+                                              </div>
+                                              <div class="col-md-4">
+                                                <img src="{% static 'paypal.png' %}" class="rounded" width="90" style="margin-top:-0.35vw;margin-left:0.6vw;" /> <br>
+                                              </div>
+                                            </div><br>
+                                          <hr>
+                                          <p class="card-text">Your card will be charged for this order if you select this option. You will be redirected to online payment page where you can submit you card details.</p>
+                                            <hr>
+                                          </div>
+                                        </div>
+                                      </div></center>
+
+
+                                      <div class="row" style="margin-top:50px">
+                                        <div class="col-md-5">
+                                        <h6><a href="ViewOrder" style="color:rgb(56, 56, 56);"><i class="fas fa-long-arrow-alt-left ms-2"></i> Return to Information</a></h6><br>
+                                        </div>
+                                        <div class="col-md-6 offset-1">
+                                          <button type="submit" id="COD_order" onclick="CompleteOrder('COD_order')" class="btn btn-block" style="background-color:#192552;color:white; padding:20px; font-size:medium; margin-left:2vw;text-transform:capitalize;">Complete Order</button>
+                                          <button type="submit" id="OP_order" onclick="CompleteOrder('OP_order')" class="btn btn-block" style="display:none;background-color:#192552;color:white; padding:20px; font-size:medium; margin-left:2vw;text-transform:capitalize;">Proceed to Online Payment</button>
+                                        </div>
+                                      </div>
+                                      <input value="{{form}}" type="text" style="display:none" name="order_list">
+                                    </div>
+                                </div>
+
+                                    <div class="col-md-5" style="align-items:center;background-color:#fafafa;width:40%;padding:20px">
+                                        {% if cart %}
+
+                                        <div class="col-md-12 col-xl-12" style="margin-top:15px;">
+
+                                          <div class="rounded d-flex flex-column p-2 ">
+
+                                              {% for c in cart %}
+
+                                              <div class="item">
+                                                
+                                                <div class="description" style="margin-top:-20px">
+                                                    <img style="max-width:65%;border-radius:12px;" class="shadow-3-strong"  src="{{c.product_variant.images.Image}}" alt="{{c.product_variant.Size_variants.Product.Name}}" />
+                                                </div>
+
+                                                <div class="description" style="margin-top:-1vw;margin-left:-3vw;">
+                                                    <div class="box" style="margin-left:-2vw;margin-top:-1.5vw;background-color:#f3173c;border-radius:50%;">
+                                                        <center><span style="color:white !important;"><b>{{c.quantity}}</b></span></center>
+                                                    </div>
+                                                        <span>{{c.product_variant.product.Name|capfirst|truncatechars:18}}</span>
+                                                    {% for s in c.product_variant.variation.all %}
+                                                        {% if s.variation.name == "Size" %}
+                                                            <span style="margin-top:-0.4vw">{{s.value}}</span>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                    <div class="box shadow-3-strong" style="background:{{c.product_variant.color}};margin-top:0vw"></div>
+                                                </div>
+                                                <div id="price_{{c.id}}" style="margin-top:-2vw;padding-left:10vw;" class="total-price"><b>${{c.price}}</b></div>
+                                                </div>
+
+                                              {% endfor %}
+
+                                              <br>
+                                              <div class="border-top px-2 mx-2"></div>
+                                              <div class="p-2 d-flex">
+                                                <div class="col-8" id="disc_perc">
+                                                  Discount (0%)
+                                                </div>
+                                                <div class="ms-auto" style="color:#3c91e6"><span id="disc_val"><b>$0</b></span></div>
+                                              </div>
+                                              <div class="border-top px-2 mx-2"></div>
+                                              <div class="p-2 d-flex pt-3">
+                                                <div class="col-8">Subtotal</div>
+                                                <div class="ms-auto"><span id="sub_total"><b>${{total_price}}</b></span></div>
+                                              </div>
+                                              <div class="p-2 d-flex">
+                                                <div class="col-8">
+                                                  Shipping Fee
+                                                </div>
+                                                <div class="ms-auto"><b>Free</b></div>
+                                              </div>
+                                              <div class="border-top px-2 mx-2"></div>
+                                              <div class="p-2 d-flex pt-3">
+                                                <div class="col-8"><b>Total</b></div>
+                                                <div class="ms-auto" ><b class="text-success">$<span id="total_price">{{total_price}}</span></b></div>
+                                              </div>
+                                            </div>
+                                          </div>
+
+                                        {% endif %}
+
+                                        <!-- Material input -->
+                                        <div style="padding:20px">
+                                        <div class="form-outline mb-4 shadow-3-strong">
+                                            <input type="text" id="coupon_form" name="coupon_forms" class="form-control" />
+                                                <label id="coupon_form_label" class="form-label" >Coupon Code</label>
+                                            </div>
+                                            <!-- <input type="text" id="coupon_form" name="coupon_forms" class="form-control" /> -->
+                                            <button type="button" onclick="CouponApply('{{request.user.id}}')" id="applyBtn" class="btn btn-danger">Apply</button>
+                                            <span id="Error_Coupon" style="visibility:hidden;">Invalid Coupon</span>
+                                            <a href="javascript:void(0)" onclick="RemoveCoupon('{{request.user.id}}')" id="remove_coupon" style="display:none;color:#f93154;">Remove Coupon</a>
+                                          </div>
+                                    </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <br><br><br>
+        </form>
+
+</body>
+
+{% block extrascripts %}
+
+<!-- Material Design for Bootstrap -->
+<script src="{% static 'js/mdb.min.js' %}"></script>
+
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<script>
+
+  $(document).ready(function() {
+
+    {% if coupon_used %}
+      c_code = '{{coupon_used.code}}';
+      discount = {{coupon_used.discount}}/100;
+      discount_perc = {{coupon_used.discount}};
+      console.log('-------------')
+      console.log(discount)
+      console.log(discount_perc)
+      console.log('-------------')
+      document.getElementById('coupon_form_label').style.visibility='hidden';
+      ApplyDiscount(discount, discount_perc, c_code);
+    {% endif %}
+
+   });
+
+// Place Order
+function CompleteOrder(btn_id) {
+    btn_id = '#'+btn_id
+    console.log(btn_id)
+    if (btn_id == "#COD_order"){
+      $(btn_id).html('Completing... <span class="spinner-border spinner-border-sm mr-2" role="status"></span>').attr('disabled', true);    
+    }
+    else{
+    $(btn_id).html('Redirecting... <span class="spinner-border spinner-border-sm mr-2" role="status"></span>').attr('disabled', true);
+    }
+
+    setTimeout(function(){
+      $('#customer-form').submit()
+    },2000)
+
+}
+
+
+// PaymentTabs Starts
+var pay_delivery = true
+
+function PaymentTabs(ptype) {
+
+  if(ptype == "COD"){
+
+    document.getElementById("customer-form").action = "{% url 'PlaceOrder' %}";
+    document.getElementById("showOP").style.display = "none";
+    document.getElementById("showCOD").style.display = "block";
+    document.getElementById("OP_order").style.display = "none";
+    document.getElementById("COD_order").style.display = "block";
+    // document.getElementById("RadioCOD").checked = true;
+    console.log("COD is choosen")
+  }
+
+  else if(ptype == "OP"){
+
+    document.getElementById("customer-form").action = "{% url 'onlinepayment' %}";
+    document.getElementById("showOP").style.display = "block";
+    document.getElementById("showCOD").style.display = "none";
+    // document.getElementById("RadioOP").checked = true;
+    document.getElementById("OP_order").style.display = "block";
+    document.getElementById("COD_order").style.display = "none";
+    console.log("OP is choosen")
+
+  }
+
+}
+
+// PaymentTabs Ends
+
+var mybtn = document.getElementById("applyBtn")
+var rem_mybtn = document.getElementById("remove_coupon")
+var total_prices = document.getElementById("total_price").innerText;
+
+function RemoveCoupon(user_id){
+
+    var code = document.getElementById("coupon_form").value;
+    var total_price = document.getElementById("total_price").innerText;
+    var discount = 0;
+    console.log(code)
+
+    $.ajax({
+            'async': false,
+            url: '/coupon/remove',
+            data : {
+                'coupon_code': code,
+            },
+            success: (data) => {
+                console.log(data);
+                // discount = data;
+            },
+    });
+
+    document.getElementById('coupon_form_label').style.visibility='visible';
+
+    var code = document.getElementById("coupon_form").value;
+
+    mybtn.disabled = false;
+    mybtn.className = "btn btn-danger"
+    mybtn.innerText = "Apply"
+    document.getElementById("coupon_form").disabled = false;
+    rem_mybtn.style.display = "none";
+    document.getElementById("coupon_form").value = "";
+    document.getElementById("total_price").innerText = total_prices;
+    document.getElementById("sub_total").innerHTML = "<b>$" + total_prices +"</b>";
+
+    document.getElementById("disc_perc").innerText = "Discount (0%)";
+    document.getElementById("disc_val").innerHTML = "<b>$0</b>";
+
+}
+
+
+function CouponApply(user_id){
+
+    var code = document.getElementById("coupon_form").value;
+    var total_price = document.getElementById("total_price").innerText;
+    var response = "";
+    console.log(user_id);
+    console.log(code)
+
+    $.ajax({
+            'async': false,
+            url: '/coupon/apply',
+            data : {
+                'user_id': user_id,
+                'coupon_code': code,
+            },
+            success: (data) => {
+                // console.log(data);
+                response = data;
+            },
+    });
+
+    if(response.status == "Successfull!"){
+      
+        discount_perc = response.discount;
+
+        discount = discount_perc/100;
+        console.log("--------------")
+        console.log(discount)
+        console.log(discount_perc)
+        console.log("--------------")
+        console.log("Value of discount : " + discount);
+
+        total_disc_price = discount * total_price;
+        total_price = total_price - total_disc_price;
+        document.getElementById("total_price").innerText = total_price;
+        document.getElementById("sub_total").innerHTML = "<b>$" + total_price +"</b>";
+        console.log(total_price);
+        document.getElementById("applyBtn").disabled = true;
+        mybtn.className = "btn btn-success"
+        mybtn.innerText = "Coupon Applied!"
+        document.getElementById("coupon_form").disabled = true;
+        rem_mybtn.style.display = "block";
+
+        document.getElementById("disc_perc").innerText = "Discount (" + discount_perc + "%)";
+        document.getElementById("disc_val").innerHTML = "<b>$" + total_disc_price + "</b>";
+
+        // ApplyDiscount(discount, discount_perc);
+    }
+    else{
+        console.log("Invalid or Expired Coupon")
+    }
+
+}
+
+function ApplyDiscount(discount, discount_perc, c_code){
+
+    var total_price = document.getElementById("total_price").innerText;
+
+    console.log("Value of discount : " + discount);
+    total_disc_price = discount * total_price;
+    total_price = total_price - total_disc_price;
+    document.getElementById("total_price").innerText = total_price;
+    document.getElementById("sub_total").innerHTML = "<b>$" + total_price +"</b>";
+    console.log(total_price);
+    document.getElementById("applyBtn").disabled = true;
+    mybtn.className = "btn btn-success"
+    mybtn.innerText = "Coupon Applied!"
+    document.getElementById("coupon_form").disabled = true;
+    document.getElementById("coupon_form").value = c_code;
+    rem_mybtn.style.display = "block";
+
+    document.getElementById("disc_perc").innerText = "Discount (" + discount_perc + "%)";
+    document.getElementById("disc_val").innerHTML = "<b>$" + total_disc_price + "</b>";
+}
+
+
+function OrderPlaced(){
+    document.getElementById("coupon_form").disabled = false;
+}
+
+</script>
+<script src="{% static 'js/themes.js' %}"></script>
+
+
+{% endblock %}
+

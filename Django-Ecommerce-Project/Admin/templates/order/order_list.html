@@ -1,0 +1,218 @@
+{% extends "dashboard/dashboard_base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+
+<main style="margin-top:85px; margin-left:3vw;">
+    <div class="container pt-4">
+        <!-- <h6 style="color:grey;font-family:bold">Here's what's happening with your store this month.</h6><br> -->
+
+        <section>
+            <div class="row">
+                <div class="col-xl-3 col-sm-6 col-12 mb-4">
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="d-flex justify-content-between px-md-1">
+                        <div>
+                          <h3 class="text-info">278</h3>
+                          <p class="mb-0">Total Orders</p>
+                        </div>
+                        <div class="align-self-center">
+                          <i class="fas fa-book-open text-info fa-3x"></i>
+                        </div>
+                      </div>
+                      <div class="px-md-1">
+                        <div class="progress mt-3 mb-1 rounded" style="height: 7px">
+                          <div
+                               class="progress-bar bg-info"
+                               role="progressbar"
+                               style="width: 80%"
+                               aria-valuenow="80"
+                               aria-valuemin="0"
+                               aria-valuemax="100"
+                               ></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-xl-3 col-sm-6 col-12 mb-4">
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="d-flex justify-content-between px-md-1">
+                        <div>
+                          <h3 class="text-warning">156</h3>
+                          <p class="mb-0">Active Orders</p>
+                        </div>
+                        <div class="align-self-center">
+                          <i class="far fa-comments text-warning fa-3x"></i>
+                        </div>
+                      </div>
+                      <div class="px-md-1">
+                        <div class="progress mt-3 mb-1 rounded" style="height: 7px">
+                          <div
+                               class="progress-bar bg-warning"
+                               role="progressbar"
+                               style="width: 35%"
+                               aria-valuenow="35"
+                               aria-valuemin="0"
+                               aria-valuemax="100"
+                               ></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+  
+          </section>
+    </div>
+
+    <center>
+        <button class="btn btn" onclick="ChangeGraph('bar')"><img src="https://cdn-icons-png.flaticon.com/128/1011/1011528.png" height="30px" alt=""> Bar View</button>
+        <button class="btn btn" onclick="ChangeGraph('pie')"><img src="https://cdn-icons-png.flaticon.com/128/2257/2257295.png" height="30px" alt=""> Pie-Chart View</button>
+        <button class="btn btn" onclick="ChangeGraph('doughnut')"><img src="https://cdn-icons-png.flaticon.com/128/3176/3176353.png" height="30px" alt=""> Doughnut View</button>
+        <button class="btn btn" onclick="ChangeGraph('line')"><img src="https://cdn-icons-png.flaticon.com/128/1807/1807350.png" height="30px" alt=""> Line View</button>
+        <button class="btn btn" onclick="ChangeGraph('polarArea')"><img src="https://cdn-icons-png.flaticon.com/128/7849/7849272.png" height="30px" alt=""> Polar Area View</button>
+        <button class="btn btn" onclick="ChangeGraph('radar')"><img src="https://cdn-icons-png.flaticon.com/128/6754/6754760.png" height="30px" alt=""> Radar View</button>
+    </center>
+
+    <section class="mb-4" id="grahph_section"><br>
+        <canvas id="bar-chart" height="15vh" width="60vw"></canvas>
+    </section><br>
+
+    <div class="form-outline mb-4" style="width:40%">
+      <input type="text" id="OrderInput" placeholder="...." class="form-control" />
+      <label class="form-label" for="OrderInput">Search Orders</label>
+    </div>
+
+    <div class="card" style="width:95%;margin-bottom:5vw;">
+        <div class="card-body p-0">
+          <div class="table-responsive" data-mdb-perfect-scrollbar="true" style="position:relative; border-radius:10px;">
+            <table class="table caption-top">
+                <thead style="background-color:#19123b;color:white">
+                        <tr>
+                          <th scope="col">Order ID#</th>
+                          <th scope="col">User</th>
+                          <th scope="col">Date</th>
+                          <th scope="col">Status</th>
+                        </tr>
+                </thead>
+
+                <tbody id="myTable">
+                      {% for order in order_list %}
+                        <tr>
+                          <td scope="row"><a href="{% url 'admin_view_order' order.id %}"><b>{{order.order_id}}</b></a></td>
+                          <td>{{order.user.username|capfirst}}</td>
+                          <td>{{order.create_at}}</td>
+
+                          {% if order.status == "Delivered" %}
+                          <td>{{order.status}} <img src="{% static 'checked.png' %}" style="margin-left:1vw" height="20px"></td>
+                          {% else %}
+                          <td>{{order.status}} <img src="{% static 'pending.png' %}" style="margin-left:1vw" height="30px"></td>
+                          {% endif %}
+
+                        </tr>
+                      {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+<script type="text/javascript">
+
+// Bar chart
+
+let graph_type = 'bar'
+
+months = []
+m_data = []
+
+{% for key, value in monthly_graph_data.items %}
+	months.push("{{key}}")
+	m_data.push("{{value}}")
+{% endfor %}
+
+function MyGraph(val){
+
+let dataBar = {
+  type: graph_type,
+  data: {
+    labels: months,
+    datasets: [
+      {
+        label: 'Orders',
+        data: m_data,
+        backgroundColor: [
+        'rgba(255, 99, 132, 0.3)',
+        'rgba(255, 159, 64, 0.3)',
+        'rgba(255, 205, 86, 0.3)',
+        'rgba(75, 192, 192, 0.3)',
+        'rgba(54, 162, 235, 0.3)',
+        'rgba(153, 102, 255, 0.3)',
+        'rgba(201, 203, 207, 0.3)',
+        'rgba(75, 192, 192, 0.3)',
+        'rgba(54, 162, 235, 0.3)',
+        'rgba(153, 102, 255, 0.3)',
+        'rgba(201, 203, 207, 0.3)'
+        ],
+        borderColor: [
+        'rgb(255, 99, 132)',
+        'rgb(255, 159, 64)',
+        'rgb(255, 205, 86)',
+        'rgb(75, 192, 192)',
+        'rgb(54, 162, 235)',
+        'rgb(153, 102, 255)',
+        'rgb(201, 203, 207)',
+        'rgb(255, 205, 86)',
+        'rgb(75, 192, 192)',
+        'rgb(54, 162, 235)',
+        'rgb(153, 102, 255)',
+        'rgb(201, 203, 207)'
+        ],
+    borderWidth: 1
+      },    
+    ],
+  },
+};
+return dataBar;
+}
+
+myChart = new Chart(document.getElementById('bar-chart'), MyGraph('bar'));
+
+function ChangeGraph(val){
+  graph_type = val;
+  myChart.destroy();
+  myChart = new Chart(document.getElementById('bar-chart'), MyGraph(val));
+}
+
+
+var $rows = $('#myTable tr');
+$('#OrderInput').keyup(function() {
+    var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+    
+    $rows.show().filter(function() {
+        var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+        return !~text.indexOf(val);
+    }).hide();
+});
+
+</script>
+
+
+</main>
+
+
+{% endblock %}
+

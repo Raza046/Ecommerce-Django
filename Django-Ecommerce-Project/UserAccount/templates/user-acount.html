@@ -1,0 +1,53 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block content %}
+
+
+<!-- main content -->
+    <div class="main-content" style="padding-top:200px;margin-bottom:120px;">
+        <div class="wrap-banner">
+
+            <div class="acount head-acount">
+                <div class="container">
+                    <div id="main">
+                        <h1 class="title-page">My Account</h1>
+                        <div class="content" id="block-history">
+                            <table class="std table">
+                                <tbody>
+                                    <tr>
+                                        <th class="first_item">My Name :</th>
+                                        <td>{{user.full_name|capfirst}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="first_item">Username :</th>
+                                        <td>{{user.user.username}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="first_item">City :</th>
+                                        <td>{{user.city}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="first_item">Postal/Zip Code :</th>
+                                        <td>{{user.zip_code}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="first_item">Phone :</th>
+                                        <td>{{user.phone}}</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="first_item">Country:</th>
+                                        <td>{{user.phone}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% endblock %}

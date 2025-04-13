@@ -1,0 +1,283 @@
+{% extends "dashboard/dashboard_base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<style>
+
+.gradient-custom {
+/* fallback for old browsers */
+background-color: #76787d;
+}
+</style>
+
+<main style="margin-top:8vw;margin-left:2vw;">
+
+        <div class="container py-5 h-100">
+          <div class="row d-flex justify-content-left align-items-center h-100">
+            <div class="col col-lg-10 mb-4 mb-lg-0">
+              <div class="card mb-3" style="border-radius: .5rem;">
+                <div class="row g-0">
+                  <div class="col-md-4 gradient-custom text-center text-white"
+                    style="border-top-left-radius: .5rem; border-bottom-left-radius: .5rem;">
+                    <img src="{% static 'user.png' %}" alt="Avatar" class="img-fluid my-5" style="width: 80px;" />
+                    <h5>{{users.user.username|capfirst}}</h5>
+                    <p>Customer</p>
+                    <i class="far fa-edit mb-5"></i>
+                  </div>
+                  <div class="col-md-8">
+                    <div class="card-body p-4">
+                      <h6>Information</h6>
+                      <hr class="mt-0 mb-4">
+                      <div class="row pt-1">
+                        <div class="col-6 mb-3">
+                          <h6>Email</h6>
+                          <p class="text-muted">{{users.user.email}}</p>
+                        </div>
+                        <div class="col-6 mb-3">
+                          <h6>Phone</h6>
+                          <p class="text-muted">{{users.phone}}</p>
+                        </div>
+                      </div>
+                      <hr class="mt-0 mb-4">
+                      <div class="row pt-1">
+                        <div class="col-4 mb-3">
+                            <h6>Total Orders</h6>
+                            <p class="text-muted">{{users.total_orders}}</p>
+                        </div>
+                        <div class="col-4 mb-3">
+                          <h6>Coupons</h6>
+                          {% for coupon in users.coupons.all %}
+                          <p class="text-muted">{{coupon.code}}  {{coupon.discount}}%</p>
+                          {% endfor %}
+                      </div>
+                        <div class="col-4 mb-4">
+                          <button class="btn btn-primary" data-mdb-toggle="modal" data-mdb-target="#AssignCoupon">Manage Coupons</button>
+                      </div>
+
+                      <!-- Modal -->
+                      <div class="modal fade" id="AssignCoupon" tabindex="-1" aria-labelledby="AssignCouponLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title" id="AssignCouponLabel">Assign Coupon To {{users.user.username|capfirst}}</h5>
+                            <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+
+                              <div class="card" style="width:95%;margin-bottom:5vw;">
+                                <div class="card-body p-0">
+                                  <div class="table-responsive" data-mdb-perfect-scrollbar="true" style="position:relative; border-radius:10px;">
+                                    <table class="table caption-top" id="coupon_body">
+                                        <thead style="background-color:#19123b;color:white">
+                                            <tr>
+                                                <th scope="col">Coupon Code #</th>
+                                                <th scope="col">Discount</th>
+                                                <th scope="col">Validity</th>
+                                                <th scope="col">Assign</th>
+                                            </tr>
+                                        </thead>
+                        
+                                    <tbody>
+                                      {% for coupon in coupons %}
+                                        <tr>
+                                          <td>{{coupon.code}}</td>
+                                          <td>{{coupon.discount}}</td>
+                                          <td>{{coupon.valid_to}}</td>
+                                          {% if users.user in coupon.user.all %}
+                                          <td><button class="btn btn-danger" id="RemoveAssignBtn" onclick="RemoveAssignCoupon('{{coupon.id}}','{{users.user.id}}')">Remove</button></td>
+                                          {% else %}
+                                          <td><button class="btn btn-info" id="assignBtn" onclick="AssignCoupon('{{coupon.id}}','{{users.user.id}}')">Assign</button></td>
+                                          {% endif %}
+                                        </tr>
+                                      {% endfor %}
+                                    </tbody>
+                                  </table>
+                              </div>
+                          </div>
+                      </div>
+
+                        </div>
+                        </div>
+                    </div>
+
+                  </div>
+                      <div class="d-flex justify-content-start">
+                        <a href="#!"><i class="fab fa-facebook-f fa-lg me-3"></i></a>
+                        <a href="#!"><i class="fab fa-twitter fa-lg me-3"></i></a>
+                        <a href="#!"><i class="fab fa-instagram fa-lg"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div><br>
+
+
+
+    <div class="form-outline mb-4" style="width:40%">
+        <input type="text" id="OrderInput" class="form-control" />
+        <label class="form-label" for="OrderInput">Search Orders</label>
+    </div>
+
+<div class="card" style="width:95%;margin-bottom:5vw;">
+        <div class="card-body p-0">
+          <div class="table-responsive" data-mdb-perfect-scrollbar="true" style="position:relative; border-radius:10px;">
+            <table class="table caption-top">
+                <thead style="background-color:#19123b;color:white">
+                    <tr>
+                        <th scope="col">Order ID#</th>
+                        <th scope="col">User</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Status</th>
+                    </tr>
+                </thead>
+
+            <tbody id="myTable">
+                {% for order in users.orders.all %}
+                    <tr>
+                        <td scope="row"><a href="{% url 'admin_view_order' order.id %}"><b>{{order.order_id}}</b></a></td>
+                        <td>{{order.user.username|capfirst}}</td>
+                        <td>{{order.create_at}}</td>
+
+                        {% if order.status == "Delivered" %}
+                        <td>{{order.status}} <img src="{% static 'checked.png' %}" style="margin-left:1vw" height="20px"></td>
+                        {% else %}
+                        <td>{{order.status}} <img src="{% static 'pending.png' %}" style="margin-left:1vw" height="30px"></td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<center>
+  <button class="btn btn" onclick="ChangeGraph('bar')"><img src="https://cdn-icons-png.flaticon.com/128/1011/1011528.png" height="30px" alt=""> Bar View</button>
+  <button class="btn btn" onclick="ChangeGraph('pie')"><img src="https://cdn-icons-png.flaticon.com/128/2257/2257295.png" height="30px" alt=""> Pie-Chart View</button>
+  <button class="btn btn" onclick="ChangeGraph('doughnut')"><img src="https://cdn-icons-png.flaticon.com/128/3176/3176353.png" height="30px" alt=""> Doughnut View</button>
+  <button class="btn btn" onclick="ChangeGraph('line')"><img src="https://cdn-icons-png.flaticon.com/128/1807/1807350.png" height="30px" alt=""> Line View</button>
+  <button class="btn btn" onclick="ChangeGraph('polarArea')"><img src="https://cdn-icons-png.flaticon.com/128/7849/7849272.png" height="30px" alt=""> Polar Area View</button>
+  <button class="btn btn" onclick="ChangeGraph('radar')"><img src="https://cdn-icons-png.flaticon.com/128/6754/6754760.png" height="30px" alt=""> Radar View</button>
+</center>
+
+<section class="mb-4"><br>
+    <canvas id="bar-chart" height="15vh" width="60vw"></canvas>
+</section><br>
+</div>
+
+</main>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+<script>
+
+var $rows = $('#myTable tr');
+
+$('#OrderInput').keyup(function() {
+    var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+    
+    $rows.show().filter(function() {
+        var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+        return !~text.indexOf(val);
+    }).hide();
+});
+
+
+// Bar chart
+
+let graph_type = 'bar'
+
+months = []
+m_data = []
+
+{% for key, value in month_data.items %}
+	months.push("{{key}}")
+	m_data.push("{{value}}")
+{% endfor %}
+
+
+function MyGraph(val){
+
+const dataBar = {
+    type: graph_type,
+    data: {
+
+    labels: months,
+    datasets: [
+        {
+        label: 'Orders',
+        data: m_data,
+        backgroundColor: [
+        'rgba(255, 99, 132, 0.3)',
+        'rgba(255, 159, 64, 0.3)',
+        'rgba(255, 205, 86, 0.3)',
+        'rgba(75, 192, 192, 0.3)',
+        'rgba(54, 162, 235, 0.3)',
+        'rgba(153, 102, 255, 0.3)',
+        'rgba(201, 203, 207, 0.3)',
+        'rgba(255, 205, 86, 0.3)',
+        'rgba(205, 194, 86, 0.3)',
+        ]
+    },
+    ],
+    },
+  };
+  return dataBar;
+}
+
+myChart = new Chart(document.getElementById('bar-chart'), MyGraph('bar'));
+
+function ChangeGraph(val){
+  graph_type = val;
+  myChart.destroy();
+  myChart = new Chart(document.getElementById('bar-chart'), MyGraph(val));
+}
+
+
+function AssignCoupon(id,user_id){
+
+  $.ajax({
+    url:'/admin-panel/coupons/assign',
+    data:{
+      "c_id":id,
+      "u_id":user_id
+    },
+    success: function(res){
+      console.log(res);
+      if(res == "Successfull"){
+        $('#assignBtn').attr('disabled', true);
+        document.getElementById("assignBtn").style.backgroundColor = "#28a745";
+      }
+    }
+  })
+    $("#coupon_body").load(location.href + " #coupon_body");
+}
+
+function RemoveAssignCoupon(id,user_id){
+  $.ajax({
+    url:'/admin-panel/coupons/remove',
+    data:{
+      "c_id":id,
+      "u_id":user_id
+    },
+    success: function(res){
+      console.log(res);
+      if(res == "Successfull"){
+        $('#assignBtn').attr('disabled', true);
+        document.getElementById("assignBtn").style.backgroundColor = "#28a745";
+      }
+    }
+  })
+    $("#coupon_body").load(location.href + " #coupon_body");
+}
+
+
+</script>
+
+
+{% endblock %}

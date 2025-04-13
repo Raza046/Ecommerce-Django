@@ -1,0 +1,127 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/mdb.min.css' %}" />
+
+
+<!-- Container for demo purpose -->
+<div class="container my-5 py-5">
+
+    <!-- Section: Design Block -->
+    <section class="mb-10">
+      <style>
+        /* Map settings */
+        .map-container-2 {
+          height: 500px;
+        }
+  
+        .map-container-2 iframe {
+          left: 0;
+          top: 0;
+          height: 100%;
+          width: 100%;
+        }
+  
+        .rounded-t-5 {
+          border-top-left-radius: 0.5rem;
+          border-top-right-radius: 0.5rem;
+        }
+        @media (min-width: 992px) {
+          .rounded-tr-lg-0 {
+            border-top-right-radius: 0;
+          }
+          .rounded-bl-lg-5 {
+            border-bottom-left-radius: 0.5rem;
+          }
+        }
+      </style>
+      <div class="card mb-3">
+        <div class="row g-0 d-flex align-items-center">
+          <div class="col-lg-4 d-none d-lg-flex">
+            <div class="map-container-2 w-100 mb-4 mb-lg-0">
+              <iframe
+                      src="https://maps.google.com/maps?q=manhatan&t=&z=13&ie=UTF8&iwloc=&output=embed"
+                      class="rounded-t-5 rounded-tr-lg-0 rounded-bl-lg-5"
+                      frameborder="0"
+                      allowfullscreen
+                      ></iframe>
+            </div>
+          </div>
+          <div class="col-lg-8">
+            <div class="card-body py-5 px-md-5">
+              <div class="row gx-lg-5">
+                <div class="col-md-6 mb-5">
+                  <div class="d-flex align-items-start">
+                    <div class="flex-shrink-0">
+                      <div class="p-3 badge-primary rounded-4">
+                        <i class="fas fa-headset fa-lg fa-fw"></i>
+                      </div>
+                    </div>
+                    <div class="flex-grow-1 ms-4">
+                      <p class="fw-bold mb-1">Technical support</p>
+                      <p class="text-muted mb-0">support@example.com</p>
+                      <p class="text-muted mb-0">+1 234-567-89</p>
+                    </div>
+                  </div>
+                </div>
+  
+                <div class="col-md-6 mb-5">
+                  <div class="d-flex align-items-start">
+                    <div class="flex-shrink-0">
+                      <div class="p-3 badge-primary rounded-4">
+                        <i class="fas fa-dollar-sign fa-lg fa-fw"></i>
+                      </div>
+                    </div>
+                    <div class="flex-grow-1 ms-4">
+                      <p class="fw-bold mb-1">Sales questions</p>
+                      <p class="text-muted mb-0">sales@example.com</p>
+                      <p class="text-muted mb-0">+1 234-567-89</p>
+                    </div>
+                  </div>
+                </div>
+  
+                <div class="col-md-6">
+                  <div class="d-flex align-items-start">
+                    <div class="flex-shrink-0">
+                      <div class="p-3 badge-primary rounded-4">
+                        <i class="fas fa-newspaper fa-lg fa-fw"></i>
+                      </div>
+                    </div>
+                    <div class="flex-grow-1 ms-4">
+                      <p class="fw-bold mb-1">Press</p>
+                      <p class="text-muted mb-0">press@example.com</p>
+                      <p class="text-muted mb-0">+1 234-567-89</p>
+                    </div>
+                  </div>
+                </div>
+  
+                <div class="col-md-6">
+                  <div class="d-flex align-items-start">
+                    <div class="flex-shrink-0">
+                      <div class="p-3 badge-primary rounded-4">
+                        <i class="fas fa-bug fa-lg fa-fw"></i>
+                      </div>
+                    </div>
+                    <div class="flex-grow-1 ms-4">
+                      <p class="fw-bold mb-1">Bug report</p>
+                      <p class="text-muted mb-0">bugs@example.com</p>
+                      <p class="text-muted mb-0">+1 234-567-89</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- Section: Design Block -->
+  
+  </div>
+  <!-- Container for demo purpose -->
+
+  
+{% endblock %}

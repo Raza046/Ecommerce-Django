@@ -1,0 +1,150 @@
+{% extends "dashboard/dashboard_base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<style>
+
+</style>
+
+
+<!-- MAIN -->
+<main style="margin-top:8vw;margin-left:2vw;">
+	<div class="head-title">
+		<div class="left">
+			<h1>{{sub_categories.name}}</h1>
+		</div>
+		<a href="#" class="">
+			<button class="btn btn-success"><i class="bx bxs-cloud-download" ></i> Download CSV</button>
+		</a>
+	</div>
+
+    <br>
+
+    <!-- Adding Variation Modal Button -->
+
+        <div class="text-center">
+            <button class="btn btn-info"  data-mdb-toggle="modal" data-mdb-target="#AddVar">+ Select Variations</button>
+            <a href="{% url 'add_product_variation' product.id %}"><button class="btn btn-info">+ Add Product Variations</button></a>
+          </div>
+  <br>
+
+<!-- Adding Variation Modal -->
+
+<div class="modal fade" id="AddVar" tabindex="-1" aria-labelledby="ProdVarModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-side modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="ProdVarModalLabel">{{c.Size_variants.Product.Name}}</h5>
+          <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <form action="" method="post" id="form_submit">
+          <div class="modal-body">Select Variations For This Product: <br>
+                <select id="p_var" class="form-control mdb-select" style="width:80%">
+                  {% for variation in variations %}
+                      <option value="{{variation.id}}">{{variation.name}}</option>
+                  {% endfor %}<br>
+                </select>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-mdb-dismiss="modal">Close</button>
+            <button  class="btn btn-primary" type="submit">Save changes</button>
+          </div>
+      </form>
+
+      </div>
+    </div>
+  </div>
+
+<!-- Adding Variation Modal -->
+
+<div class="table-data">
+		<div class="order">
+			<div class="head">
+				<h3 style="font-family: bold">All Variations</h3>
+				<i class="bx bx-search" ></i>
+				<i class="bx bx-filter" ></i>
+			</div>
+			<div class="card" style="width:95%;margin-bottom:5vw;">
+				<div class="card-body p-0">
+				  <div class="table-responsive" data-mdb-perfect-scrollbar="true" style="position:relative; border-radius:10px;">
+							<table class="table caption-top">
+              <thead style="background-color:#19123b;color:white">
+                <tr>
+                  <th>Variations</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                  {% for variation in product.variations.all %}
+
+                      <tr>
+                        <td>{{variation.name}}</td>
+                        <td><button class="btn btn-danger">Remove</button></td>
+                      </tr>
+
+                  {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+	</div>
+
+</main>
+
+
+{% block extrascripts %}
+
+<!-- jQuery -->
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<script>
+
+$('#form_submit').submit(function(e){
+
+e.preventDefault();
+p_var = document.getElementById("p_var").value
+
+var formdata = new FormData();
+formdata.append("p_var_id", p_var);
+formdata.append("product", "{{product.id}}");
+formdata.append("csrfmiddlewaretoken", "{{ csrf_token }}");
+
+console.log("{{product.id}}")
+console.log("----Hello-------")
+
+
+$.ajax({
+  method: "POST",
+  url : "/add_variation",
+  processData: false,
+  contentType: false,
+  mimeType: "multipart/form-data",
+  data : formdata,
+  success: function(res) {
+  console.log(res);
+  if (res.includes("Product Variation Added!")){
+    // input_error = document.getElementById("input_error").style.display="none";
+    // Created(res);
+  }
+  else{
+    // input_error = document.getElementById("input_error").style.display="block";
+  }
+  }
+});
+
+});
+
+
+</script>
+
+{% endblock %}
+
+
+{% endblock %}
+

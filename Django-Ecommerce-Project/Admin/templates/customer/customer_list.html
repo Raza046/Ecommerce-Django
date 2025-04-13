@@ -1,0 +1,67 @@
+{% extends "dashboard/dashboard_base.html" %}
+
+{% load static %}
+
+{% block content %}
+  
+
+<main style="margin-top:8vw;margin-left:2vw;">
+
+    <div class="form-outline mb-4" style="width:40%">
+        <input type="text" id="CustomerInput" placeholder="Search customer here .." class="form-control" />
+        <label class="form-label" for="CustomerInput">Search Customer</label>
+    </div>
+
+
+<div class="card" style="width:95%;margin-bottom:5vw;">
+        <div class="card-body p-0">
+          <div class="table-responsive" data-mdb-perfect-scrollbar="true" style="position:relative; border-radius:10px;">
+            <table class="table caption-top">
+                <thead style="background-color:#19123b;color:white">
+                        <tr>
+                          <th scope="col">Picture</th>
+                          <th scope="col">Username</th>
+                          <th scope="col">City</th>
+                          <th scope="col">Total Orders</th>
+                          <th scope="col">View</th>
+                        </tr>
+                </thead>
+
+                <tbody id="myTable">
+                    {% for user in users_list.all %}
+                        <tr>
+                            <td><img src="{% static 'user.png' %}" height="50px"></td>
+                            <td>{{user.user.username|capfirst}}</td>
+                            <td>{{user.city}}</td>
+                            <td>{{user.total_orders}}</td>
+                            <td><a href="{% url 'customers_orders' user.user.id %}"><button class="btn btn-primary">View</button></a></td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+</main>
+
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+
+var $rows = $('#myTable tr');
+
+$('#CustomerInput').keyup(function() {
+    var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+    
+    $rows.show().filter(function() {
+        var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+        return !~text.indexOf(val);
+    }).hide();
+});
+
+</script>
+
+
+{% endblock %}

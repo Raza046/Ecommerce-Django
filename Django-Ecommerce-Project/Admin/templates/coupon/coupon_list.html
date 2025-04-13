@@ -1,0 +1,295 @@
+{% extends "dashboard/dashboard_base.html" %}
+
+{% load static %}
+
+{% block content %}
+  
+
+<main style="margin-top:8vw;margin-left:2vw;">
+	<div class="head-title">
+		<div class="left">
+			<h1 style="font-family:bold">Coupons</h1>
+		</div><br>
+		<a href="#" class="btn btn-success" data-mdb-toggle="modal" data-mdb-target="#exampleModal">+ Add Coupon</a>
+	</div><br><br>
+
+  <div class="form-outline mb-4" style="width:40%">
+    <input type="text" id="CouponInput" placeholder="Search for coupon here .." class="form-control" />
+    <label class="form-label" for="CouponInput">Search Coupon</label>
+</div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Create Coupon</h5>
+          <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+
+            <div class="row mb-4">
+                <div class="col">
+                  <div class="form-outline">
+                    <input type="text" id="c_code" class="form-control" />
+                    <label class="form-label" for="c_code">Coupon Code</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-outline">
+                    <input type="number" id="c_discount" class="form-control" />
+                    <label class="form-label" for="c_discount">Total Discount</label>
+                  </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="form-label">Validity</label>
+                    <div class="form-outline">
+                      <input type="date" id="validfor" class="form-control" />
+                    </div>
+                </div>
+
+                <div class="col-md-3 offset-3"><br>
+                  <div class="form-check">
+                    <label class="form-check-label" for="all_user_opt">For All Users</label>
+                    <input class="form-check-input" type="checkbox" value="yes" id="all_user_opt" />
+                  </div>
+            </div>
+
+            </div>
+          <br>
+
+          <div class="row">
+              <div class="col">
+                <label id="CouponResponse_val"></label>
+              </div>
+        </div>
+          
+
+        </div>
+        <!-- <div class="modal-footer"> -->
+
+          <hr>
+          <div class="d-grid gap-2">
+            <center>
+            <button id="CouponBtn" style="width:80%" class="btn btn-primary" type="button" onclick="CreateCoupon()">Create Coupon</button>
+          </center>
+          </div><br>
+        <!-- </div> -->
+      </div>
+    </div>
+  </div>
+
+
+	<div class="table-data">
+		<div class="order">
+			<div class="card" style="width:95%;margin-bottom:5vw;">
+				<div class="card-body p-0">
+				  <div class="table-responsive" data-mdb-perfect-scrollbar="true" style="position:relative; border-radius:10px;">
+							<table class="table caption-top">
+								<thead style="background-color:#19123b;color:white">
+									<tr>
+										<th>Coupon Code</th>
+										<th>Discount</th>
+										<th>Validity</th>
+										<th>Edit</th>
+									</tr>
+								</thead>
+								<tbody id="myTable">
+									{% for coupon in coupon_list %}
+									<tr id="coupon_body">
+										<td>{{coupon.code}}</td>
+										<td>{{coupon.discount}} %</td>
+										<td>{{coupon.valid_to}}</td>
+										<td><button class="btn btn-primary" data-mdb-toggle="modal" data-mdb-target="#EditCoupon{{coupon.id}}">View</button></td>
+									</tr>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="EditCoupon{{coupon.id}}" tabindex="-1" aria-labelledby="EditCouponLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                <h5 class="modal-title" id="EditCouponLabel">Modal title</h5>
+                                <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+
+                                    <div class="row mb-4">
+                                        <div class="col">
+                                        <div class="form-outline">
+                                            <input type="text" id="edit_c_code{{coupon.id}}" value="{{coupon.code}}" class="form-control" />
+                                            <label class="form-label" for="c_code">Coupon Code</label>
+                                        </div>
+                                        </div>
+                                        <div class="col">
+                                        <div class="form-outline">
+                                            <input type="number" id="edit_discount{{coupon.id}}" value="{{coupon.discount}}" class="form-control" />
+                                            <label class="form-label" for="edit_discount">Total Discount</label>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            <label class="form-label">Validity</label>
+                                            <div class="form-outline">
+                                              <input type="date" value="{{coupon.valid_to|date:'Y-m-d'}}" id="edit_vaalidfor{{coupon.id}}" class="form-control" required />
+                                            </div>
+                                        </div>
+                                    
+                                      <div class="col-md-3 offset-3"><br>
+                                        <div class="form-check">
+                                          <label class="form-check-label" for="edit_all_user_opt">For All Users</label>
+                                          {% if coupon.all_users %}
+                                          <input class="form-check-input" type="checkbox" value="yes" id="edit_all_user_opt{{coupon.id}}" checked/>
+                                          {% else %}
+                                          <input class="form-check-input" type="checkbox" value="yes" id="edit_all_user_opt{{coupon.id}}" />
+                                          {% endif %}
+                                        </div>
+                                      </div>
+
+                                  </div>          
+
+                                </div><hr>
+                                <div class="d-grid gap-2">
+                                  <center>
+                                  <button id="EditCouponBtn{{coupon.id}}" style="width:80%" class="btn btn-primary" type="button" onclick="EditCoupon('{{coupon.id}}')">Edit Coupon</button>
+                                </center>
+                                </div><br>
+                            </div>
+                            </div>
+                        </div>
+
+                      {% endfor %}
+
+                </tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+	</div>
+
+</main>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<script>
+var $rows = $('#myTable tr');
+
+$('#CouponInput').keyup(function() {
+    var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+    
+    $rows.show().filter(function() {
+        var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+        return !~text.indexOf(val);
+    }).hide();
+});
+
+
+function CreateCoupon(){
+
+  all_user_option = document.getElementById("all_user_opt").checked
+  valid_for = document.getElementById("validfor").value
+  coupon_discount = document.getElementById("c_discount").value
+  coupon_code = document.getElementById("c_code").value
+
+  let formData = new FormData();
+  formData.append("csrfmiddlewaretoken", "{{ csrf_token }}");
+  formData.append('all_users', all_user_option);
+  formData.append('valid_to', valid_for);
+  formData.append('discount', coupon_discount);
+  formData.append('code', coupon_code);
+  
+  $.ajax({
+    method: "POST",
+    url: '/admin-panel/coupons/create',
+    mimeType: "multipart/form-data",
+    processData: false,
+    contentType: false,
+    data: formData,
+    success: function(res) {
+        // console.log(res);
+        CouponResponse(res);
+    }
+  });
+  // $("#coupon_body").load(location.href + " #coupon_body");
+}
+
+function EditCoupon(coupon_id){
+  console.log(coupon_id);
+
+all_user_option = document.getElementById("edit_all_user_opt"+coupon_id).checked
+valid_for = document.getElementById("edit_vaalidfor"+coupon_id).value
+coupon_discount = document.getElementById("edit_discount"+coupon_id).value
+coupon_code = document.getElementById("edit_c_code"+coupon_id).value
+
+let formData = new FormData();
+formData.append("csrfmiddlewaretoken", "{{ csrf_token }}");
+formData.append('id', coupon_id);
+formData.append('all_users', all_user_option);
+formData.append('valid_to', valid_for);
+formData.append('discount', coupon_discount);
+formData.append('code', coupon_code);
+
+
+$.ajax({
+    method: "POST",
+    url: '/admin-panel/coupons/edit',
+    mimeType: "multipart/form-data",
+    processData: false,
+    contentType: false,
+    data: formData,
+
+    headers: {
+      'X-CSRFToken': '{{ csrf_token }}'
+    },
+ 
+    success: function(res) {
+        console.log(res);
+        EditCouponResponse(res, coupon_id);
+    },
+});
+}
+
+function CouponResponse(val){
+
+  if(val == "Successfull"){
+    setTimeout(function(){
+    document.getElementById("CouponBtn").style="opacity:0.4";
+    $('#CouponBtn').html('Created successfully <span style="margin-left:10px">&#10004;</span>')
+    document.getElementById("CouponBtn").style="background-color:#28a745;opacity:1";
+    }, 500);
+    document.getElementById("CouponResponse_val").innerHTML = "";
+    $('#CouponBtn').attr('disabled', true);
+
+  }
+
+}
+
+function EditCouponResponse(val,c_id){
+
+if(val == "Successfull"){
+  setTimeout(function(){
+  document.getElementById("EditCouponBtn"+c_id).style="opacity:0.4";
+  $('#EditCouponBtn'+c_id).html('Edited successfully <span style="margin-left:10px">&#10004;</span>')
+  document.getElementById("EditCouponBtn"+c_id).style="background-color:#28a745;opacity:1";
+  }, 500);
+  $('#EditCouponBtn'+c_id).attr('disabled', true);
+
+}
+
+else{
+    setTimeout(function(){
+    document.getElementById("EditCouponBtn"+c_id).style="opacity:0.4";
+    $('#EditCouponBtn'+c_id).html('Try Again <span style="margin-left:10px">&#10004;</span>')
+    document.getElementById("EditCouponBtn"+c_id).style="opacity:1";
+    }, 500);
+  }
+
+}
+
+</script>
+
+{% endblock %}

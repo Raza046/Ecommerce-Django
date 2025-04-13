@@ -1,0 +1,112 @@
+{% extends "base/base1.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<section style="background-color: #eee;">
+
+    <form id="subs_form" action="/subscription/", method="post">
+
+        {% csrf_token %}
+
+        <div class="row">
+
+            <div class="col-md-6">
+                <div class="row justify-content-center">
+                    <div class="col-md-7">
+                    <div class="card" style="border-radius: 15px;">
+                        <div class="card-body pb-0">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                            <p><a href="#!" class="text-dark">Free Plan</a></p>
+                            <p class="small text-muted">Subscription plan</p>
+                            </div>
+                            <div>
+                            </div>
+                        </div>
+                        </div>
+                        <hr class="my-0" />
+                        <div class="card-body pb-0">
+                        <div class="d-flex justify-content-between">
+                            <p><a href="#!" class="text-dark">$0.00</a></p>
+                            <p class="text-dark">#### 8787</p>
+                        </div>
+                        <p class="small text-muted">VISA Card</p>
+                        </div>
+                        <hr class="my-0" />
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center pb-2 mb-1">
+                            {% if subscription %}
+                                {% if subscription.subscription_name == 'Free' %}
+                                    <button onclick="Cancel()" class="btn btn-danger">Cancel</button>
+                                {% else %}
+                                    <button type="submit" class="btn btn-primary">Upgrade</button>
+                                {% endif %}
+                            {% else %}
+                                <button type="submit" class="btn btn-primary">Purchase</button>
+                            {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+            <div class="col-md-6">
+                <div class="row justify-content-center">
+                    <div class="col-md-7">
+                    <div class="card" style="border-radius: 15px;">
+                        <div class="card-body pb-0">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                            <p><a href="#!" class="text-dark">Standard Plan</a></p>
+                            <p class="small text-muted">Subscription plan</p>
+                            </div>
+                            <div>
+                            </div>
+                        </div>
+                        </div>
+                        <hr class="my-0" />
+                        <div class="card-body pb-0">
+                        <div class="d-flex justify-content-between">
+                            <p><a href="#!" class="text-dark">$20.00</a></p>
+                            <p class="text-dark">#### 8787</p>
+                        </div>
+                        <p class="small text-muted">VISA Card</p>
+                        </div>
+                        <hr class="my-0" />
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center pb-2 mb-1">
+                                {% if subscription %}
+                                    {% if subscription.subscription_name == 'Standard' %}
+                                        <button type="submit" class="btn btn-danger">Cancel</button>
+                                    {% else %}
+                                        <button type="submit" class="btn btn-primary">Upgrade</button>
+                                    {% endif %}
+                                {% else %}
+                                    <button type="submit" class="btn btn-primary">Purchase</button>
+                                {% endif %}
+                            </div>
+                        </div>
+                
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</form>
+
+</section>
+
+<script>
+
+    function Cancel(){
+        form = document.getElementById("subs_form")
+        form.action = "/subscription/cancel/"
+    }
+
+</script>
+
+
+{% endblock %}

@@ -1,0 +1,100 @@
+{% load static %}
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- Boxicons -->
+	<link href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css" rel="stylesheet">
+	<!-- My CSS -->
+	<!-- <link rel="stylesheet" href="{% static 'css/admin_style.css' %}"> -->
+
+	<link
+	rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+  />
+  <!-- Google Fonts Roboto -->
+  <link
+	rel="stylesheet"
+	href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap"
+  />
+
+
+  <!-- MDB -->
+  <link rel="stylesheet" href="{% static 'css/mdb.min.css' %}" />
+    <!-- ------ -->
+	<!--  Above line of code will blast the admin sidebar -->
+
+</head>
+
+<h1>{{custom_message}}</h1>
+<!-- Section: Design Block -->
+<section class="text-center">
+    <!-- Background image -->
+    <div class="p-5 bg-image" style="
+          background-image: url('static/header_img.jpg');
+          height: 300px;"></div>
+    <!-- Background image -->
+  
+    <div class="card mx-4 mx-md-5 shadow-5-strong" style="
+          margin-top: -100px;
+          background: hsla(0, 0%, 100%, 0.8);
+          backdrop-filter: blur(30px);
+          ">
+      <div class="card-body py-5 px-md-5">
+  
+        <div class="row d-flex justify-content-center">
+          <div class="col-lg-8">
+            <img src="{% static 'ecom_logo.png' %}" height="100px" alt="">
+            <h2 class="fw-bold mb-5">Sign In</h2>
+            <form action="{% url 'login' %}" id="customer-form" class="js-customer-form" method="post">
+              {% csrf_token %}
+
+            <div class="row">
+              <center>
+                <div class="col-md-12 mb-4" style="width:50%;">
+                    {% for form in form %}
+                        <div class="form-outline">
+                          {{form}}
+                          <label class="form-label" for="{{form.label}}">{{form.label}}</label>
+                        </div><br>
+                    {% endfor %}
+                  </div>
+              </center>
+            </div><br>
+  
+  
+              <!-- Submit button -->
+              <button type="submit" class="btn btn-primary btn-block mb-4">
+                Sign up
+              </button>
+  
+              <!-- Register buttons -->
+              <div class="text-center">
+                <p>or sign up with:</p>
+                <button type="button" class="btn btn-link btn-floating mx-1">
+                  <i class="fab fa-facebook-f"></i>
+                </button>
+  
+                <button type="button" class="btn btn-link btn-floating mx-1">
+                  <i class="fab fa-google"></i>
+                </button>
+  
+                <button type="button" class="btn btn-link btn-floating mx-1">
+                  <i class="fab fa-twitter"></i>
+                </button>
+  
+                <button type="button" class="btn btn-link btn-floating mx-1">
+                  <i class="fab fa-github"></i>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- Section: Design Block -->
+
+  
+    <script src="{% static 'js/mdb.min.js' %}"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>

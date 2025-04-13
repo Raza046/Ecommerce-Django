@@ -1,0 +1,73 @@
+{% extends "dashboard/dashboard_base.html" %}
+
+{% load static %}
+
+{% block content %}
+  
+
+<main style="margin-top:8vw;margin-left:2vw;">
+
+    <div class="form-outline mb-4" style="width:40%">
+        <input type="text" id="OrderInput" class="form-control" />
+        <label class="form-label" for="OrderInput">Search Orders</label>
+    </div>
+
+    <div class="card" style="width:95%;margin-bottom:5vw;">
+        <div class="card-body p-0">
+          <div class="table-responsive" data-mdb-perfect-scrollbar="true" style="position:relative; border-radius:10px;">
+            <table class="table caption-top">
+                <thead style="background-color:#19123b;color:white">
+                    <tr>
+                        <th scope="col">Complain ID#</th>
+                        <th scope="col">User</th>
+                        <th scope="col">Order ID#</th>
+                        <th scope="col">Product</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Request</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">View</th>
+                    </tr>
+                </thead>
+
+            <tbody id="myTable">
+                {% for complain in complain_list %}
+                    <tr>
+                        <td>{{complain.id}}</td>
+                        <td>{{complain.user.username|capfirst}}</td>
+                        <td scope="row"><a href="{% url 'admin_view_order' complain.order.id %}"><b>{{complain.order.order_id}}</b></a></td>
+                        <td>{{complain.product_variant.product.Name}}</td>
+                        <td>{{complain.description|truncatechars:"13"}}</td>
+                        <td>{{complain.request}}</td>
+                        <td>{{complain.status}}</td>
+                        <td><button class="btn btn-primary">View</button></td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+</main>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
+<script>
+
+var $rows = $('#myTable tr');
+
+$('#OrderInput').keyup(function() {
+    var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+    
+    $rows.show().filter(function() {
+        var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+        return !~text.indexOf(val);
+    }).hide();
+});
+
+
+</script>
+
+
+{% endblock %}

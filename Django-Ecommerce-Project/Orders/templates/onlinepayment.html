@@ -1,0 +1,797 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Boxicons -->
+	<link href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css" rel="stylesheet">
+	<!-- My CSS -->
+	<link rel="stylesheet" href="{% static 'css/admin_style.css' %}">
+
+	<link
+	rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+  />
+  <!-- Google Fonts Roboto -->
+  <link
+	rel="stylesheet"
+	href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap"
+  />
+  <!-- MDB -->
+  <link rel="stylesheet" href="{% static 'css/mdb.min.css' %}" />
+
+</head>
+
+<style>
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(-300px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0px);
+  }
+}
+
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    /* transform: translateX(-300px); */
+  }
+  to {
+    opacity: 1;
+    /* transform: translateX(0px); */
+  }
+}
+
+.left {
+    position: absolute;
+    left: 0;
+    width: 50vw;
+    height: 100%;
+    /* background-image: linear-gradient(to right, #202020, #808080); */
+    background-color: #0c1127;
+  }
+
+.right {
+    position: absolute;
+    right: 0;
+    width: 60vw;
+    height: 100%;
+    overflow: hidden;
+}
+.form fieldset {
+  border: none;
+  padding: 0;
+  padding: 10px 0;
+  position: relative;
+  clear: both;
+}
+.form fieldset.card-expire {
+  float: left;
+  width: 60%;
+}
+.form fieldset.card-expire .select {
+  width: 84px;
+  margin-right: 12px;
+  float: left;
+}
+.form fieldset.fieldset-ccv {
+  clear: none;
+  float: right;
+  width: 86px;
+}
+.form fieldset label {
+  display: block;
+  text-transform: uppercase;
+  font-size: 11px;
+  color: rgba(0, 0, 0, 0.6);
+  margin-bottom: 5px;
+  font-weight: bold;
+  font-family: Inconsolata;
+}
+.form fieldset input,
+.form fieldset .select {
+  width: 100%;
+  height: 38px;
+  color: #333333;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 15px;
+  outline: none !important;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.2);
+}
+.form fieldset input.input-cart-number,
+.form fieldset .select.input-cart-number {
+  width: 82px;
+  display: inline-block;
+  margin-right: 8px;
+}
+.form fieldset input.input-cart-number:last-child,
+.form fieldset .select.input-cart-number:last-child {
+  margin-right: 0;
+}
+.form fieldset .select {
+  position: relative;
+}
+.form fieldset .select::after {
+  content: '';
+  border-top: 8px solid #222;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  position: absolute;
+  z-index: 2;
+  top: 14px;
+  right: 10px;
+  pointer-events: none;
+}
+.form fieldset .select select {
+  -webkit-appearance: none;
+     -moz-appearance: none;
+          appearance: none;
+  position: absolute;
+  padding: 0;
+  border: none;
+  width: 100%;
+  outline: none !important;
+  top: 6px;
+  left: 6px;
+  background: none;
+}
+.form fieldset .select select :-moz-focusring {
+  color: transparent;
+  text-shadow: 0 0 0 #000;
+}
+
+.checkout {
+  margin: 260px auto 30px;
+  position: relative;
+}
+
+.checkout_form {
+  margin: 130px auto 30px;
+  position: relative;
+  width: 550px;
+  background: white;
+  border-radius: 15px;
+  padding: 65px 35px 30px;
+}
+
+.credit-card-box {
+  -webkit-perspective: 1000;
+          perspective: 1000;
+  width: 400px;
+  height: 280px;
+  position: absolute;
+  top: -112px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+          transform: translateX(-50%);
+}
+.credit-card-box:hover .flip, .credit-card-box.hover .flip {
+  -webkit-transform: rotateY(180deg);
+          transform: rotateY(180deg);
+}
+.credit-card-box .front,
+.credit-card-box .back {
+  width: 400px;
+  height: 250px;
+  border-radius: 15px;
+  -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+  background: linear-gradient(135deg, #11998e, #38ef7d);
+  position: absolute;
+  color: #fff;
+  font-family: Inconsolata;
+  top: 0;
+  left: 0;
+  text-shadow: 0 1px 1px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.3);
+}
+.credit-card-box .front::before,
+.credit-card-box .back::before {
+  content: '';
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: url("https://webdevtrick.com/demos/earth.svg") no-repeat center;
+  background-size: cover;
+  opacity: .05;
+}
+.credit-card-box .flip {
+  transition: 0.6s;
+  -webkit-transform-style: preserve-3d;
+          transform-style: preserve-3d;
+  position: relative;
+}
+.credit-card-box .logo {
+  position: absolute;
+  top: 9px;
+  right: 20px;
+  width: 60px;
+}
+.credit-card-box .logo svg {
+  width: 100%;
+  height: auto;
+  fill: #fff;
+}
+.credit-card-box .front {
+  z-index: 2;
+  -webkit-transform: rotateY(0deg);
+          transform: rotateY(0deg);
+}
+.credit-card-box .back {
+  -webkit-transform: rotateY(180deg);
+          transform: rotateY(180deg);
+}
+.credit-card-box .back .logo {
+  top: 185px;
+}
+.credit-card-box .chip {
+  position: absolute;
+  width: 60px;
+  height: 45px;
+  top: 20px;
+  left: 20px;
+  background: linear-gradient(135deg, #ddccf0 0%, #d1e9f5 44%, #f8ece7 100%);
+  border-radius: 8px;
+}
+.credit-card-box .chip::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+  border: 4px solid rgba(128, 128, 128, 0.1);
+  width: 80%;
+  height: 70%;
+  border-radius: 5px;
+}
+.credit-card-box .strip {
+  background: linear-gradient(135deg, #404040, #1a1a1a);
+  position: absolute;
+  width: 100%;
+  height: 50px;
+  top: 30px;
+  left: 0;
+}
+.credit-card-box .number {
+  position: absolute;
+  margin: 0 auto;
+  top: 103px;
+  left: 19px;
+  font-size: 38px;
+}
+.credit-card-box label {
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-shadow: none;
+  text-transform: uppercase;
+  font-weight: normal;
+  opacity: 0.5;
+  display: block;
+  margin-bottom: 3px;
+}
+.credit-card-box .card-holder,
+.credit-card-box .card-expiration-date {
+  position: absolute;
+  margin: 0 auto;
+  top: 180px;
+  left: 19px;
+  font-size: 22px;
+  text-transform: capitalize;
+}
+.credit-card-box .card-expiration-date {
+  text-align: right;
+  left: auto;
+  right: 20px;
+}
+.credit-card-box .ccv {
+  height: 36px;
+  background: #fff;
+  width: 91%;
+  border-radius: 5px;
+  top: 110px;
+  left: 0;
+  right: 0;
+  position: absolute;
+  margin: 0 auto;
+  color: #000;
+  text-align: right;
+  padding: 10px;
+}
+.credit-card-box .ccv label {
+  margin: -25px 0 14px;
+  color: #fff;
+}
+.form button {
+  width: 100%;
+  outline: none !important;
+  background: linear-gradient(90deg, #11998e, #38ef7d);
+  text-transform: uppercase;
+  font-weight: bold;
+  border: none;
+  box-shadow: none;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  margin-top: 90px;
+}
+.form button .fa {
+  margin-right: 6px;
+}
+
+/* Tada animations */
+
+
+@keyframes tada {
+  0% {
+    -webkit-transform: scale3d(1, 1, 1);
+    -ms-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+
+  10%, 20% {
+    -webkit-transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -0.5deg);
+    -ms-transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -0.5deg);
+    transform: scale3d(.9, .9, .9) rotate3d(0, 0, 1, -0.5deg);
+  }
+
+  30%, 50%, 70%, 90% {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 0.5deg);
+    -ms-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 0.5deg);
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, 0.5deg);
+  }
+
+  40%, 60%, 80% {
+    -webkit-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -0.5deg);
+    -ms-transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -0.5deg);
+    transform: scale3d(1.1, 1.1, 1.1) rotate3d(0, 0, 1, -0.5deg);
+  }
+
+  100% {
+    -webkit-transform: scale3d(1, 1, 1);
+    -ms-transform: scale3d(1, 1, 1);
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+.tada {
+  -webkit-animation-name: tada;
+  animation-name: tada;
+}
+
+.fademe.animated {
+  /* animation:tada 1.5s ease; */
+  background-color: #dc4c64 !important;
+  transition:1.5s;
+}
+
+.fademe_warning.animated, .fademe_warning_year.animated, .fademe_warning_month.animated {
+  /* animation:tada 1.5s ease; */
+  background-color: #fcb0bc !important;
+  transition:1.5s;
+}
+
+
+
+body {
+        animation: fadeIn ease 1s;
+        animation-iteration-count: 1;
+        animation-fill-mode: forwards;
+    }
+
+
+/* SHINE */
+
+.credit-card-box {
+  position: relative;
+  cursor: pointer;
+  overflow: hidden;
+  outline: none;
+  transition: all 0.2s ease;
+}
+.credit-card-box:after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -200%;
+  width: 50%;
+  height: 90%;
+  transform: skewX(320deg);
+  background-image: linear-gradient(to right, transparent, rgba(255,255,255,0.3), transparent);
+}
+.credit-card-box:after {
+  animation: shine 2.3s ease infinite;
+}
+.credit-card-box:active {
+  transform: translateY(1px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+}
+@-moz-keyframes shine {
+  100% {
+    left: 200%;
+  }
+}
+@-webkit-keyframes shine {
+  100% {
+    left: 200%;
+  }
+}
+@-o-keyframes shine {
+  100% {
+    left: 200%;
+  }
+}
+@keyframes shine {
+  100% {
+    left: 200%;
+  }
+}
+
+
+</style>
+
+<body>
+
+  <div class="backgound">
+    <div class="left"></div>
+    <div class="right">
+      <div class="strip-bottom"></div>
+      <div class="strip-top"></div>
+    </div>
+  </div>
+
+<div class="row" style="color:white;position:relative;">
+
+  <div class="col-md-6" style="box-shadow: 0 4px 78px 0 rgba(0, 0, 0, 0.5), 0 6px 50px 0 rgba(0, 0, 0, 0.19);">
+
+    <div class="checkout" style="animation: fadeInRight 2.5s ease-in-out;">
+      <div class="credit-card-box">
+        <div class="flip">
+          <div class="front" style="background:linear-gradient(135deg, black, #033f74);">
+            <div><img src="{% static 'card_chip.png' %}" height="60px" style="margin-left:15px" alt=""></div>
+            <div class="logo">
+              <svg version="1.1" id="visa" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                   width="47.834px" height="47.834px" style="enable-background:new 0 0 47.834 47.834;">
+                <g>
+                  <g>
+                    <path d="M44.688,16.814h-3.004c-0.933,0-1.627,0.254-2.037,1.184l-5.773,13.074h4.083c0,0,0.666-1.758,0.817-2.143
+                             c0.447,0,4.414,0.006,4.979,0.006c0.116,0.498,0.474,2.137,0.474,2.137h3.607L44.688,16.814z M39.893,26.01
+                             c0.32-0.819,1.549-3.987,1.549-3.987c-0.021,0.039,0.317-0.825,0.518-1.362l0.262,1.23c0,0,0.745,3.406,0.901,4.119H39.893z
+                             M34.146,26.404c-0.028,2.963-2.684,4.875-6.771,4.875c-1.743-0.018-3.422-0.361-4.332-0.76l0.547-3.193l0.501,0.228
+                             c1.277,0.532,2.104,0.747,3.661,0.747c1.117,0,2.313-0.438,2.325-1.393c0.007-0.625-0.501-1.07-2.016-1.77
+                             c-1.476-0.683-3.43-1.827-3.405-3.876c0.021-2.773,2.729-4.708,6.571-4.708c1.506,0,2.713,0.31,3.483,0.599l-0.526,3.092
+                             l-0.351-0.165c-0.716-0.288-1.638-0.566-2.91-0.546c-1.522,0-2.228,0.634-2.228,1.227c-0.008,0.668,0.824,1.108,2.184,1.77
+                             C33.126,23.546,34.163,24.783,34.146,26.404z M0,16.962l0.05-0.286h6.028c0.813,0.031,1.468,0.29,1.694,1.159l1.311,6.304
+                             C7.795,20.842,4.691,18.099,0,16.962z M17.581,16.812l-6.123,14.239l-4.114,0.007L3.862,19.161
+                             c2.503,1.602,4.635,4.144,5.386,5.914l0.406,1.469l3.808-9.729L17.581,16.812L17.581,16.812z M19.153,16.8h3.89L20.61,31.066
+                             h-3.888L19.153,16.8z"/>
+                  </g>
+                </g>
+              </svg>
+            </div>
+            <div class="number" id="card_result">**** **** **** ****</div>
+            <div class="card-holder">
+              <label>Card holder</label>
+              <div id="card_holder">Your Name</div>
+            </div>
+            <div class="card-expiration-date">
+              <label>Expires</label>
+              <div style="text-transform: lowercase;"> <span class="month_exp" id="month_result">mm</span> / <span class="year_exp" id="year_result">yy</span></div>
+            </div>
+          </div>
+          <div class="back" style="background:linear-gradient(135deg, black, #033f74);">
+            <div class="strip"></div>
+            <div class="logo">
+              <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+                   width="47.834px" height="47.834px"  style="enable-background:new 0 0 47.834 47.834;">
+                <g>
+                  <g>
+                    <path d="M44.688,16.814h-3.004c-0.933,0-1.627,0.254-2.037,1.184l-5.773,13.074h4.083c0,0,0.666-1.758,0.817-2.143
+                             c0.447,0,4.414,0.006,4.979,0.006c0.116,0.498,0.474,2.137,0.474,2.137h3.607L44.688,16.814z M39.893,26.01
+                             c0.32-0.819,1.549-3.987,1.549-3.987c-0.021,0.039,0.317-0.825,0.518-1.362l0.262,1.23c0,0,0.745,3.406,0.901,4.119H39.893z
+                             M34.146,26.404c-0.028,2.963-2.684,4.875-6.771,4.875c-1.743-0.018-3.422-0.361-4.332-0.76l0.547-3.193l0.501,0.228
+                             c1.277,0.532,2.104,0.747,3.661,0.747c1.117,0,2.313-0.438,2.325-1.393c0.007-0.625-0.501-1.07-2.016-1.77
+                             c-1.476-0.683-3.43-1.827-3.405-3.876c0.021-2.773,2.729-4.708,6.571-4.708c1.506,0,2.713,0.31,3.483,0.599l-0.526,3.092
+                             l-0.351-0.165c-0.716-0.288-1.638-0.566-2.91-0.546c-1.522,0-2.228,0.634-2.228,1.227c-0.008,0.668,0.824,1.108,2.184,1.77
+                             C33.126,23.546,34.163,24.783,34.146,26.404z M0,16.962l0.05-0.286h6.028c0.813,0.031,1.468,0.29,1.694,1.159l1.311,6.304
+                             C7.795,20.842,4.691,18.099,0,16.962z M17.581,16.812l-6.123,14.239l-4.114,0.007L3.862,19.161
+                             c2.503,1.602,4.635,4.144,5.386,5.914l0.406,1.469l3.808-9.729L17.581,16.812L17.581,16.812z M19.153,16.8h3.89L20.61,31.066
+                             h-3.888L19.153,16.8z"/>
+                  </g>
+                </g>
+              </svg>
+     
+            </div>
+            <div class="ccv">
+              <label>CVV</label>
+              <div id="cvv_result">****</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+  
+  </div>
+
+
+  <div class="col-md-6">
+
+          <div class="row" style="padding:80px;padding-bottom:0px;color:#5c5c5c;margin-top:-3vw; animation:fadeIn 2.5s ease-in-out;">
+            <div class="col-md-12">
+              <div class="rounded-3">
+                <!-- <div class="card rounded-3"> -->
+                <div class="card-body p-4">
+                  <div class="text-center mb-4" style="font-family:bold">
+                    <h3>Payment</h3>
+                  </div>
+                  <form action="#" method="post">
+                    {% csrf_token %}
+
+                    <div class="d-flex flex-row align-items-center mb-4 pb-1">
+                      <img class="img-fluid" src="https://img.icons8.com/color/48/000000/visa.png" />
+                      <div class="flex-fill mx-3">
+                        <div class="form-outline fademe_warning">
+                          <input type="text" id="card_input" class="form-control form-control-lg" maxlength="19"
+                            value="**** **** **** ****" />
+                          <label class="form-label" for="card_input">Card Number</label>
+                        </div>
+                      </div>
+                      <!-- <i class="fa fa-warning fademe_warning" style="font-size:25px;color:red;display:none;"></i> -->
+                    </div>
+        
+                    <div class="form-outline mb-4">
+                      <input type="text" id="holdername" class="form-control form-control-lg"
+                        value="Your Name" />
+                      <label class="form-label" for="holdername">Cardholder's Name</label>
+                    </div>
+        
+                    <div class="row mb-4">
+                      <div class="col-12">
+                        <div class="form-outline">
+                          <input type="text" id="Email_input" class="form-control form-control-lg"/>
+                          <label class="form-label" for="Email_input">Email</label>
+                        </div>
+                         <br>
+                      </div>
+                      <div class="col-2">
+                        <div class="form-outline fademe_warning_month">
+                          <input type="text" id="month_input" class="form-control form-control-lg" value="11"
+                            placeholder="mm" maxlength="2"/>
+                            <label class="form-label" for="month_input">Month</label>
+                          </div>
+                        </div>
+
+                      <div class="col-2">
+                        <div class="form-outline fademe_warning_year">
+                          <input type="text" id="year_input" class="form-control form-control-lg" value="28"
+                          placeholder="yy" maxlength="2"/>
+                          <label class="form-label" for="month_input">Year</label>
+                        </div>
+                      </div>
+
+
+                      <div class="col-2 offset-5">
+                        <div class="form-outline">
+                          <input type="password" id="card-ccv" class="form-control form-control-lg"
+                            placeholder="Cvv" maxlength="4" value="1100"/>
+                          <label class="form-label" for="card-ccv" >Cvv</label>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-12">
+                      <div class="form-outline">
+                        <input type="text" id="Country_input" class="form-control form-control-lg"/>
+                        <label class="form-label" for="Country_input">Country</label>
+                      </div>
+                       <br>
+                    </div>
+                    <input value="{{order_from_list}}" type="text" style="display:none" id="order_list">
+                    <h6 style="color:maroon" ><span id="card_error"></span></h6><br>
+                    <button class="btn btn-primary btn-lg btn-block fademe" type="button" style="background-color:#192552;text-transform:capitalize;" id="btn-one" onclick="SubmitPay()" >Pay</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+
+  </div>
+
+
+</body>
+
+<script src="{% static 'js/mdb.min.js' %}"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<script>
+
+let result = ""
+
+// Loading button
+$('btn-one').on('click', function() {
+    var $this = $(this);
+  $this.button('loading');
+    setTimeout(function() {
+       $this.button('reset');
+   }, 8000);
+});
+
+
+// Your card's expiration month is invalid.
+// Your card's expiration year is invalid.
+// Your card number is incorrect.
+
+function SubmitPay(){
+  
+  $('#btn-one').html('Processing... <span class="spinner-border spinner-border-sm mr-2" role="status"></span>').attr('disabled', true);
+
+  setTimeout(function(){
+  $('#btn-one').html('Processing... <span class="spinner-border spinner-border-sm mr-2" role="status"></span>').attr('disabled', true);
+  },1000)
+
+  console.log("Payment submition button clicked")
+
+  card = document.getElementById("card_input").value
+  month = document.getElementById("month_input").value
+  year = document.getElementById("year_input").value
+  cvv = document.getElementById("card-ccv").value
+  order_list = document.getElementById("order_list").value
+  result = ""
+  
+  $.ajax({
+      url: 'cardvalidation',
+      data : {
+          'card_number': card,
+          'month': month,
+          'year':year,
+          'cvv':cvv,
+          'order_list':order_list
+      },
+      // async: false,
+      success: function(res) {
+        // console.log(res);
+        SaveResponse(res);
+    }
+  });
+}
+
+function SaveResponse(val){
+  result = val;
+
+  // if(result == "This is my Response"){
+  //   console.log("Correct Response")
+  // }
+
+  if (result.includes(":")){
+
+    setTimeout(function(){
+    $('#btn-one').html('Pay').attr('disabled', false);
+    document.getElementById("btn-one").style="opacity:1;background-color:rgb(25, 37, 82);"
+    } , 2000);
+    setTimeout(function(){
+    document.getElementById("card_error").innerHTML = '<i class="fa fa-warning fademe_warning" style="font-size:25px;color:#c20000;"></i>  ' + result.split(": ")[1];
+    } , 2000);
+
+// Pay Button warning
+  //   setTimeout(function(){
+  //   $(".fademe").addClass('animated');
+  //   // document.getElementById("btn-one").innerHTML = "Unsuccessfull Attempt"
+  //   setTimeout(function() {
+  //         $(".fademe").removeClass('animated');
+  //   }, 2000);
+  // },1800);
+
+  // Warning icon
+
+  if(result.includes("Your card number is incorrect")){
+    
+    setTimeout(function(){
+      document.getElementsByClassName("fademe_warning")[0].style.display = 'block';
+      document.getElementsByClassName("fademe_warning")[0].style.transition = "1.5s";
+      $(".fademe_warning").addClass('animated');
+        setTimeout(function() {
+              $(".fademe_warning").removeClass('animated');
+        }, 2000);
+      },1800);
+  }
+  else if(result.includes("expiration year is invalid")){
+
+    setTimeout(function(){
+      document.getElementsByClassName("fademe_warning_year")[0].style.transition = "1.5s";
+      $(".fademe_warning_year").addClass('animated');
+        setTimeout(function() {
+              $(".fademe_warning_year").removeClass('animated');
+        }, 2000);
+      },1800);
+  }
+
+  else if(result.includes("month is invalid")){
+  setTimeout(function(){
+    document.getElementsByClassName("fademe_warning_month")[0].style.transition = "1.5s";
+    $(".fademe_warning_month").addClass('animated');
+      setTimeout(function() {
+            $(".fademe_warning_month").removeClass('animated');
+      }, 2000);
+    },1800);
+  }
+
+
+
+}
+
+  else{
+    setTimeout(function(){
+    $('#btn-one').html('Payment successfull <span style="margin-left:10px">&#10004;</span>')
+    document.getElementById("btn-one").style="background-color:#28a745;opacity:1"
+    } , 2000);
+    document.getElementById("card_error").innerHTML = "";
+
+    result = result.split(" --- ")[1]
+
+    setTimeout(function(){
+        window.location.href = window.location.origin + "/thankyou/" + result;
+    }, 2000);
+  }
+
+}
+
+
+
+// Credit Card JS
+
+$('#holdername').on('keyup change', function(){
+  $t = $(this);
+  $('#card_holder').html($t.val());
+});
+ 
+$('#card_input').on('keyup change', function(){
+  $t = $(this);
+  $('#card_result').html($t.val());
+});
+ 
+$('#month_input').on('keyup change', function(){
+  $t = $(this);
+  $('#month_result').html($t.val());
+});
+
+$('#year_input').on('keyup change', function(){
+  $t = $(this);
+  $('#year_result').html($t.val());
+});
+
+$('#card-ccv').on('focus', function(){
+  $('.credit-card-box').addClass('hover');
+}).on('blur', function(){
+  $('.credit-card-box').removeClass('hover');
+}).on('keyup change', function(){
+  $('.ccv div').html($(this).val());
+});
+ 
+// setTimeout(function(){
+//   $('#card-ccv').focus().delay(1000).queue(function(){
+//     $(this).blur().dequeue();
+//   });
+// }, 500);
+
+
+// Credit Card JS
+
+</script>
+
+
+</body>
+
+</html>

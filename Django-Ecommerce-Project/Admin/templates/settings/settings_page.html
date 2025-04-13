@@ -1,0 +1,98 @@
+{% extends "dashboard/dashboard_base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+
+<main style="margin-top:8vw;margin-left:2vw;">
+<h2>Settings Page</h2>
+</main>
+
+
+<style>
+
+    .gradient-custom {
+    /* fallback for old browsers */
+    background-color: #76787d;
+    }
+    </style>
+    
+    <main style="margin-top:vw;margin-left:2vw;">
+    
+            <div class="container py-5 h-100">
+              <div class="row d-flex justify-content-left align-items-center h-100">
+                <div class="col col-lg-10 mb-4 mb-lg-0">
+                  <div class="card mb-3" style="border-radius: .5rem;">
+                    <div class="row g-0">
+                      <div class="col-md-4 gradient-custom text-center text-white"
+                        style="border-top-left-radius: .5rem; border-bottom-left-radius: .5rem;">
+                        <img src="{% static 'user.png' %}" alt="Avatar" class="img-fluid my-5" style="width: 80px;" />
+                        <h5>{{request.user.username|capfirst}}</h5>
+                        <p>Customer</p>
+                        <i class="far fa-edit mb-5"></i>
+                      </div>
+                      <div class="col-md-8">
+                        <div class="card-body p-4">
+                          <h6>Information</h6>
+                          <hr class="mt-0 mb-4">
+                          <div class="row pt-1">
+                            <div class="col-6 mb-3">
+                              <h6>Email</h6>
+                              <p class="text-muted">{{request.user.email}}</p>
+                            </div>
+                            <div class="col-6 mb-3">
+                              <h6>Password</h6>
+                              <p class="text-muted">***********</p>
+                            </div>
+                          </div>
+                          <hr class="mt-0 mb-4">
+                            <div class="col-4 mb-4">
+                              <button class="btn btn-primary" data-mdb-toggle="modal" data-mdb-target="#EditModal">Edit Profile</button>
+                          </div>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="EditModal" tabindex="-1" aria-labelledby="EditModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                <h5 class="modal-title" id="EditModalLabel">Edit Profile</h5>
+                                <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form action="{% url 'edit_profile' %}" method="post">
+                                    {% csrf_token %}
+                                    <div class="modal-body">
+                                    <div class="form-outline">
+                                        <input type="text" name="editusername" class="form-control" required/>
+                                        <label class="form-label" for="editusername">Username</label>
+                                    </div><br>
+
+                                    <div class="form-outline">
+                                        <input type="password" name="editpassword" class="form-control" required/>
+                                        <label class="form-label" for="editpassword">Password</label>
+                                    </div>
+                                      
+                                    </div>
+                                    <div class="modal-footer">
+                                    <button type="submit" class="btn btn-block btn-info">Save changes</button>
+                                    </div>
+
+                            </form>
+
+                        </div>
+                            </div>
+                        </div>
+
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>
+        </div><br>
+
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+
+{% endblock %}

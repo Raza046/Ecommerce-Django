@@ -1,0 +1,505 @@
+{% extends "base/base1.html" %}
+{% load custom_filters %}
+
+{% load static %}
+
+{% block content %}
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tutorial</title>
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" rel="stylesheet">
+    <!-- CSS -->
+    <link href="{% static 'css/product_detail_style.css' %}" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/mdb.min.css' %}" />
+
+    <meta name="robots" content="noindex,follow" />
+
+  </head>
+
+<style>
+
+  .navbar-expand-lg{
+    height:80px;
+  }
+
+  .container{
+    margin: auto;
+  }
+
+  #navDiv{
+    margin-top: -10px;
+  }
+
+  body{
+    margin-top:150px;
+  }
+
+</style>
+
+  <body>
+
+    <main class="container">
+
+      <!-- Left Column / Headphones Image -->
+      <div class="row">
+        <div class="col-md-6">
+            <div class="left-column">
+                <img data-image="black" id="ColorImage" src="/{{p.Image_main}}" alt="">
+
+                <!-- Carousel wrapper -->
+                    <div id="carouselExampleIndicators" class="carousel slide carousel-fade" data-mdb-ride="carousel">
+                        <div class="row" style="margin-top:0px;">
+                            <!-- <button onclick="slideRight(this);"><i class="fa fa-angle-left" aria-hidden="true"></i></button> -->
+                        {% for i in P_Img.all %}
+                            <span style="width:100px;" class="smalImgs" onclick="document.getElementById('ColorImage').src='/{{i.Image}}'">
+                                <img class="d-block w-100" src="/{{i.Image}}" />
+                            </span>
+                        {% endfor %}
+                        </div>
+                    </div>
+                    <!-- Carousel wrapper -->
+            </div>
+        </div>
+
+        <div class="col-md-6">
+
+            <form method="post" id="add-to-cart-form" action="{% url 'cart-view' %}">
+
+                {% csrf_token %}
+                    <!-- Right Column -->
+                    <div class="right-column">
+        
+                        <!-- Product Description -->
+                        <div class="product-description">
+                          <div class="row">
+                            <div class="col-md-3">
+                              <span>{{p.subcategory}}</span>
+                            </div>
+                            {% if not p.availability %}
+                            <div class="col-md-3 offset-6">
+                              <span><img src="{% static 'sold-out.png' %}" height="70px"></span>
+                            </div>
+                            {% endif %}
+                          </div>
+                        
+                          <h2 style="font-family:bold">{{p.Name}}</h2>
+                        <h4 style="font-family:bold" id="p_price">${{p.Price}}</h4>
+
+                        <p>{{p.Description}}</p>
+                        </div>
+
+                          <!-- Product Configuration -->
+                          <div class="product-configuration">
+
+                            {% for variation in p.variations.all %}
+                              <span>{{ variation.name }}:</span>
+
+                              <div id="variation_{{ variation.id }}">
+                                {% for variation_value in variation.value.all %}
+                                  <input 
+                                    type="radio" 
+                                    class="btn-check" 
+                                    name="variation_{{ variation.id }}"
+                                    id="var_{{ variation_value.id }}" 
+                                    value="{{ variation_value.id }}" 
+                                    required
+                                  />
+                                  <label class="btn btn-light" for="var_{{ variation_value.id }}">
+                                    {{ variation_value.value }}
+                                  </label>
+                                {% endfor %}
+                              </div>
+                              <br>
+                            {% endfor %}
+
+                          </div>
+                          <input type="hidden" name="product_variant_id" value="">
+
+
+                        <!-- Product Color -->
+                        {% comment %} <div class="product-color">
+                          <span>Color</span>
+
+                            <div class="color-choose">
+                            {% for i in prod_var.all|unique %}
+                                  <div>
+                                      <input type="radio" class="radio_input" id="{{i.id}}" name="color" value="{{i.id}}" onclick="CallMultiple('{{i.id}}','{{i.color}}')" required>
+                                      <label><span style="background-color:{{i.color}};box-shadow: 0 4px 8px 0 rgb(0 0 0 / 15%), 0 6px 20px 0 rgb(0 0 0 / 29%);border-color:{{i.color}}" onclick="document.getElementById('{{i.id}}').click()"></span></label>
+                                  </div>
+                            {% endfor %}
+                          </div>
+                    </div> {% endcomment %}
+
+
+                    <div class="d-flex mb-4" style="max-width:200px">
+
+                        <span>Quantity: </span>
+                        <button type="button" style="margin-left:1.25vw" class="btn btn-light" onclick="this.parentNode.querySelector('input[type=number]').stepDown()">-</button>
+
+                        <div class="form-outline text-center">
+                            <input style="text-align:center; width:4vw" id="form1" min="1" name="quantity" value="1" type="number" class="form-control" required />
+                          <!-- <label class="form-label" for="form1">Quantity</label> -->
+                        </div>
+
+                        <button type="button" class="btn btn-light px-3 ms-2" onclick="this.parentNode.querySelector('input[type=number]').stepUp()">+</button>
+                      </div>
+
+                  {% if not p.availability %}
+                    <button id="SubmitCart" disabled style="background-color:#192552;color:white;height:50px;" class="btn btn-block" type="submit">
+                            <b><i class="fa fa-shopping-cart" aria-hidden="true" style="margin-right:10px"></i>
+                            Add to cart</b>
+                    </button>
+                  {% else %}
+                  <button id="SubmitCart" style="background-color:#192552;color:white;height:50px;" class="btn btn-block" type="submit">
+                    <b><i class="fa fa-shopping-cart" aria-hidden="true" style="margin-right:10px"></i>
+                    Add to cart</b>
+                  </button>        
+                  {% endif %}
+                    </div>
+                </form>
+        </div>
+    </div><br><br>
+
+
+    <!-- Tabs navs -->
+    <ul class="nav nav-tabs nav-fill mb-3" id="ex1" role="tablist">
+        <li class="nav-item" role="presentation">
+        <a
+            class="nav-link active"
+            id="ex2-tab-1"
+            data-mdb-toggle="tab"
+            href="#ex2-tabs-1"
+            role="tab"
+            aria-controls="ex2-tabs-1"
+            aria-selected="true"
+            >Description</a
+        >
+        </li>
+        <li class="nav-item" role="presentation">
+        <a
+            class="nav-link"
+            id="ex2-tab-2"
+            data-mdb-toggle="tab"
+            href="#ex2-tabs-2"
+            role="tab"
+            aria-controls="ex2-tabs-2"
+            aria-selected="false"
+            >Reviews</a
+        >
+        </li>
+    </ul>
+    <!-- Tabs navs -->
+    
+    <!-- Tabs content -->
+    <div class="tab-content" id="ex2-content" >
+        <div
+        class="tab-pane fade show active"
+        id="ex2-tabs-1"
+        role="tabpanel"
+        aria-labelledby="ex2-tab-1"
+        >
+        {{p.Description}}
+        </div>
+        <div
+        class="tab-pane fade"
+        id="ex2-tabs-2"
+        role="tabpanel"
+        aria-labelledby="ex2-tab-2"
+        >
+        
+      <div id="review_div">
+        {% for r in reviews %}
+        <div class="spr-form">
+            <div class="user-comment">
+                <div class="spr-review">
+                    <div class="spr-review-header">
+                        <span class="spr-review-header-byline">
+                            <strong>{{r.users.username|capfirst}}</strong> -
+                            <span>Apr 14, 2018</span>
+                        </span>
+                        <div class="rating">
+                            <div class="star-content">
+                                {% with ''|center:r.rating as range %}
+                                    {% for 1 in range %}
+                                    <span class="fa fa-star checked" style="color:orange"></span>
+                                    {% endfor %}
+                                {% endwith %}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="spr-review-content">
+                        <p class="spr-review-content-body" style="font-family:'Robot'">{{r.comment}}.</p>
+                    </div>
+
+                    {% for i in reviews_img.all %}
+                        {% if i.review == r %}
+                            <img src="/{{i.image}}" height="120" style="border-radius:5px;margin-top:0px" alt="">
+                            
+                            {% if i.video %}
+                                <video height="130" style="margin-top:20px;border-radius:10px;margin-bottom:-50px;" controls>
+                                    <source src="/{{i.video}}" type="video/mp4">
+                                </video>
+                            {% endif %}
+
+                        {% endif %}
+                    {% endfor %}
+
+                </div>
+            </div>
+        </div> <br><hr>
+        {% endfor %}
+        </div>
+        <br>
+
+        <form action="{% url 'submit_review' p.id %}" method="post">
+
+          {% csrf_token %}
+
+          {% for form in form %}
+            <div class="form-outline mb-4" style="width:50%">
+              {{form}}
+              <label class="form-label" >{{form.label}}</label>
+            </div>
+          {% endfor %}
+
+          <button class="btn btn-info" type="submit" >Submit Review</button>
+        </form><br>
+
+
+    <section style="padding-top:-100px">
+        <div class="text-center container py-5">
+          <h4 class="mt-4 mb-5"><strong>Bestsellers</strong></h4>
+          <div class="row">
+            <div class="col-lg-4 col-md-12 mb-4">
+              <div class="card">
+                <div class="bg-image hover-zoom ripple" data-mdb-ripple-color="light">
+                  <img src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Products/img%20(23).webp"
+                    class="w-100" />
+                  <a href="#!">
+                    <div class="mask">
+                      <div class="d-flex justify-content-start align-items-end h-100">
+                        <h5>
+                          <span class="badge bg-success ms-2">Eco</span><span
+                            class="badge bg-danger ms-2">-10%</span>
+                        </h5>
+                      </div>
+                    </div>
+                    <div class="hover-overlay">
+                      <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                    </div>
+                  </a>
+                </div>
+                <div class="card-body">
+                  <a href="" class="text-reset">
+                    <h5 class="card-title mb-3">Product name</h5>
+                  </a>
+                  <a href="" class="text-reset">
+                    <p>Category</p>
+                  </a>
+                  <h6 class="mb-3">
+                    <s>$61.99</s><strong class="ms-2 text-danger">$50.99</strong>
+                  </h6>
+                </div>
+              </div>
+            </div>
+      
+            <div class="col-lg-4 col-md-6 mb-4">
+              <div class="card">
+                <div class="bg-image hover-zoom ripple ripple-surface ripple-surface-light"
+                  data-mdb-ripple-color="light">
+                  <img src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Products/img%20(17).webp"
+                    class="w-100" />
+                  <a href="#!">
+                    <div class="mask">
+                      <div class="d-flex justify-content-start align-items-end h-100"></div>
+                    </div>
+                    <div class="hover-overlay">
+                      <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                    </div>
+                  </a>
+                </div>
+                <div class="card-body">
+                  <a href="" class="text-reset">
+                    <h5 class="card-title mb-3">Product name</h5>
+                  </a>
+                  <a href="" class="text-reset">
+                    <p>Category</p>
+                  </a>
+                  <h6 class="mb-3">$61.99</h6>
+                </div>
+              </div>
+            </div>
+      
+            <div class="col-lg-4 col-md-6 mb-4">
+              <div class="card">
+                <div class="bg-image hover-zoom ripple" data-mdb-ripple-color="light">
+                  <img src="https://mdbcdn.b-cdn.net/img/Photos/Horizontal/E-commerce/Products/img%20(30).webp"
+                    class="w-100" />
+                  <a href="#!">
+                    <div class="mask">
+                      <div class="d-flex justify-content-start align-items-end h-100">
+                        <h5>
+                          <span class="badge bg-primary ms-2">New</span><span
+                            class="badge bg-success ms-2">Eco</span><span class="badge bg-danger ms-2">-10%</span>
+                        </h5>
+                      </div>
+                    </div>
+                    <div class="hover-overlay">
+                      <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                    </div>
+                  </a>
+                </div>
+                <div class="card-body">
+                  <a href="" class="text-reset">
+                    <h5 class="card-title mb-3">Product name</h5>
+                  </a>
+                  <a href="" class="text-reset">
+                    <p>Category</p>
+                  </a>
+                  <h6 class="mb-3">
+                    <s>$61.99</s><strong class="ms-2 text-danger">$50.99</strong>
+                  </h6>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      
+    </main>
+
+    <!-- Scripts -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js" charset="utf-8"></script>
+    <script src="{% static 'js/script.js' %}" charset="utf-8"></script>
+
+<script>
+  const productVariants = {
+    {% for prod_variant in prod_variants.all %}
+      "{{ prod_variant.id }}": [
+        {% for val in prod_variant.variation.all %}
+          {{ val.id }}{% if not forloop.last %}, {% endif %}
+        {% endfor %}
+      ]{% if not forloop.last %}, {% endif %}
+    {% endfor %}
+  };
+
+  console.log("productVariants:", productVariants);
+
+
+  document.getElementById("add-to-cart-form").addEventListener("submit", function (e) {
+    const selectedValues = [];
+    const hiddenInput = document.querySelector("input[name='product_variant_id']");
+    
+    // Collect all checked variation values
+    const checkedInputs = document.querySelectorAll("input[type='radio'][id^='var_']:checked");
+    checkedInputs.forEach(input => {
+      selectedValues.push(parseInt(input.value));
+    });
+
+    // Sort for consistent comparison
+    selectedValues.sort((a, b) => a - b);
+
+    console.log("Selected Values:", selectedValues);
+
+    // Find matching variant
+    let found = false;
+    for (const [variantId, variantValues] of Object.entries(productVariants)) {
+      const sortedVariant = [...variantValues].sort((a, b) => a - b);
+      
+      console.log("Checking Variant:", variantId, "with Values:", sortedVariant);
+      
+      // Check if the selected values match the sorted variant values
+      if (
+        sortedVariant.length === selectedValues.length &&
+        sortedVariant.every((val, idx) => val === selectedValues[idx])
+      ) {
+        hiddenInput.value = variantId;
+        found = true;
+        break;
+      }
+    }
+
+    // If no matching variant found, prevent form submission
+    if (!found) {
+      console.log("No matching product variant found.");
+      alert("No matching product variant found.");
+      e.preventDefault();
+    }
+  });
+
+
+    function CallMultiple(a,c) {
+        changeImage(a);
+        ChangeSizeOptions(c);
+    }
+
+
+    function changeImage(a) {
+
+    let img_val = a.toString()
+
+    {% for i in P_Img.all %}
+
+    if("{{i.product_variation.id}}" == img_val){
+        document.getElementById("ColorImage").src="/{{i.Image}}";
+    }
+        
+    {% endfor %}
+
+    }
+
+    function ChangeSizeOptions(options) {
+            // console.log("Yes Called" + options);
+            // debugger;
+            let ColorChoosen = options.toString();
+
+            var parent_div = document.getElementById('sizes');
+
+            document.getElementById("sizes_var").innerHTML=""
+
+            {% for p in p_vars.all %}
+                // console.log("{{p.id}}");
+                if("{{p.color}}".toUpperCase() == options.toUpperCase()){
+
+                    {% for pv in p.variation.all %}
+
+                        if("{{pv.variation.name}}".toUpperCase() == "SIZE"){
+                        console.log("{{pv}}");
+
+                        document.getElementById("sizes_var").innerHTML += '<input type="radio" onclick="ChangePrice({{p.price}})" class="btn-check" value="{{p.id}}" name="item_id" id="{{pv.id}}" autocomplete="off" required />'+
+                        '<label class="btn btn-light" style="margin:3px" for="{{pv.id}}">{{pv}}</label>'
+                    }
+
+                    {% endfor %}
+                }
+                
+            {% endfor %}
+
+        }
+
+        function ChangePrice(price){
+        console.log(price);
+        document.getElementById("p_price").innerText = "$" + price;
+    }
+
+
+
+    function ReviewSubmition(p_id){
+      console.log(p_id)
+    }
+
+</script>
+
+
+</body>
+</html>
+
+{% endblock %}
+

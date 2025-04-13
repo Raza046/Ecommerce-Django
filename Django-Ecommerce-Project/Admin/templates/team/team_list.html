@@ -1,0 +1,91 @@
+{% extends "dashboard/dashboard_base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+
+
+
+
+<main style="margin-top:8vw;margin-left:2vw;">
+
+    <h1 style="font-family:bold">My Team Members</h1><br>
+
+    <div class="row">
+        <div class="col-md-5">
+            <div class="form-outline mb-4">
+                <input type="text" id="CustomerInput" placeholder="Search customer here .." class="form-control" />
+                <label class="form-label" for="CustomerInput">Search Customer</label>
+            </div>        
+        </div>
+
+        <div class="col-md-2 offset-3">
+            <button class="btn btn-info">+ Add Customer</button>            
+        </div>
+
+        <div class="col-md-2">
+            <button class="btn btn-success">Export CSV</button>            
+        </div>
+    </div>
+
+
+
+<div class="card" style="width:95%;margin-bottom:5vw;">
+        <div class="card-body p-0">
+          <div class="table-responsive" data-mdb-perfect-scrollbar="true" style="position:relative; border-radius:10px;">
+            <table class="table caption-top">
+                <thead style="background-color:#19123b;color:white">
+                        <tr>
+                          <th scope="col">Picture</th>
+                          <th scope="col">Employee</th>
+                          <th scope="col">City</th>
+                          <th scope="col">Email</th>
+                          <th scope="col">Contact</th>
+                          <th scope="col">Action</th>
+                        </tr>
+                </thead>
+
+                <tbody id="myTable">
+                    {% for user in users_list %}
+                        <tr>
+                            <td><img src="{% static 'user.png' %}" height="50px"></td>
+                            <td>{{user.user.username|capfirst}}</td>
+                            <td>{{user.city}}</td>
+                            <td>{{user.user.email}}</td>
+                            <td>{{user.phone}}</td>
+                            <td>
+                                <a href="#"><img src="{% static 'edit.png' %}" height="20px" alt=""></a>
+                                <a href="#"><img src="{% static 'trash.png' %}" style="margin-left:1vw" height="20px" alt=""></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+</main>
+
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+
+var $rows = $('#myTable tr');
+
+$('#CustomerInput').keyup(function() {
+    var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+    
+    $rows.show().filter(function() {
+        var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+        return !~text.indexOf(val);
+    }).hide();
+});
+
+</script>
+
+
+
+{% endblock %}

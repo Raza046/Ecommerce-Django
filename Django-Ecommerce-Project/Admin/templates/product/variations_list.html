@@ -1,0 +1,174 @@
+{% extends "dashboard/dashboard_base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<style>
+
+</style>
+
+
+<!-- MAIN -->
+<main style="margin-top:8vw;margin-left:2vw;">
+	<div class="head-title">
+		<div class="left">
+			<h1>{{sub_categories.name}}</h1>
+		</div>
+		<a href="#" class="">
+			<button class="btn btn-success"><i class="bx bxs-cloud-download" ></i> Download CSV</button>
+		</a>
+	</div>
+
+    <br>
+
+    <!-- Adding Variation Modal Button -->
+
+        <div class="text-center">
+            <button class="btn btn-info"  data-mdb-toggle="modal" data-mdb-target="#AddVar">+ Create Variations</button>
+          </div>
+  <br>
+
+<!-- Adding Variation Modal -->
+
+<div class="modal fade" id="AddVar" tabindex="-1" aria-labelledby="ProdVarModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-side modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="ProdVarModalLabel">Create Variations</h5>
+          <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <form action="{% url 'admin_panel_create_variation' %}" method="post">
+            {% csrf_token %}
+        <div class="modal-body">
+            <div class="form-outline">
+                <input type="text" name="varname" id="vname" class="form-control" required/>
+                <label class="form-label" for="vname">Variation Name</label>
+            </div>
+        </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger" data-mdb-dismiss="modal">Close</button>
+            <button  class="btn btn-primary" type="submit">Save changes</button>
+          </div>
+      </form>
+
+      </div>
+    </div>
+  </div>
+
+<!-- Adding Variation Modal -->
+
+<div class="table-data">
+		<div class="order">
+			<div class="head">
+				<h3 style="font-family: bold">All Variations</h3>
+				<i class="bx bx-search" ></i>
+				<i class="bx bx-filter" ></i>
+			</div>
+			<div class="card" style="width:95%;margin-bottom:5vw;">
+				<div class="card-body p-0">
+				  <div class="table-responsive" data-mdb-perfect-scrollbar="true" style="position:relative; border-radius:10px;">
+							<table class="table caption-top">
+              <thead style="background-color:#19123b;color:white">
+                <tr>
+                  <th>Variations</th>
+                  <th>Values</th>
+                  <th><center>Action</center></th>
+                </tr>
+              </thead>
+              <tbody>
+                  {% for variation in variation_list.all %}
+                    <tr>
+                      <td>{{variation.name}}</td>
+
+                        <td>
+                            {% for variation_value in variation.value.all %}
+                              <span class="btn btn-light">{{variation_value.value}}</span>
+                            {% endfor %}
+                        </td>
+
+                        <td><a href="{% url 'delete_variation' variation.id %}" class="btn btn-danger">Remove</a>
+                        <button class="btn btn-success"  data-mdb-toggle="modal" data-mdb-target="#EditVar{{variation.id}}">Edit</button></td>
+                    </tr>
+
+
+
+                    <div class="modal fade" id="EditVar{{variation.id}}" tabindex="-1" aria-labelledby="EditVarModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-side modal-lg">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="EditVarModalLabel">Create Variations</h5>
+                              <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                            </div>
+
+                            <form action="{% url 'edit_variation' variation.id %}" method="post">
+                                {% csrf_token %}
+                            <div class="modal-body">
+                                <div class="form-outline">
+                                    <input type="text" name="edit_varname" value="{{variation.name}}" class="form-control" required/>
+                                    <label class="form-label" for="vname">Edit Name</label>
+                                </div><br>
+                                <div class="form-outline">
+                                    <input type="text" name="add_varname" class="form-control" required/>
+                                    <label class="form-label" for="vname">Add Variation Value</label>
+                                </div><br>
+
+                                <span>Click on values to remove them!</span><br>
+                                {% for variation_value in variation.value.all %}
+                                    {% if variation_value.variation == variation %}
+                                        <span id="del_val{{variation_value}}" onclick="Rem_Val('del_val{{variation_value}}','{{variation_value.id}}')" class="btn btn-light">{{variation_value}}</span>
+                                    {% endif %}
+                                {% endfor %}
+
+                            </div>
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-danger" data-mdb-dismiss="modal">Close</button>
+                                <button  class="btn btn-primary" type="submit">Save changes</button>
+                              </div>
+                          </form>
+                    
+                          </div>
+                        </div>
+                      </div>
+
+                  {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+	</div>
+
+</main>
+
+
+{% block extrascripts %}
+
+<!-- jQuery -->
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<script>
+
+function Rem_Val(v_id, v_val_id){
+    document.getElementById(v_id).remove()
+
+$.ajax({
+    method: "GET",
+    url : "/delete_variation_val/"+v_val_id,
+    processData: false,
+    contentType: false,
+    mimeType: "multipart/form-data",
+});
+
+}
+
+</script>
+
+{% endblock %}
+
+
+{% endblock %}
+

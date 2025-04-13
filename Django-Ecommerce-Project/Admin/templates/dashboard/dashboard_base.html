@@ -1,0 +1,320 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<link
+	rel="stylesheet"
+	href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap"
+  />
+
+  <!-- MDB -->
+  <link rel="stylesheet" href="{% static 'css/mdb.min.css' %}" />
+
+
+</head>
+
+<style>
+
+
+/* The snackbar - position it at the bottom and in the middle of the screen */
+#snackbar {
+  z-index: 1;
+  visibility: hidden; /* Hidden by default. Visible on click */
+  min-width: 250px; /* Set a default minimum width */
+  margin-left: -125px; /* Divide value of min-width by 2 */
+  background-color: #039e6a;; /* Black background color */
+  font-family: sans-serif;
+  color: white; /* White text color */
+  text-align: center; /* Centered text */
+  border-radius: 2px; /* Rounded borders */
+  border-color: #08a169;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.5);
+  padding: 16px; /* Padding */
+  position: fixed; /* Sit on top of the screen */
+  z-index: 1; /* Add a z-index if needed */
+  left: 50%; /* Center the snackbar */
+  bottom: 30px; /* 30px from the bottom */
+}
+
+/* Show the snackbar when clicking on a button (class added with JavaScript) */
+#snackbar.show {
+  visibility: visible; /* Show the snackbar */
+  /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+  However, delay the fade out process for 2.5 seconds */
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+/* Animations to fade the snackbar in and out */
+@-webkit-keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@keyframes fadein {
+  from {bottom: 0; opacity: 0;}
+  to {bottom: 30px; opacity: 1;}
+}
+
+@-webkit-keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
+
+@keyframes fadeout {
+  from {bottom: 30px; opacity: 1;}
+  to {bottom: 0; opacity: 0;}
+}
+
+
+
+body {
+  background-color: #fbfbfb;
+}
+@media (min-width: 991.98px) {
+  main {
+    padding-left: 240px;
+  }
+}
+
+tbody{
+	/* border-color:white; */
+}
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  padding: 58px 0 0; /* Height of navbar */
+  box-shadow: 0 2px 5px 0 rgb(0 0 0 / 5%), 0 2px 10px 0 rgb(0 0 0 / 5%);
+  width: 240px;
+  z-index: 600;
+}
+
+@media (max-width: 991.98px) {
+  .sidebar {
+    width: 100%;
+  }
+}
+.sidebar .active {
+  border-radius: 5px;
+  box-shadow: 0 2px 5px 0 rgb(0 0 0 / 16%), 0 2px 10px 0 rgb(0 0 0 / 12%);
+}
+
+.sidebar-sticky {
+  position: relative;
+  top: 0;
+  height: calc(100vh - 48px);
+  padding-top: 0.5rem;
+  overflow-x: hidden;
+  overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+}
+
+main {
+        animation: fadeIn ease 1.2s;
+        animation-iteration-count: 1;
+    }
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    /* transform: translateX(-300px); */
+  }
+  to {
+    opacity: 1;
+    /* transform: translateX(0px); */
+  }
+}
+
+
+
+</style>
+
+
+	<header>
+		<!-- Sidebar -->
+		<nav
+			 id="sidebarMenu"
+			 class="collapse d-lg-block sidebar collapse bg-white"
+			 >
+		  <div class="position-sticky">
+			<div class="list-group list-group-flush mx-3 mt-4">
+			  <a
+				 href="/AdminDashboard"
+				 class="list-group-item list-group-item-action py-2 ripple"
+				 aria-current="true"
+				 >
+				<img src="{% static 'dashboard.png' %}" height="37px" alt="dashboard">
+					<span style="margin-left:1vw">Dashboard</span>
+			  </a>
+
+			  <a
+			  href="/store"
+			  class="list-group-item list-group-item-action py-2 ripple">
+			  <img src="{% static 'store.png' %}" height="37px" alt="dashboard">
+			  <span style="margin-left:1vw">My Store</span></a
+			 >
+
+	          <a
+				 href="/orderpage"
+				 class="list-group-item list-group-item-action py-2 ripple">
+				 <img src="{% static 'box.png' %}" height="37px" alt="dashboard">
+				 <span style="margin-left:1vw">Orders</span>
+				</a>
+
+				<a
+				href="/admin-panel/variations"
+				class="list-group-item list-group-item-action py-2 ripple">
+				<img src="{% static 'clothes.png' %}" height="37px" alt="dashboard">
+				<span style="margin-left:1vw">Variations</span></a
+			   >
+  
+				<a
+				 href="/customers"
+				 class="list-group-item list-group-item-action py-2 ripple">
+				 <img src="{% static 'people.png' %}" height="37px" alt="dashboard">
+				 <span style="margin-left:1vw">Customers</span></a
+				>
+				<a
+				 href="/team"
+				 class="list-group-item list-group-item-action py-2 ripple">
+				 <img src="{% static 'team.png' %}" height="37px" alt="dashboard">
+				 <span style="margin-left:1vw">Team</span></a
+				>
+
+				<a
+				href="/complains"
+				class="list-group-item list-group-item-action py-2 ripple">
+				<img src="{% static 'complain.png' %}" height="37px" alt="dashboard">				
+				<span style="margin-left:1vw">Complains</span></a
+			   >
+
+               <a
+               href="/admin-panel/coupons"
+               class="list-group-item list-group-item-action py-2 ripple">
+			   <img src="{% static 'coupon.png' %}" height="37px" alt="dashboard">
+			   <span style="margin-left:1vw">Coupon</span></a
+              >
+
+			</div>
+		  </div>
+		</nav>
+		<!-- Sidebar -->
+	  
+		<!-- Navbar -->
+		<nav
+			 id="main-navbar"
+			 class="navbar navbar-expand-lg navbar-light bg-white fixed-top"
+			 >
+		  <!-- Container wrapper -->
+		  <div class="container-fluid">
+			<!-- Toggle button -->
+			<button
+					class="navbar-toggler"
+					type="button"
+					data-mdb-toggle="collapse"
+					data-mdb-target="#sidebarMenu"
+					aria-controls="sidebarMenu"
+					aria-expanded="false"
+					aria-label="Toggle navigation"
+					>
+			  <i class="fas fa-bars"></i>
+			</button>
+	  
+			<!-- Brand -->
+			<a class="navbar-brand" href="#">
+			  <img src="{% static 'ecom_logo.png' %}" height="58" alt="" loading="lazy"/>
+			</a>
+			<!-- Search form -->
+	  
+			<!-- Right links -->
+			<ul class="navbar-nav ms-auto d-flex flex-row">
+			  <!-- Notification dropdown -->
+			  <li class="nav-item dropdown">
+				<a
+				   class="nav-link me-3 me-lg-0 dropdown-toggle hidden-arrow"
+				   href="#"
+				   id="navbarDropdownMenuLink"
+				   role="button"
+				   data-mdb-toggle="dropdown"
+				   aria-expanded="false"
+				   >
+				   <img src="{% static 'bell.png' %}" height="30px" alt="">
+                   <span class="badge rounded-pill badge-notification bg-danger" style="margin-left:-0.5vw">1</span>
+
+                </a>
+				<ul
+					class="dropdown-menu dropdown-menu-end"
+					aria-labelledby="navbarDropdownMenuLink"
+					>
+				  <li><a class="dropdown-item" href="#">Some news</a></li>
+				  <li><a class="dropdown-item" href="#">Another news</a></li>
+				  <li>
+					<a class="dropdown-item" href="#">Something else here</a>
+				  </li>
+				</ul>
+			  </li>
+	  
+			  <!-- Icon -->
+			  <li class="nav-item">
+				<a class="nav-link me-3 me-lg-0" href="#">
+				  <i class="fas fa-fill-drip"></i>
+				</a>
+			  </li>
+			  <!-- Icon -->
+			  <li class="nav-item me-3 me-lg-0">
+				<a class="nav-link" href="#">
+				  <i class="fab fa-github"></i>
+				</a>
+			  </li>
+	  
+			  <!-- Avatar -->
+			  <li class="nav-item dropdown">
+				<a
+				   class="nav-link dropdown-toggle hidden-arrow d-flex align-items-center"
+				   href="#"
+				   id="navbarDropdownMenuLink"
+				   role="button"
+				   data-mdb-toggle="dropdown"
+				   aria-expanded="false"
+				   >
+				  <img
+					   src="https://mdbootstrap.com/img/Photos/Avatars/img (31).jpg"
+					   class="rounded-circle"
+					   height="40"
+					   alt=""
+					   loading="lazy"
+					   />
+				</a>
+				<ul
+					class="dropdown-menu dropdown-menu-end"
+					aria-labelledby="navbarDropdownMenuLink"
+					>
+				  <li><a class="dropdown-item" href="/AdminDashboard">My Admin</a></li>
+				  <li><a class="dropdown-item" href="/settings">Settings</a></li>
+				  <li><a class="dropdown-item" href="#" style="color:red">Logout</a></li>
+				</ul>
+			  </li>
+			</ul>
+		  </div>
+		  <!-- Container wrapper -->
+		</nav>
+		<!-- Navbar -->
+	  </header>
+	  <!--Main Navigation-->
+
+      {% block content %}
+
+
+
+      {% endblock %}
+
+<!-- Material Design for Bootstrap -->
+<script src="{% static 'js/mdb.min.js' %}"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>

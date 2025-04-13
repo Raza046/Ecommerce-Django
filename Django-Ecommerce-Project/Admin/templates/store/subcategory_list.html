@@ -1,0 +1,218 @@
+{% extends "dashboard/dashboard_base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+
+<style>
+
+    .collapsible {
+      cursor: pointer;
+      width: 75%;
+      text-align: left;
+    }
+
+    .collapsible:after {
+      content: '\002B';
+      color: white;
+      font-weight: bold;
+      float: right;
+      margin-left: 5px;
+    }
+    
+    .active:after {
+      content: "\2212";
+    }
+    
+    .content {
+      padding: 0 18px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.2s ease-out;
+    }
+
+    .subcatBtn{
+        background-color: #bdcfbe; /* Green */
+        border: none;
+        color: rgb(48, 46, 46);
+        padding: 7px 17px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 12px;
+        margin: 4px 2px;
+        cursor: pointer;
+        margin-bottom:1vw;
+        /* border-radius: 10px; */
+    }
+
+</style>
+
+
+<!-- MAIN -->
+<main style="margin-top:8vw;margin-left:2vw;">
+
+  <h1 style="font-family:bold">All Sub-Categories</h1><br><br>
+    <!-- <button type="button" class="btn btn-success" style="border-radius:2px;">Add Category</button> -->
+
+    <div class="row">
+      <div class="col-md-5">
+          <div class="form-outline mb-4">
+              <input type="text" id="subcatInput" placeholder="Search sub categories here .." class="form-control" />
+              <label class="form-label" for="subcatInput">Search Sub Category</label>
+          </div>
+      </div>
+
+      <div class="col-md-3 offset-2">
+          <button class="btn btn-info" data-mdb-toggle="modal" data-mdb-target="#SubCategory">+ Add Sub-Category</button>
+      </div>
+
+      <div class="col-md-2">
+          <button class="btn btn-success">Export CSV</button>
+      </div>
+  </div>
+
+<form action="{% url 'show_subcats' category_id %}" method="post">
+
+  {% csrf_token %}
+
+  <!-- Modal -->
+  <div class="modal fade" id="SubCategory" tabindex="-1" aria-labelledby="SubCategoryLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="SubCategoryLabel">Modal title</h5>
+          <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="form-outline">
+            <!-- <input type="text" id="addsubcat" class="form-control" /> -->
+            {{form.name}}
+            <label class="form-label" for="addsubcat">Sub Category Name</label>
+          </div>
+          <span style="color:rgb(119, 0, 0); font-family:bold; display:none;" id="input_error"><b></b></span>
+        </div>
+        <div class="modal-footer">
+          <!-- <button type="button" onclick="AddSubCategory('{{category.id}}')" class="btn btn-primary btn-block">Add Sub-Category</button> -->
+          <button type="submit" class="btn btn-primary btn-block">Add Sub-Category</button>
+        </div>
+      </div>
+    </div>
+    <div id="snackbar">Category Created<img src="{% static 'check_mark.png' %}" style="margin-top:-0.4vw;" alt=""></div>
+  </div>
+
+</form>
+
+<div class="card" style="width:95%;margin-bottom:5vw;">
+      <div class="card-body p-0">
+        <div class="table-responsive" data-mdb-perfect-scrollbar="true" style="position:relative; border-radius:10px;">
+          <table class="table caption-top" id="myTable">
+              <thead style="background-color:#19123b;color:white">
+                      <tr>
+                        <th scope="col">Sub-Category</th>
+                        <th scope="col">Action</th>
+                        <th scope="col">View</th>
+                      </tr>
+              </thead>
+
+              <tbody id="myTableData">
+                  {% for sub in object_list.all %}
+                      <tr>
+                          <td>{{sub.name}}</td>
+                          <td>
+                            <a href="#"><img src="{% static 'edit.png' %}" height="20px" alt=""></a>
+                            <a href="{% url 'delete_subcat' sub.id %}"><img src="{% static 'trash.png' %}" style="margin-left:1vw" height="20px" alt=""></a>
+                          </td>
+                          <td><a href="{% url 'products' sub.id %}"><button class="btn btn-primary">View</button></a></td>
+                      </tr>
+                  {% endfor %}
+              </tbody>
+          </table>
+      </div>
+  </div>
+</div>
+
+</main>
+
+<!-- <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script> -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+
+<script>
+
+var $rows = $('tbody tr');
+
+$('#subcatInput').keyup(function() {
+    var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+    
+    $rows.show().filter(function() {
+        var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+        return !~text.indexOf(val);
+    }).hide();
+});
+
+
+function AddSubCategory(cat_id){
+
+addsubcat = document.getElementById("addsubcat").value;
+
+if (addsubcat != ""){
+
+input_error = document.getElementById("input_error").style.display="none";
+
+var formdata = new FormData();
+formdata.append("subcategory", addsubcat);
+formdata.append("category_id", cat_id);
+formdata.append("csrfmiddlewaretoken", "{{ csrf_token }}");
+
+$.ajax({
+  method: "POST",
+  url : "/show_subcats/{{category_id}}",
+  processData: false,
+  contentType: false,
+  mimeType: "multipart/form-data",
+  data : formdata,
+  success: function(res) {
+    console.log(res);
+    if (res.includes("SubCategory created")){
+            Created(res,addsubcat);
+          }
+    else{
+      input_error = document.getElementById("input_error").innerText=res;
+      input_error = document.getElementById("input_error").style.display="block";
+    }
+  }
+});
+}
+
+else{
+    input_error = document.getElementById("input_error").innerText="Field is Required!";
+    input_error = document.getElementById("input_error").style.display="block";
+}
+}
+
+function Created(res,name){
+
+document.getElementById("addsubcat").value = "";
+// setInterval(function() {$('#myTable').load(location.href + " #myTable");}, 300);
+cat_id = res.split("-- ")[1];
+cat_url = '/subcategory/' + cat_id;
+console.log(cat_url);
+
+$("#myTableData").append("<tr><td>"+ name +"</td> <td> <a href=''><img src='{% static 'edit.png' %}' height='20px'></a>" +
+  "<a href='#'><img src='{% static 'trash.png' %}' style='margin-left:1vw' height='20px' alt=''></a> </td>" +
+  " <td><a href='"+ cat_url +"'><button class='btn btn-primary'>View</button></a></td> </tr>");
+
+var x = document.getElementById("snackbar");
+
+// Add the "show" class to DIV
+x.className = "show";
+
+// After 3 seconds, remove the show class from DIV
+setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+
+}
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,153 @@
+{% extends "dashboard/dashboard_base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+  <!-- MDB -->
+  <link rel="stylesheet" href="{% static 'css/mdb.min.css' %}" />
+
+<main style="margin-top:8vw;margin-left:2vw;">
+	<div class="head-title">
+		<div class="left">
+			<h1 style="font-family:bold">{{sub_categories.name}}</h1>
+		</div>
+		<a href="#" class="btn btn-info" data-mdb-toggle="modal" data-mdb-target="#exampleModal">Add Product</a>
+		<a href="#" class="btn btn-success">Download CSV</a>
+	</div><br>
+
+	<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title" id="exampleModalLabel">Add Product</h5>
+		  <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+		</div>
+
+		<form action="{% url 'products' sub_categories.id %}" method="post" enctype="multipart/form-data">
+
+		{% csrf_token %}
+
+		<div class="modal-body">
+
+			<div class="row">
+				{% for form in form %}
+					<div class="col-md-6">
+						<div class="form-outline">
+								{{form}}
+							<label class="form-label" for="{{form.label}}">{{form.label|capfirst}}</label>
+						</div>
+					</div>
+					<br><br>
+				{% endfor %}
+			</div>
+
+			<br>
+			<br>
+
+			<div id="snackbar">Product Created<img src="{% static 'check_mark.png' %}" style="margin-top:-0.4vw;" alt=""></div>
+		</div>
+		<span style="color:rgb(119, 0, 0); font-family:bold; display:none; margin:20px;" id="input_error"><b>Product Name already used!</b></span>
+
+		<div class="modal-footer">
+		  <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal">Close</button>
+		  <button type="submit" class="btn btn-primary" >Save changes</button>
+		</div>
+		
+	</form>
+
+	  </div>
+	</div>
+  </div>
+
+	<div class="table-data">
+		<div class="order">
+			<div class="card" style="width:95%;margin-bottom:5vw;">
+				<div class="card-body p-0">
+				  <div class="table-responsive" data-mdb-perfect-scrollbar="true" style="position:relative; border-radius:10px;">
+							<table class="table caption-top">
+								<thead style="background-color:#19123b;color:white">
+									<tr>
+										<th>Image</th>
+										<th>Name</th>
+										<th>Price</th>
+										<th>View</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for product in sub_categories.products.all %}
+									<tr>
+										<td><img style="height:5vw; width:5vw; border-radius: 15px;" src="/{{product.Image_main}}"></td>
+										<td>{{product.Name}}</td>
+										<td>{{product.Price}}</td>
+										<td><a href="{% url 'view_product_variation' product.id %}"><button class="btn btn-primary">View</button></a></td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+	</div>
+
+</main>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+
+
+// function AddProduct(e){
+// $('#form_submit').submit(function(e){
+
+// 	e.preventDefault();
+
+// 	p_name = document.getElementById("p_name").value;
+// 	Price = document.getElementById("Price").value;
+// 	p_desc = document.getElementById("p_desc").value;
+// 	p_image = document.getElementById("p_img").files[0];
+// 	subcat_id = document.getElementById("p_sub_cat").value;
+
+// 	var formdata = new FormData();
+// 	formdata.append("p_subcat", subcat_id);
+// 	formdata.append("p_name", p_name);
+// 	formdata.append("p_price", Price);
+// 	formdata.append("p_desc", p_desc);
+// 	formdata.append("p_image", p_image);
+// 	formdata.append("csrfmiddlewaretoken", "{{ csrf_token }}");
+
+// 	$.ajax({
+// 		method: "POST",
+// 		url : "/add_product",
+// 		processData: false,
+// 		contentType: false,
+// 		mimeType: "multipart/form-data",
+// 		data : formdata,
+// 		success: function(res) {
+// 		console.log(res);
+// 		if (res.includes("Product Created!")){
+// 			input_error = document.getElementById("input_error").style.display="none";
+// 			Created(res);
+// 		}
+// 		else{
+// 			input_error = document.getElementById("input_error").style.display="block";
+// 		}
+// 		}
+// 	});
+
+// });
+
+function Created(res){
+
+var x = document.getElementById("snackbar");
+// Add the "show" class to DIV
+x.className = "show";
+
+// After 3 seconds, remove the show class from DIV
+setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+}
+
+</script>
+
+{% endblock %}

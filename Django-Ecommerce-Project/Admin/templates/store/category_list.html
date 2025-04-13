@@ -1,0 +1,211 @@
+{% extends "dashboard/dashboard_base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+
+<style>
+
+.collapsible {
+  cursor: pointer;
+  width: 75%;
+  text-align: left;
+}
+
+    .collapsible:after {
+      content: '\002B';
+      color: white;
+      font-weight: bold;
+      float: right;
+      margin-left: 5px;
+    }
+    
+    .active:after {
+      content: "\2212";
+    }
+    
+    .content {
+      padding: 0 18px;
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.2s ease-out;
+    }
+
+    .subcatBtn{
+        background-color: #bdcfbe; /* Green */
+        border: none;
+        color: rgb(48, 46, 46);
+        padding: 7px 17px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 12px;
+        margin: 4px 2px;
+        cursor: pointer;
+        margin-bottom:1vw;
+        /* border-radius: 10px; */
+    }
+
+    </style>
+
+
+<!-- MAIN -->
+<main style="margin-top:8vw;margin-left:2vw;" id="refresh_page">
+
+  <h1 style="font-family:bold">All Categories</h1><br><br>
+
+    <div class="row">
+      <div class="col-md-5">
+          <div class="form-outline mb-4">
+              <input type="text" id="catInput" placeholder="Search customer here .." class="form-control" />
+              <label class="form-label" for="catInput">Search Customer</label>
+          </div>        
+      </div>
+
+      <div class="col-md-2 offset-3">
+          <button class="btn btn-info" data-mdb-toggle="modal" data-mdb-target="#Category">+ Add Category</button>
+      </div>
+
+      <div class="col-md-2">
+          <button class="btn btn-success">Export CSV</button>            
+      </div>
+  </div>
+
+<!-- Modal -->
+<form action="store" method="post">
+  {% csrf_token %}
+
+  <div class="modal fade" id="Category" tabindex="-1" aria-labelledby="CategoryLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="CategoryLabel">Add Category</h5>
+          <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">        
+          <div class="form-outline">
+            <!-- <input type="text" id="addcat" class="form-control" required/> -->
+            {{form.name}}
+            <label class="form-label" for="addcat">Category Name</label>
+          </div>
+          <span style="color:rgb(119, 0, 0); font-family:bold; display:none;" id="input_error"><b>Field is Required!</b></span>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary btn-block">Add Category</button>
+        </div>
+      </div>
+    </div>
+    <div id="snackbar">Category Created<img src="{% static 'check_mark.png' %}" style="margin-top:-0.4vw;" alt=""></div>
+  </div>
+
+</form>
+
+
+<div class="card" style="width:95%;margin-bottom:5vw;">
+      <div class="card-body p-0">
+        <div class="table-responsive" data-mdb-perfect-scrollbar="true" style="position:relative; border-radius:10px;">
+          <table class="table caption-top" id="myTable">
+              <thead style="background-color:#19123b;color:white">
+                      <tr>
+                        <th scope="col">Category</th>
+                        <th scope="col">Action</th>
+                        <th scope="col">View</th>
+                      </tr>
+              </thead>
+
+              <tbody id="myTableData">
+                  {% for c in object_list.all %}
+                      <tr>
+                          <td>{{c.name}}</td>
+                          <td>
+                            <a href="#"><img src="{% static 'edit.png' %}" height="20px" alt=""></a>
+                            <a href="{% url 'delete_category' c.id %}"><img src="{% static 'trash.png' %}" style="margin-left:1vw" height="20px" alt=""></a>
+                          </td>
+                          <td><a href="{% url 'show_subcats' c.id %}"><button class="btn btn-primary">View</button></a></td>
+                      </tr>
+                  {% endfor %}
+              </tbody>
+          </table>
+      </div>
+  </div>
+</div>
+
+</main>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+
+var $rows = $('#myTableData tr');
+
+$('#catInput').keyup(function() {
+    var val = $.trim($(this).val()).replace(/ +/g, ' ').toLowerCase();
+    $rows.show().filter(function() {
+        var text = $(this).text().replace(/\s+/g, ' ').toLowerCase();
+        return !~text.indexOf(val);
+    }).hide();
+});
+
+function AddCategory(){
+
+  addcat = document.getElementById("addcat").value;
+
+  if (addcat != ""){
+    input_error = document.getElementById("input_error").style.display="none";
+
+    var formdata = new FormData();
+    formdata.append("category", addcat);
+    formdata.append("csrfmiddlewaretoken", "{{ csrf_token }}");
+
+    $.ajax({
+      method: "POST",
+      url : "/store",
+      processData: false,
+      contentType: false,
+      mimeType: "multipart/form-data",
+      data : formdata,
+      success: function(res) {
+        console.log(res);
+        if (res.includes("Category created")){
+          Created(res,addcat);
+        }
+        else{
+          input_error = document.getElementById("input_error").innerText=res;
+          input_error = document.getElementById("input_error").style.display="block";
+        }
+      }
+    });
+  }
+  else{
+    input_error = document.getElementById("input_error").innerText="Field is Required!";
+    input_error = document.getElementById("input_error").style.display="block";
+  }
+
+}
+
+function Created(res,name){
+
+  document.getElementById("addcat").value = "";
+  // setInterval(function() {$('#myTable').load(location.href + " #myTable");}, 300);
+  cat_id = res.split("-- ")[1]
+  cat_url = '/show_subcats/' + cat_id
+  console.log(cat_url)
+
+  $("#myTableData").append("<tr><td>"+ name +"</td> <td> <a href=''><img src='{% static 'edit.png' %}' height='20px'></a>" +
+    "<a href='#'><img src='{% static 'trash.png' %}' style='margin-left:1vw' height='20px' alt=''></a> </td>" +
+    " <td><a href='"+ cat_url +"'><button class='btn btn-primary'>View</button></a></td> </tr>");
+
+  var x = document.getElementById("snackbar");
+
+  // Add the "show" class to DIV
+  x.className = "show";
+
+  // After 3 seconds, remove the show class from DIV
+  setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+
+}
+
+</script>
+
+{% endblock %}

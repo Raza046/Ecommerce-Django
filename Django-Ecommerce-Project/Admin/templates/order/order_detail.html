@@ -1,0 +1,359 @@
+{% extends "dashboard/dashboard_base.html" %}
+
+{% load static %}
+
+{% block content %}
+
+<style>
+
+.track-line {
+height: 2px !important;
+background-color: rgb(1, 1, 88);  /* rgb(6, 90, 20); ---> For order delivered. */
+opacity: 1;
+}
+
+.dot {
+height: 10px;
+width: 10px;
+margin-left: 3px;
+margin-right: 3px;
+margin-top: 0px;
+background-color: rgb(1, 1, 88);
+border-radius: 50%;
+display: inline-block
+}
+
+.big-dot {
+height: 25px;
+width: 25px;
+margin-left: 0px;
+margin-right: 0px;
+margin-top: 0px;
+background-color: rgb(1, 1, 88);
+border-radius: 50%;
+display: inline-block;
+}
+
+.big-dot i {
+font-size: 12px;
+}
+
+.card-stepper {
+z-index: 0
+}
+
+</style>
+
+
+<main style="margin-top:85px;">
+
+<section class="h-100 gradient-custom">
+    <div class="container py-5 h-100">
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-lg-12 ">
+          <div class="card shadow-5" style="border-radius: 10px;">
+            <div class="card-header px-4 py-5">
+              <div class="row">
+                <div class="col-md-10">
+                  <h4 class="text-muted mb-0" style="font-family:bold">Order placed by <span style="color: #192552;">{{order.customer.user.username|capfirst}}</span>!</h4>
+                </div>
+                {% if order.complains %}
+                <div class="col-md-2">
+                  <img data-mdb-toggle="tooltip" title="Complain in this Order !" src="{% static 'report.png' %}" height="60px" alt="">
+                </div>
+                {% endif %}
+            </div>
+          </div>
+
+            <div class="card-body p-4">
+              <div class="d-flex justify-content-between align-items-center mb-4">
+                <p class="lead fw-normal mb-0" style="color: #192552;">Order</p>
+                <p class="small text-muted mb-0">Order Id : <b>{{order.order_id}}</b></p>
+            </div>
+              
+              {% for item in order.items.all %}
+
+              <div class="card" style="width:95%;margin-bottom:2vw;">
+                <div class="card-body p-0">
+                  <div class="table-responsive" data-mdb-perfect-scrollbar="true" style="position:relative; border-radius:10px;">
+                
+                <table class="table caption-top">
+                  <thead style="background-color:#19123b;color:white">
+                      <tr>
+                        <th scope="col">Image</th>
+                        <th scope="col">Name</th>
+
+                        {% for v in item.product_variant.variation.all %}
+                        <th scope="col">{{v.variation.name}}</th>
+                        {% endfor %}
+
+                        <th scope="col">Quantity</th>
+                        <th scope="col">Total Price</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+        
+                      <tr>
+                        <td><img src="/{{item.product_variant.image.first.Image}}" style="height:6vw; width:6vw; border-radius: 15px;" /></td>
+                        <td><b>{{item.product_variant.product.Name|truncatechars:18}}</b></td>
+
+                        {% for v in item.product_variant.variation.all %}
+                        <td>{{v.value}}</td>
+                        {% endfor %}
+
+                        <td>{{item.quantity}}</td>
+                        <td>{{item.quantity}} x {{item.product_variant.price}}</td>
+                      </tr>
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+            </div>
+
+              {% endfor %}
+
+                  <div class="row d-flex justify-content-center align-items-center h-100">
+                    <div class="col">
+                      <div class="card card-stepper" style="border-radius: 10px;">
+                        <div class="card-body p-4">
+              
+                          <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex flex-column">
+                              <span class="lead fw-normal">Your Order Progress</span>
+                              <span class="text-muted small">by DHFL on 21 Jan, 2020</span>
+                            </div>
+                            <div>
+                              <button class="btn btn-danger" type="button" data-mdb-toggle="modal" data-mdb-target="#UpdateModal">Update Order Details</button>
+                            </div>
+                          </div>
+                          <hr class="my-4">
+              
+                          <div class="d-flex flex-row justify-content-between align-items-center align-content-center">
+                            <span class="dot"></span>
+                            <hr class="flex-fill track-line"><span class="dot"></span>
+                            <hr class="flex-fill track-line"><span class="dot"></span>
+                            <hr class="flex-fill track-line"><span class="dot"></span>
+                            <hr class="flex-fill track-line">
+                            <span>
+                              {% if order.status == "Delivered" %}
+                                <img src="{% static 'ticks.png' %}" height="50px">
+                              {% else %}
+                                <img src="{% static 'ticks.png' %}" height="50px" style="opacity:0.3">
+                              {% endif %}
+                            </span>
+                          </div>
+              
+                          <div class="d-flex flex-row justify-content-between align-items-center">
+
+                            <div class="d-flex flex-column align-items-start"><center><span>{{order.create_at}}</span><br><span>Order placed</span><br>
+                              {% if order.status == "Created" %}
+                                <img src="{% static 'order_completion.png' %}" height="60px">
+                              {% else %}
+                                <img src="{% static 'order_completion.png' %}" height="60px" style="opacity:0.3">
+                              {% endif %}</center></div>
+
+                            <div class="d-flex flex-column justify-content-center"><center><br><span>Order Processeing</span><br>
+                              {% if order.status == "Preparing" %}
+                              <img src="https://cdn3.iconfinder.com/data/icons/online-shopping-flat-flash-deals/512/Order_processing-512.png" height="90px">
+                              {% else %}
+                              <img src="https://cdn3.iconfinder.com/data/icons/online-shopping-flat-flash-deals/512/Order_processing-512.png" style="opacity:0.3" height="90px">
+                              {% endif %}</center></div>
+                            
+                            <div class="d-flex flex-column justify-content-center align-items-center"><center><span>Order Shipping</span><br>
+                              {% if order.status == "Shipping" %}
+                                <img src="{% static 'shipping.png' %}" height="70px" >
+                              {% else %}
+                              <img src="{% static 'shipping.png' %}" height="70px" style="opacity:0.3">
+                              {% endif %}</center></div>
+  
+                            <div class="d-flex flex-column align-items-center"><center><span>Out for delivery</span><br>
+                              {% if order.status == "Out for Delivery" %}
+                              <img src="{% static 'delivery.png' %}" height="70px">
+                              {% else %}
+                              <img src="{% static 'delivery.png' %}" height="70px" style="opacity:0.3">
+                              {% endif %}</center></div>
+
+                            <div class="d-flex flex-column align-items-end"><center><span>15 Mar</span><br><span>Delivered</span><br>
+                              {% if order.status == "Delivered" %}
+                              <img src="{% static 'package.png' %}" height="70px">
+                              {% else %}
+                              <img src="{% static 'package.png' %}" height="70px" style="opacity:0.3">
+                              {% endif %}</center></div>
+
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div><br>
+
+                      <!-- Update order detail Modal -->
+
+                      <!-- Modal -->
+                      <div
+                        class="modal fade"
+                        id="UpdateModal"
+                        data-mdb-keyboard="false"
+                        tabindex="-1"
+                        aria-labelledby="UpdateModalLabel"
+                        aria-hidden="true"
+                      >
+                        <div class="modal-dialog modal-dialog modal-lg" >
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="UpdateModalLabel">Update Order Details</h5>
+                              <button type="button" class="btn-close" data-mdb-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+
+                                <div class="row">
+                                  <div class="col-md-2" style="margin-left:1.5vw;">
+                                    <center><img src="{% static 'order_completion.png' %}" height="60px"></center>
+                                  </div>
+                                  <div class="col-md-2" style="margin-left:1.2vw;">
+                                    <center><img src="https://cdn3.iconfinder.com/data/icons/online-shopping-flat-flash-deals/512/Order_processing-512.png" height="90px"></center>
+                                  </div>
+                                  <div class="col-md-2" style="margin-left:1.2vw;">
+                                    <center><img src="{% static 'shipping.png' %}" height="70px"></center>
+                                  </div>
+                                  <div class="col-md-2" style="margin-left:1.2vw;">
+                                    <center><img src="{% static 'delivery.png' %}" height="70px"></center>
+                                  </div>
+                                  <div class="col-md-2" style="margin-left:1.2vw;">
+                                    <center><img src="{% static 'package.png' %}" height="70px"></center>
+                                  </div>
+                                </div>
+                              <div class="btn-group" style="margin:20px;margin-top:1.5vw;margin-bottom:3vw;">
+                                <input type="radio" class="btn-check" name="options" id="OP" value="Created" autocomplete="off" checked />
+                                <label class="btn btn-info" for="OP">Order Placed</label>
+                              
+                                <input type="radio" class="btn-check" name="options" id="OPR" value="Preparing" autocomplete="off" />
+                                <label class="btn btn-info" for="OPR">Order Processing</label>
+                              
+                                <input type="radio" class="btn-check" name="options" id="OS" value="Shipping" autocomplete="off" />
+                                <label class="btn btn-info" for="OS">Order Shipping</label>
+
+                                <input type="radio" class="btn-check" name="options" id="OFD" value="Out for Delivery" autocomplete="off" />
+                                <label class="btn btn-info" for="OFD">Out for Delivery</label>
+
+                                <input type="radio" class="btn-check" name="options" id="DL" value="Delivered" autocomplete="off" />
+                                <label class="btn btn-info" for="DL">Delivered!</label>
+                              </div>
+
+
+                                <h5> Email Options:</h5>
+                                  <div class="row">
+                                    <div class="col-md-3 offset-3">
+                                      <span onclick="MailOption('Yes')" class="btn" style="color:grey;" id="mail_yes" ><img src="{% static 'mail.png' %}" height="60px" alt=""><br><br>Update customer by sending an email</span>
+                                    </div>
+                                    <div class="col-md-3 offset-0">
+                                      <span onclick="MailOption('No')" class="btn" style="color:grey" id="mail_no"><img src="{% static 'no_mail.png' %}" height="60px" ><br><br>Update without sending an email</span>
+                                    </div>
+                                  </div><br>
+
+                            </div>
+                            <!-- <div class="modal-footer"> -->
+                              <center><button type="button" class="btn btn-lg" style="width:70%;background-color:#192552;color:white;" onclick="UpdateOrder('{{order.id}}')">Update Order</button></center><br>
+                            <!-- </div> -->
+                          </div>
+                        </div>
+                      </div>
+
+                      <!-- Update order detail Modal -->
+
+
+              <div class="d-flex justify-content-between pt-2">
+                <p class="fw-bold mb-0">Order Details</p>
+                <p class="text-muted mb-0"><span class="fw-bold me-4">Total</span> ${{order.total}}</p>
+              </div>
+  
+              <div class="d-flex justify-content-between pt-2">
+                <p class="text-muted mb-0">Invoice Number : 788152</p>
+                <p class="text-muted mb-0"><span class="fw-bold me-4">Discount</span> $19.00</p>
+              </div>
+  
+              <div class="d-flex justify-content-between">
+                <p class="text-muted mb-0">Invoice Date : {{order.create_at}}</p>
+                <p class="text-muted mb-0"><span class="fw-bold me-4">GST 18%</span> 123</p>
+              </div>
+  
+              <div class="d-flex justify-content-between mb-5">
+                <p class="text-muted mb-0">Delivery Type : {{order.delivery_option}}</p>
+                <p class="text-muted mb-0"><span class="fw-bold me-4">Delivery Charges</span> Free</p>
+              </div>
+            </div>
+            <div class="card-footer border-0 px-4 py-5"
+              style="background-color: #192552; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px;">
+
+              <h5 class="d-flex align-items-center justify-content-end text-white text-uppercase mb-0">
+              {% if order.delivery_option == "Online Payment" %}
+               Total paid: <span class="h2 mb-0 ms-2">${{order.total}}</span>
+ 
+              {% elif order.delivery_option == "Cash On Delivery" %}
+              Total pending: <span class="h2 mb-0 ms-2">${{order.total}}</span>
+ 
+              {% endif %}
+
+            </h5>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</section>
+
+</main>
+
+<script>
+
+mail_option = false;
+
+function MailOption(v){
+  console.log(v)
+  if(v == "Yes"){
+    mail_option = true;
+    document.getElementById("mail_yes").style.backgroundColor = "rgb(214, 224, 255)";
+    document.getElementById("mail_no").style.backgroundColor = "white";
+  }
+  else{
+    mail_option = false;
+    document.getElementById("mail_no").style.backgroundColor = "rgb(214, 224, 255)";
+    document.getElementById("mail_yes").style.backgroundColor = "white";
+  }
+}
+
+function UpdateOrder(order_id){
+
+  action = document.querySelector('.btn-check:checked').value;
+  console.log(order_id)
+  console.log(mail_option)
+  console.log(action)
+
+  let formData = new FormData();
+  formData.append("csrfmiddlewaretoken", "{{ csrf_token }}");
+  formData.append('status', action);
+
+
+  $.ajax({
+      method: "POST",
+      url: '/order/' + order_id + '/update',
+      mimeType: "multipart/form-data",
+      processData: false,
+      contentType: false,
+      data: formData,
+
+      headers: {
+        'X-CSRFToken': '{{ csrf_token }}'
+      },
+  
+      success: function(res) {
+          console.log(res);
+      },
+  });
+
+
+}
+
+</script>
+
+
+{% endblock %}

@@ -1,0 +1,736 @@
+{% extends "base/base1.html" %}
+{% load static %}
+
+{% block content %}
+
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+	<!-- Boxicons -->
+	<link href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css" rel="stylesheet">
+	<!-- My CSS -->
+	<link rel="stylesheet" href="{% static 'css/admin_style.css' %}">
+
+	<link
+	rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+  />
+  <!-- Google Fonts Roboto -->
+  <link
+	rel="stylesheet"
+	href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap"
+  />
+
+  <!-- MDB -->
+  <link rel="stylesheet" href="{% static 'css/mdb.min.css' %}" />
+    <!-- ------ -->
+	<!--  Above line of code will blast the admin sidebar -->
+</head>
+
+<style>
+
+/* Add to Cart Button Design */
+
+.box {
+  position: relative;
+  background: #fff;
+}
+
+/* common */
+
+/* crimson color for Sale */
+
+.ribbon {
+  width: 150px;
+  height: 150px;
+  overflow: hidden;
+  position: absolute;
+}
+.ribbon::before,
+.ribbon::after {
+  position: absolute;
+  z-index: -1;
+  content: '';
+  display: block;
+  border: 5px solid #2980b9;
+}
+.ribbon span {
+  position: absolute;
+  display: block;
+  width: 225px;
+  padding: 15px 0;
+  background-color: #3498db;
+  box-shadow: 0 5px 10px rgba(0,0,0,.1);
+  color: #fff;
+  font: 700 18px/1 'Lato', sans-serif;
+  text-shadow: 0 1px 1px rgba(0,0,0,.2);
+  text-transform: uppercase;
+  text-align: center;
+}
+
+/* top right*/
+.ribbon-top-right {
+  top: -10px;
+  right: -10px;
+}
+.ribbon-top-right::before,
+.ribbon-top-right::after {
+  border-top-color: transparent;
+  border-right-color: transparent;
+}
+.ribbon-top-right::before {
+  top: 0;
+  left: 0;
+}
+.ribbon-top-right::after {
+  bottom: 0;
+  right: 0;
+}
+.ribbon-top-right span {
+  left: -25px;
+  top: 30px;
+  transform: rotate(45deg);
+}
+
+/* Ended */
+
+
+/* MODAL BODY CSS */
+
+* {
+  box-sizing: border-box;
+}
+
+.Schecked{
+    color: orange;
+}
+/* .fa-star{
+font-size: 20px;
+} */
+
+/* Create three columns of equal width */
+.columns {
+  font-family:bold;
+  color:black;
+  float: left;
+  width: 32%;
+  padding: 8px;
+  padding-left: 32px;
+  box-shadow: 0 12px 20px 0 rgba(0,0,0,0.2);
+  margin-left: 1vw;
+  border-radius: 10px;
+}
+
+/* Style the list */
+.price {
+  list-style-type: none;
+  /* border: 1px solid #eee; */
+  margin-left: -1vw !important;
+  margin: 0;
+  padding: 0;
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+
+/* Add shadows on hover */
+
+/* Pricing header */
+.price .header {
+  background-color: #111;
+  color: white;
+  font-size: 25px;
+}
+
+/* List items */
+.price li {
+  /* border-bottom: 1px solid #eee; */
+  padding: 20px;
+  text-align: center;
+}
+
+/* Grey list item */
+.price .grey {
+  background-color: #eee;
+  font-size: 20px;
+}
+
+/* The "Sign Up" button */
+
+.BtnClass{
+  background-color: hotpink;
+  border-radius: 5px !important;
+  color: white;
+  padding: 4px 12px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.button {
+  background-color: hotpink;
+  border: none;
+  color: white;
+  padding: 6px 18px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 18px;
+}
+
+/* Change the width of the three columns to 100%
+(to stack horizontally on small screens) */
+@media only screen and (max-width: 600px) {
+  .columns {
+    width: 100%;
+  }
+}
+
+/* CSS ENDS */
+
+
+.selected {
+    /* border: 3px solid #555; */
+    box-shadow: 3px 3px 3px 3px rgb(0 0 0 / 50%);
+    transition: 0.7s;
+    border-radius: 20px;
+}
+
+.card {
+  /* Add shadows to create the "card" effect */
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+  transition: 0.3s;
+}
+
+/* On mouse-over, add a deeper shadow */
+.card:hover {
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+/* Add some padding inside the card container */
+.container {
+  padding: 2px 16px;
+}
+
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: hotpink;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px hotpink;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+.modal{
+    font-family: bold;
+}
+
+@media screen and (min-width: 676px) {
+        .modal-dialog {
+          max-width: 1300px; /* New width for default modal */
+        }
+    }
+
+
+
+/* Shinning on products */
+
+    .icon {
+  position: relative;
+  overflow: hidden;  
+}
+
+/**
+ * The "shine" element
+ */
+
+.icon:after {
+  content: "";
+  position: absolute;
+  top: -110%;
+  left: -210%;
+  width: 200%;
+  height: 200%;
+  opacity: 0;
+  transform: rotate(30deg);
+
+  background: rgba(255, 255, 255, 0.13);
+  background: linear-gradient(
+    to right, 
+    rgba(255, 255, 255, 0.13) 0%,
+    rgba(255, 255, 255, 0.13) 77%,
+    rgba(255, 255, 255, 0.5) 92%,
+    rgba(255, 255, 255, 0.0) 100%
+  );
+}
+
+/* Hover state - trigger effect */
+
+.icon:hover:after {
+  opacity: 1;
+  top: -30%;
+  left: -30%;
+  transition-property: left, top, opacity;
+  transition-duration: 0.7s, 0.7s, 0.15s;
+  transition-timing-function: ease;
+}
+
+/* Active state */
+
+.icon:active:after {
+  opacity: 0;
+}
+
+/* Shinning on products */
+
+.py-2{
+    padding: 0px !important
+}
+
+
+/* allprodColors */
+
+#allprodColors{
+    box-shadow: 0 2px 5px 0 rgb(0 0 0 / 40%), 0 2px 10px 0 rgb(0 0 0 / 30%);
+    border-radius: 5px;
+}
+
+.animate_me1{
+  animation-name: Nowswing1;
+  animation-duration: 1s;
+}
+
+@-webkit-keyframes Nowswing1 {
+  0% {
+      opacity: 0.9;
+      transform: translateY(-400px);
+   }
+   100% {
+      opacity: 1;
+      transform: translateY(0);
+   }
+}
+
+.animate_me{
+  animation-name: Nowswing;
+  animation-duration: 1s;
+}
+
+
+@-webkit-keyframes Nowswing {
+
+from {
+  opacity:0
+  -webkit-transform: translate3d(0,100%,0);
+  transform: translate3d(0,100%,0);
+}
+
+to{
+  opacity:1
+  -webkit-transform:none;
+  transform: none;
+}
+
+}
+
+.split {
+  height: 100%;
+  width: 50%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  overflow-x: hidden;
+  padding-top: 20px;
+}
+
+.left {
+  border-right: 1px solid #e4e2e2;
+  left: 0;
+  background-color: white;
+  font-family: 'Lato', Calibri, Arial, sans-serif;
+  padding: 0.85em 0;
+}
+
+.right {
+  right: 0;
+  background-color: white;
+}
+
+.centered {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+}
+
+.centered img {
+  width: 150px;
+  border-radius: 30%;
+}
+
+
+</style>
+
+<!--  HEADER STARTS -->
+
+
+<nav id="comp_navbar" style="display:none;background-color:whitesmoke" class="navbar fixed-top navbar-light">
+  <div class="container-fluid">
+    <div class="container">
+      <div class="row" id="prod_comp">
+        <div class="col-sm-8"></div>
+        <div class="col-sm-1"><button class="btn btn-outline-primary" id="comp_prod" onclick="ShowDiv()">Compare</button></div>
+        <div class="col-sm-1"></div>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!--  HEADER ENDS -->
+
+
+<body id="product-sidebar-left">
+<!-- main content -->
+    <div class="main-content" style="margin-top:100px">
+        <div id="wrapper-site">
+            <div id="content-wrapper">
+                <div id="main">
+                    <div class="page-home">
+                        <div class="container">
+                            <div class="content">
+                                <div class="row">
+                                    <div class="sidebar-3 sidebar-collection col-lg-3 col-md-4 col-sm-4">
+                                       <form action="{{request.path}}" method="post">
+                                        {% csrf_token %}
+
+                                        <!-- category menu -->
+                                        <div class="sidebar-block">
+
+                                            <div class="title-block" style="font-family:bold">Categories</div>
+
+                                            <div class="block-content">
+
+                                              {% for category in cat %}
+
+                                              <div class="cateTitle hasSubCategory open level1" style="z-index:0;" >
+                                                    <span class="arrow collapsed collapse-icons" data-toggle="collapse" data-target="#{{category.name|cut:' '}}" aria-expanded="false" role="status">
+                                                        <i class="zmdi zmdi-minus"></i>
+                                                        <i class="zmdi zmdi-plus"></i>
+                                                    </span>
+
+                                                    <a class="cateItem" href="{% url 'AllProducts' 'cat' category.id '1' %}" style="font-family:bold"><b>{{category.name}}</b></a>
+                                                    <div class="subCategory collapse" id="{{category.name|cut:' '}}" aria-expanded="true" role="status">
+
+                                                    {% for subcategory in subcat %}
+                                                      {% if subcategory.category.id == category.id %}
+                                                        <div class="cateTitle">
+                                                            <a href="{% url 'AllProducts' 'subcat' subcategory.id '1' %}" class="cateItem">{{subcategory.name}}</a>
+                                                        </div>
+                                                      {% endif %}
+                                                    {% endfor %}
+                                                    </div>
+                                                  </div>
+
+                                              {% endfor %}<br>
+
+                                            </div>
+                                        </div>
+
+                                        <!-- best seller -->
+                                        <div class="sidebar-block">
+                                            <div class="tiva-filter-price new-item-content sidebar-block">
+                                                <label class="form-label" for="priceRange">Price Range</label>
+                                                <div class="range">
+                                                  <input type="range" class="form-range" value="{{p_max}}" name="priceRange" min="{{p_min}}" max="{{p_max}}" />
+                                                </div><br>
+                                                <div class="form-check">
+                                                  <input class="form-check-input" type="checkbox" value="True" name="instock" checked />
+                                                  <label class="form-check-label" for="instock">In Stock</label>
+                                                </div>
+                                                <!-- <input type="text" class="form-range" style="display:none" id="current_url" /> -->
+                                            </div>
+                                            <!-- <div class="sidebar-block by-color">
+                                                <h3 class="title-product">By Color</h3>
+                                                <div>
+                                                    {% for pv in p_var %}
+                                                    <span class="">
+                                                        <label id="allprodColors" style="background-color:{{pv.color}}"></label>
+                                                        <a href="#"></a>
+                                                    </span>
+                                                {% endfor %}
+                                                </div>
+                                            </div><br> -->
+                                            <button class="btn btn-primary" type="submit">Filter Search</button>
+                                        </div>
+                                      </form>
+                                    </div>
+
+                                    <div class="col-sm-8 col-lg-9 col-md-8 product-container">
+                                      <h1 style="font-family:bold">{{cat_name}}</h1>
+
+                                        <!-- <div class="container">
+                                          <div class="row" id="prod_comp">
+                                            <div class="col-sm-3"></div>
+                                          </div>
+                                        </div> -->
+
+                                        <div class="row">
+                                        <div class="split left" id="menu" style="display: none;"></div>
+                                        <div class="split right" id="menu1" style="display:none;"></div>
+                                      </div>
+                                      <!-- <button onclick="hideDiv()" style="margin-left:30vw;" class="btn btn-danger">Close</button> -->
+
+                                        <!-- Modal -->
+                                        <div id="myModal" class="modal fade" role="dialog">
+                                          <div class="modal-dialog">
+                                            <!-- Modal content-->
+                                            <div class="modal-content" style="background-color:transparent">
+                                              <div class="modal-body">
+                                                <!-- <div class="row" id="ModalBody">
+                                                </div> -->
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <hr>
+
+                                        <div class="tab-content product-items" style="margin-top:-120px">
+                                            <div id="grid">
+                                                <div class="row">
+
+                                                <div class="container mt-5">
+  
+                                                    <!--Section: Content-->
+                                                    <section class="dark-grey-text text-center">
+
+                                                    <!-- Grid row -->
+                                                      <div class="row" id="prod_div">
+                                                  
+                                                        {% if products.count == 0 %}
+                                                        <br><br>
+                                                        <h2 style="margin-left:5vw;">No Products Found!</h2>
+                                                        <br>
+                                                        {% else %}
+
+                                                        {% for prod in products %}
+
+                                                          <div class="col-lg-4 col-md-6 mb-4 d-flex align-items-stretch" onclick="ProdID('{{prod.id}}')" id="AllProds{{prod.id}}">
+                                                            <input id="Prod{{prod.id}}" type="hidden" value="{{prod.id}}|||{{prod.Name}}|||{{prod.Price}}|||{{prod.Description}}|||{{prod.Image_main}}">
+                                                            <!-- Card -->
+                                                            <div class="card" id="pCard_{{prod.id}}">
+                                                                <i class="fa fa-plus" id="checkplus_{{prod.id}}" style="cursor:pointer;text-align:right;margin:10px;" onclick="AddComparison('{{prod}}', '{{prod.id}}', '{{prod.Image_main}}', '{{prod.Name}}', '{{prod.subcategory}}', '{{prod.Description|truncatechars:'100'}}', '{{prod.rating_value}}', '{{prod.Price}}')"></i>
+                                                                <i class="fa fa-check" id="checkcross_{{prod.id}}" style="cursor:pointer;text-align:right;margin:10px;display:none;" onclick="RemoveComparison('{{prod.id}}')"></i>
+
+                                                              <div class="bg-image hover-overlay ripple" data-mdb-ripple-color="light">
+                                                                <div class="view overlay">
+                                                                    <img src="/{{prod.Image_main}}" class="card-img-top" style="height:18vw; width:18vw;" alt="">
+                                                                    <a>
+                                                                      <div class="mask rgba-white-slight"></div>
+                                                                    </a>
+                                                                  </div>
+                                                              <a href="#!">
+                                                                <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                                                              </a>
+                                                              </div>
+                                                              <div class="card-body">
+                                                                <a href="{{prod.get_absolute_url}}"><h6 class="card-title">{{prod.Name|capfirst|truncatechars:44}}</h6></a>
+                                                            <!-- Max 21 Men's Desert Design Fleece Sweat Shirt -->
+                                                            <section class="section-preview p-1" style="margin-top:-10px">
+                                                                  <div class="container">
+                                                                      <span id="rateMe1" style="color:orange;">
+                                                                          <i class="py-2 px-1 rate-popover fas fa-star" data-original-title="Very bad"></i>
+                                                                          <i class="py-2 px-1 rate-popover fas fa-star" data-original-title="Poor"></i>
+                                                                          <i class="py-2 px-1 rate-popover fas fa-star" data-original-title="OK"></i>
+                                                                          <i class="py-2 px-1 rate-popover fas fa-star" data-original-title="Good"></i>
+                                                                          <i class="py-2 px-1 rate-popover fas fa-star" data-original-title="Excellent"></i>
+                                                                      </span>
+                                                                      <!-- <img src="{% static 'compare.png' %}" height="25px" style="cursor:pointer;text-align:right;" alt=""> -->
+                                                                  </div>
+
+                                                                  </section>
+                                                                  <h5 style="font-family:bold">
+                                                                      <strong>Rs.{{prod.Price}}</strong>
+                                                                  </h5>
+                                                              </div>
+                                                            </div>
+                                              
+                                                            <!-- Card -->
+                                                          </div>
+                                                          <input type="hidden" name="images[ ]" />
+                                                          {% endfor %}
+
+                                                    {% endif %}
+
+                                                    </div>
+                                                </section>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                    
+
+                            <!-- pagination --><br/><br><br><br>
+
+                            <nav aria-label="Page navigation example">
+                                <ul class="pagination justify-content-end">
+                                    <li class="page-item disabled">
+                                    <!-- <a class="page-link">Previous</a> -->
+                                    </li>
+                                    {% for i in n_pages %}
+                                      {% if i == pg_num %}
+                                      <li class="page-item" style="background-color:#ede8e8"><a class="page-link" href="{{next_pg}}{{i}}">{{i}}</a></li>
+                                      {% else %}
+                                      <li class="page-item"><a class="page-link" href="{{next_pg}}{{i}}">{{i}}</a></li>
+                                      {% endif %}
+                                    {% endfor %}
+                                    <li class="page-item">
+                                    <!-- <a class="page-link" href="#">Next</a> -->
+                                    </li>
+                                </ul>
+                              </nav>
+                            </div>
+
+                              </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+
+<!-- Material Design for Bootstrap -->
+<!-- <script src="{% static 'js/mdb.min.js' %}"></script> -->
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script type="text/javascript">
+
+
+function ShowDiv(){
+
+    if (document.getElementById('menu').innerHTML && document.getElementById('menu1').innerHTML){
+      console.log("Yes 2 products")
+
+      document.getElementById('menu').classList.add('animate_me');
+      document.getElementById('menu').style.display= "block";
+
+      document.getElementById('menu1').classList.add('animate_me1');
+      document.getElementById('menu1').style.display= "block";
+
+      document.getElementsByClassName("navbar")[0].style.zIndex = 0;
+      document.getElementById("comp_navbar").style.zIndex = 0;
+      
+      // abcd
+    }
+  }
+
+function hideDiv(){
+  
+    document.getElementById('menu').style.display= "none";
+    document.getElementById('menu').classList.remove('animate_me');
+    document.getElementById('menu1').classList.remove('animate_me1');
+    document.getElementById('menu1').style.display= "none";
+    document.getElementsByClassName("navbar")[0].style.zIndex = 1;
+    document.getElementById("comp_navbar").style.zIndex = 1;
+}
+
+
+function AddComparison(p,p_id, p_img, p_name, p_subcat, p_desc, p_rating, p_price){
+    document.getElementById("pCard_" + p_id).style.outline = "3px solid";
+    document.getElementById("pCard_" + p_id).style.outlineColor = "#9c95ff";
+    document.getElementById("checkplus_" + p_id).style.display = "none";
+    document.getElementById("checkcross_" + p_id).style.display = "block";
+    document.getElementById("comp_navbar").style.display = "block";
+
+    document.getElementById("prod_comp").innerHTML += '<div class="col-sm-1" id="'+ p_id +'__img"><img style="height:5.5vw;outline:3px solid; outline-color:#9c95ff;transition-duration: 2s; border-radius:10px;" src="/'+ p_img +'" height="90vw"></div>';
+    men_id = "menu_body_"+p_id
+    console.log(men_id)
+
+    if (document.getElementById('menu').innerHTML){
+      document.getElementById('menu1').innerHTML = '<div class="centered" id="'+men_id+'"><img src=/' + p_img + ' alt="Avatar woman"> <h3 id="pname_1" style="font-family:bold">'+ p_name +'</h3><b><p id="pcat_1" style="color:#3c91e6">'+ p_subcat +'</p></b><span id="prev_1">'+ p_desc +'</span><br><br>'+
+      '<span id="prat_1">'+ p_rating +' Star Ratings</span><br><br><span id="psale_1">10% Sale</span><br><br><span id="pprice_1"><b>$'+ p_price +'</b></span><br>'+
+      '<button onclick="hideDiv()" style="margin-left:30vw;" class="btn btn-danger">Close</button></div>'
+    }
+    else{
+    document.getElementById('menu').innerHTML = '<div class="centered" id="'+men_id+'"><img src=/' + p_img + ' alt="Avatar woman"> <h3 id="pname_1" style="font-family:bold">'+ p_name +'</h3><b><p id="pcat_1" style="color:#3c91e6">'+ p_subcat +'</p></b><span id="prev_1">'+ p_desc +'</span><br><br>'+
+      '<span id="prat_1">'+ p_rating +' Star Ratings</span><br><br><span id="psale_1">10% Sale</span><br><br><span id="pprice_1"><b>$'+ p_price +'</b></span><br>'+
+      '</div>'
+  }
+
+}
+
+function RemoveComparison(p_id){
+    
+    document.getElementById("pCard_" + p_id).style.outline = "0px solid";
+    document.getElementById("pCard_" + p_id).style.outlineColor = "none";
+    document.getElementById("checkplus_" + p_id).style.display = "block";
+    document.getElementById("checkcross_" + p_id).style.display = "none";
+
+    document.getElementById(p_id +'__img').remove();
+
+    document.getElementById("menu_body_"+p_id).remove()
+
+    if (!document.getElementById('menu').innerHTML && !document.getElementById('menu1').innerHTML){
+      document.getElementById("comp_navbar").style.display = "none";
+    }
+  }
+
+</script>
+
+
+{% endblock %}
