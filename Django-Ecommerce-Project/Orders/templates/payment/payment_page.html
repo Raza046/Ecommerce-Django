@@ -241,7 +241,7 @@ margin-top:0vw;
 
 <body>
 
-    <form action="{% url 'PlaceOrder' %}" id="customer-form" class="js-customer-form" method="post">
+    <form action="{% url 'place_order' %}" id="customer-form" class="js-customer-form" method="post">
         {% csrf_token %}
 
         <div id="wrapper-site">
@@ -330,7 +330,7 @@ margin-top:0vw;
 
                                       <div class="row" style="margin-top:50px">
                                         <div class="col-md-5">
-                                        <h6><a href="ViewOrder" style="color:rgb(56, 56, 56);"><i class="fas fa-long-arrow-alt-left ms-2"></i> Return to Information</a></h6><br>
+                                        <h6><a href="order/view" style="color:rgb(56, 56, 56);"><i class="fas fa-long-arrow-alt-left ms-2"></i> Return to Information</a></h6><br>
                                         </div>
                                         <div class="col-md-6 offset-1">
                                           <button type="submit" id="COD_order" onclick="CompleteOrder('COD_order')" class="btn btn-block" style="background-color:#192552;color:white; padding:20px; font-size:medium; margin-left:2vw;text-transform:capitalize;">Complete Order</button>
@@ -348,27 +348,28 @@ margin-top:0vw;
 
                                           <div class="rounded d-flex flex-column p-2 ">
 
-                                              {% for c in cart %}
+                                              {% for item in cart %}
 
                                               <div class="item">
                                                 
                                                 <div class="description" style="margin-top:-20px">
-                                                    <img style="max-width:65%;border-radius:12px;" class="shadow-3-strong"  src="{{c.product_variant.images.Image}}" alt="{{c.product_variant.Size_variants.Product.Name}}" />
+                                                    <img style="max-width:65%;border-radius:12px;" class="shadow-3-strong"  src="/{{item.product_variant.images.first.Image}}" alt="{{item.product_variant.Size_variants.Product.Name}}" />
                                                 </div>
 
                                                 <div class="description" style="margin-top:-1vw;margin-left:-3vw;">
                                                     <div class="box" style="margin-left:-2vw;margin-top:-1.5vw;background-color:#f3173c;border-radius:50%;">
-                                                        <center><span style="color:white !important;"><b>{{c.quantity}}</b></span></center>
+                                                        <center><span style="color:white !important;"><b>{{item.quantity}}</b></span></center>
                                                     </div>
-                                                        <span>{{c.product_variant.product.Name|capfirst|truncatechars:18}}</span>
-                                                    {% for s in c.product_variant.variation.all %}
-                                                        {% if s.variation.name == "Size" %}
-                                                            <span style="margin-top:-0.4vw">{{s.value}}</span>
+                                                        <span>{{item.product_variant.product.Name|capfirst|truncatechars:18}}</span>
+                                                    {% for s in item.product_variant.variation.all %}
+                                                        {% if s.variation.name != "color" %}
+                                                            <span style="margin-bottom:-0.5vw">{{s.value}}</span>
+                                                        {% else %}
+                                                            <div class="box" style="background:{{s.value}};"></div>
                                                         {% endif %}
                                                     {% endfor %}
-                                                    <div class="box shadow-3-strong" style="background:{{c.product_variant.color}};margin-top:0vw"></div>
                                                 </div>
-                                                <div id="price_{{c.id}}" style="margin-top:-2vw;padding-left:10vw;" class="total-price"><b>${{c.price}}</b></div>
+                                                <div id="price_{{item.id}}" style="margin-top:-2vw;padding-left:10vw;" class="total-price"><b>${{item.price}}</b></div>
                                                 </div>
 
                                               {% endfor %}
@@ -477,7 +478,7 @@ function PaymentTabs(ptype) {
 
   if(ptype == "COD"){
 
-    document.getElementById("customer-form").action = "{% url 'PlaceOrder' %}";
+    document.getElementById("customer-form").action = "{% url 'place_order' %}";
     document.getElementById("showOP").style.display = "none";
     document.getElementById("showCOD").style.display = "block";
     document.getElementById("OP_order").style.display = "none";

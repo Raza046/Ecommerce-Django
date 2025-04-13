@@ -1,6 +1,6 @@
 from typing import Any, Dict
 from django.forms.models import BaseModelForm
-from django.shortcuts import render,redirect
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 
 from Cart.forms import CartItemsForm
@@ -9,6 +9,7 @@ from .models import *
 from django.http import HttpRequest, HttpResponse
 from django.core.paginator import Paginator
 from django.views.generic import ListView, CreateView, DetailView, FormView
+
 
 class ProductMixin:
 
@@ -57,23 +58,6 @@ class ViewProducts(ProductMixin, ListView):
         context["products"] = products
         return render(self.request, self.template_name, context)
 
-    # def get(self, *args, **kwargs):
-
-    #     # p = Paginator(p, 9)
-    #     # pages = p.page(kwargs['pg_num'])
-    #     # next_page_url = f'{self.request.path[:-1]}'
-
-    #     # try:
-    #     #     start_index = pages.previous_page_number()
-    #     # except:
-    #     #     start_index = 1
-
-    #     # try:
-    #     #     end_index = pages.next_page_number()
-    #     # except:
-    #     #     end_index = p.num_pages
-
-    #     return render(self.request, self.template_name, context)
 
 class ProductDetailView(ProductMixin, DetailView):
 
@@ -93,7 +77,7 @@ class ProductDetailView(ProductMixin, DetailView):
         form = ReviewForm()
 
         context={
-            "p":product, "prod_variants":product_variants, "P_Img":p_img, "p_vars":product_variants, "reviews":reviews,
+            "product":product, "prod_variants":product_variants, "product_images":p_img, "p_vars":product_variants, "reviews":reviews,
             "reviews_img":reviews_img, "cat":self.category_query, "subcat":self.subcat_query,
             "form":form
             }
@@ -120,10 +104,3 @@ class ReviewFormView(FormView):
     def form_invalid(self, form):
         print(form.errors)
         return redirect('product', self.kwargs.get('id'))
-    # review , create_rev = Reviews.objects.get_or_create(product_id=p_id,users=request.user,email=email,name=name,comment=comment,rating=rating)
-    # reviewImg = ReviewImages.objects.create(review=review,image=p_img)
-
-# def FilterProducts(request):
-
-#     p_max = request.GET.get('priceRange')
-#     return redirect(request.__dict__["environ"]["HTTP_REFERER"])

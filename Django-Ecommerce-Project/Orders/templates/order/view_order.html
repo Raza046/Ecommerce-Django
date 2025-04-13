@@ -131,7 +131,7 @@ margin-top:0vw;
 
 <body>
 
-    <form action="ViewPaymentPage" id="customer-form" class="js-customer-form" method="post">
+    <form action="/checkout/confirm-payment" id="customer-form" class="js-customer-form" method="post">
         {% csrf_token %}
 
         <div id="wrapper-site">
@@ -256,27 +256,28 @@ margin-top:0vw;
 
                                             <div class="rounded d-flex flex-column p-2 ">
 
-                                              {% for c in cart %}
+                                              {% for item in cart %}
 
                                               <div class="item">
                                                 
                                                 <div class="description" style="margin-top:-20px">
-                                                    <img style="max-width:65%;border-radius:12px;" class="shadow-3-strong"  src="{{c.product_variant.images.Image}}" alt="{{c.product_variant.Size_variants.Product.Name}}" />
+                                                    <img style="max-width:65%;border-radius:12px;" class="shadow-3-strong"  src="/{{item.product_variant.images.first.Image}}" alt="{{item.product_variant.id}}" />
                                                 </div>
 
                                                 <div class="description" style="margin-top:-1vw;margin-left:-3vw;">
                                                     <div class="box" style="margin-left:-2vw;margin-top:-1.5vw;background-color:#f3173c;border-radius:50%;">
-                                                        <center><span style="color:white !important;"><b>{{c.quantity}}</b></span></center>
+                                                        <center><span style="color:white !important;"><b>{{item.quantity}}</b></span></center>
                                                     </div>
-                                                        <span style="margin-top:-0.7vw">{{c.product_variant.product.Name|capfirst|truncatechars:12}}</span>
-                                                    {% for s in c.product_variant.variation.all %}
-                                                        {% if s.variation.name == "Size" %}
-                                                            <span>{{s.value}}</span>
-                                                        {% endif %}
+                                                        <span style="margin-top:-0.7vw">{{item.product_variant.product.Name|capfirst|truncatechars:12}}</span>
+                                                    {% for s in item.product_variant.variation.all %}
+                                                      {% if s.variation.name != "color" %}
+                                                          <span style="margin-bottom:-0.5vw">{{s.value}}</span>
+                                                      {% else %}
+                                                          <div class="box" style="background:{{s.value}};"></div>
+                                                      {% endif %}
                                                     {% endfor %}
-                                                    <div class="box shadow-3-strong" style="background:{{c.product_variant.color}};margin-top:0vw"></div>
                                                 </div>
-                                                <div id="price_{{c.id}}" style="margin-top:-2vw;padding-left:10vw;" class="total-price"><b>${{c.price}}</b></div>
+                                                <div id="price_{{item.id}}" style="margin-top:-2vw;padding-left:10vw;" class="total-price"><b>${{item.price}}</b></div>
                                                 </div>
 
                                               {% endfor %}

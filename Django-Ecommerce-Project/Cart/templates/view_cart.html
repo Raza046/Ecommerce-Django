@@ -23,7 +23,6 @@
   <script src="{% static 'js/theme.js' %}"></script>
   <!-- MDB -->
   <link rel="stylesheet" href="{% static 'css/mdb.min.css' %}" />
-    <!-- ------ -->
 	<!--  Above line of code will blast the admin sidebar -->
 
 </head>
@@ -382,49 +381,50 @@ input:focus {
                                     <div class="cart-container">
                                         <div class="cart-overview js-cart">
 
-                                            {% for c in cart_items %}
+                                            {% for item in cart_items %}
 
-                                            <div class="shopping-cart" id="cart_num_{{c.id}}">
+                                            <div class="shopping-cart" id="cart_num_{{item.id}}">
                                             
                                                 <div class="item target1">
-                                                
+
                                                 <div class="description">
-                                                    <img style="width:9vw;border-radius:15px;height:9vw;"  src="/{{c.product_variant.images.Image}}" alt="{{c.product_variant.Size_variants.Product.Name}}" />
+                                                    <img style="width:9vw;border-radius:15px;height:9vw;"  src="/{{item.product_variant.images.first.Image}}" />
                                                 </div>
 
                                                   <div class="description" style="margin-left:1vw;margin-top:0.6vw;">
-                                                    <h6 style="margin-bottom:-0.1vw"><b>{{c.product_variant.product.Name|capfirst|truncatechars:24}}</b></h6>
-                                                    {% for s in c.product_variant.variation.all %}
-                                                        {% if s.variation.name == "Size" %}
+                                                    <h6 style="margin-bottom:-0.1vw"><b>{{item.product_variant.product.Name|capfirst|truncatechars:24}}</b></h6>
+                                                    {% for s in item.product_variant.variation.all %}
+                                                        {% if s.variation.name != "color" %}
                                                             <span style="margin-bottom:-0.5vw">{{s.value}}</span>
+                                                        {% else %}
+                                                            <div class="box" style="background:{{s.value}};"></div>
                                                         {% endif %}
                                                     {% endfor %}
-                                                    <div class="box" style="background:{{c.product_variant.color}};"></div>
 
                                                 </div>
 
                                                   <div class="quantity" style="margin-left:5vw;margin-top:1.5vw">
                                                     <div class="row">
                                                       <div class="col-md-4">
-                                                      <button class="plus-btn" onclick="IncreaseQuant('{{c.product_variant.id}}','quant_{{c.quantity}}','price_{{c.id}}','{{c.product_variant.price}}','{{c.id}}')" type="button" name="button">+
+                                                      <button class="plus-btn" onclick="IncreaseQuant('{{item.product_variant.id}}','quant_{{item.quantity}}','price_{{item.id}}','{{item.product_variant.price}}','{{item.id}}')" type="button" name="button">+
                                                       </button>
                                                     </div>
 
                                                     <div class="col-md-4">
-                                                      <input type="text" id="quant_{{c.product_variant.id}}" name="name" value="{{c.quantity}}"><br>
+                                                      <input type="text" id="quant_{{item.product_variant.id}}" name="name" value="{{item.quantity}}"><br>
                                                     </div>
 
                                                     <div class="col-md-4">
-                                                      <button class="minus-btn" onclick="DecreaseQuant('{{c.product_variant.id}}','quant_{{c.quantity}}','price_{{c.id}}','{{c.product_variant.price}}','{{c.id}}')" type="button" name="button">-
+                                                      <button class="minus-btn" onclick="DecreaseQuant('{{item.product_variant.id}}','quant_{{item.quantity}}','price_{{item.id}}','{{item.product_variant.price}}','{{item.id}}')" type="button" name="button">-
                                                       </button>
                                                     </div>
   
                                                     </div>
                                                   </div>
 
-                                                  <div id="price_{{c.id}}" class="total-price" style="margin-top:1.5vw">${{c.price}}</div>
+                                                  <div id="price_{{item.id}}" class="total-price" style="margin-top:1.5vw">${{item.price}}</div>
 
-                                                  <div class="buttons" style="margin-top:2vw;margin-left:5vw;" onclick="RemoveItemFromCart('{{c.id}}','{{c.price}}')">
+                                                  <div class="buttons" style="margin-top:2vw;margin-left:5vw;" onclick="RemoveItemFromCart('{{item.id}}','{{item.price}}')">
                                                     <!-- <span class="delete-btn"><img style="font-size:2em" src="{% static 'trash.png' %}" alt=""></span> -->
                                                     <a href="#!" class="text-danger delete-btn"><i class="fas fa-trash fa-lg" style="font-size:1.8em;"></i></a>
                                                 </div>
@@ -504,7 +504,7 @@ $("#checkout_btn").on("click", function(event) {
   $('#checkout_btn').html('Processing... <span class="spinner-border spinner-border-sm mr-2" role="status"></span>').attr('disabled', true);
 
   setTimeout(function(){
-    window.location.href="/ViewOrder"
+    window.location.href="/order/view"
     $('#checkout_btn').html('Checkout</b> <i class="fas fa-long-arrow-alt-right ms-2"></i>').attr('disabled', false);
   },2000)
 

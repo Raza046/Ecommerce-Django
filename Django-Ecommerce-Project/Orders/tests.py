@@ -16,7 +16,7 @@ class OrderTest(TestCase):
 
     def test_order_view(self):
         
-        response = self.client.get("/Vieworder")
+        response = self.client.get("/order/view")
         print(response)
         print(response.status_code)
         self.assertEqual(response.status_code, 200)

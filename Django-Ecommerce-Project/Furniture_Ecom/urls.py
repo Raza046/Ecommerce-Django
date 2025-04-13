@@ -34,9 +34,9 @@ urlpatterns = [
     path('update_cart', cart_views.CartUpdateView.as_view(), name="update_cart"),
 
     # Order Views
-    path('ViewOrder', order_views.Vieworder.as_view(), name="ViewOrder"),
-    path('ViewPaymentPage', order_views.ViewPaymentPage.as_view(), name="ViewPaymentPage"),
-    path('PlaceOrder', order_views.PlaceOrder.as_view(), name="PlaceOrder"),
+    path('order/view', order_views.OrderDetailView.as_view(), name="order_detail"),
+    path('checkout/confirm-payment', order_views.CheckoutPaymentView.as_view(), name="confirm-payment"),
+    path('checkout/place-order', order_views.PlaceOrderView.as_view(), name="place_order"),
     path('thankyou/<str:id>', order_views.ThankyouView.as_view(), name="thankyou"),
 
     # Stripe webhook URL

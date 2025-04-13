@@ -154,8 +154,8 @@
                 {% for p in product_variants.all %}
                 
                 <tr>
-                    {% if p.image.first %}
-                      <td><img style="height:5vw; width:5vw; border-radius:15px;" src="/{{p.image.first.Image}}"></td>
+                    {% if p.images.first %}
+                      <td><img style="height:5vw; width:5vw; border-radius:15px;" src="/{{p.images.first.Image}}"></td>
                     {% else %}
                       <td>No Image</td>
                     {% endif %}

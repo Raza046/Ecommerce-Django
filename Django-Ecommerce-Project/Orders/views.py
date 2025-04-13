@@ -40,9 +40,9 @@ class OrderMixin(View):
         else:
             print(form.errors)
 
-class Vieworder(OrderMixin, TemplateView):
+class OrderDetailView(OrderMixin, TemplateView):
 
-    template_name = "Order_ViewOrder.html"
+    template_name = "order/view_order.html"
 
     def get_context_data(self, **kwargs):
         context = {
@@ -52,10 +52,10 @@ class Vieworder(OrderMixin, TemplateView):
         return context
 
 
-class ViewPaymentPage(Vieworder, FormView):
+class CheckoutPaymentView(OrderDetailView, FormView):
 
     form_class = OrderForm
-    template_name = "Order_ViewpaymentPage.html"
+    template_name = "payment/payment_page.html"
 
     def form_valid(self, form):
         # Access the validated form data
@@ -67,7 +67,7 @@ class ViewPaymentPage(Vieworder, FormView):
 
 
 class ThankyouView(OrderMixin, TemplateView):
-    template_name = "thankyou.html"
+    template_name = "checkout/thankyou.html"
 
     def get_context_data(self, id, **kwargs):
         order = Order.objects.get(id=id)
@@ -77,12 +77,12 @@ class ThankyouView(OrderMixin, TemplateView):
         return context
 
 
-class PlaceOrder(OrderMixin, View):
+class PlaceOrderView(OrderMixin, View):
 
     def post(self, request, *args, **kwargs):
         order_form = OrderForm(self.request.session['form_data'])
         order = self.PlaceOrder(order_form, self.cart, self.cart.Total_Price)
-        html_message = render_to_string('email.html', {
+        html_message = render_to_string('email/email.html', {
         "cart":self.cart_items, "discount":getattr(self.cart.coupon, 'discount', 0),
         "order":order, "total_amount":order.total
         })
@@ -108,7 +108,7 @@ class ApplyCoupon(OrderMixin, View):
         coupon_code = str(request.GET.get('coupon_code'))
         date_time = datetime.date.today()
         coupon = Coupon.objects.filter(
-            user=self.user, code=coupon_code, valid_from__lte = date_time,
+            user__in=[self.user], code=coupon_code, valid_from__lte = date_time,
             valid_to__gte = date_time, is_expired=False
             )
 
@@ -235,6 +235,7 @@ class WebhookStripeView(OrderMixin, View):
 
         # Passed signature verification
         return HttpResponse(status=200)
+
 
 class ProductSubscription(OrderMixin, ListView):
 

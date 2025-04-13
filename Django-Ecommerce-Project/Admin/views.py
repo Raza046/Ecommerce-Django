@@ -3,6 +3,7 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 from Admin.forms import CategoryForm, AddProductForm, CouponCreateForm, CouponUpdateForm, FilterGraphValidation, OrderUpdateForm, ProductVariantCreateForm, SubCategoryForm
+from Admin.services import set_product_variaiton, top_products, GraphFilteration
 from Cart.models import Coupon
 from Orders.models import Complain, Order, OrderItem
 from Products.models import Category, Product, ProductImage, Reviews, SubCategory, Variation, VariationValue, ProductVariant
@@ -27,8 +28,8 @@ class AdminDashboardView(TemplateView):
         products = Product.objects.count()
         prods_var = OrderItem.objects.values("product_variant").annotate(product_quantity=Sum('quantity')).order_by("-product_quantity")
         reviews = Reviews.objects.all()
-        top_prod = Product.Top_Products(prods_var)
-        month_data = Product.GraphFilteration(sales)
+        top_prod = top_products(prods_var)
+        month_data = GraphFilteration(sales)
 
         context.update({
             "total_earnings":total_earnings, "sales":sales, "p_count":products,
@@ -52,7 +53,7 @@ class FilterGraphView(FormView):
             sales_graph = Order.objects.filter(
                 status="Delivered", create_at__gte=from_date, create_at__lte=to_date
                 ).all()
-            month_data = Product.GraphFilteration(sales_graph)
+            month_data = GraphFilteration(sales_graph)
  
             return HttpResponse(json.dumps(month_data))
 
@@ -272,7 +273,7 @@ class OrderListView(ListView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
-        monthly_graph_data = Product.GraphFilteration(self.queryset)
+        monthly_graph_data = GraphFilteration(self.queryset)
         context.update({
             "monthly_graph_data":monthly_graph_data,
         })
@@ -360,7 +361,7 @@ class CustomerOrdersListView(DetailView):
         context = super().get_context_data(**kwargs)
         context.update({
             "coupons":Coupon.objects.all(),
-            "month_data":Product.GraphFilteration(self.get_object().orders.all())
+            "month_data":GraphFilteration(self.get_object().orders.all())
             })
         return context
 

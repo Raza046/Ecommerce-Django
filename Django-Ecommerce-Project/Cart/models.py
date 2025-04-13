@@ -26,7 +26,6 @@ class Cart(models.Model):
 
     class Meta:
         verbose_name = ("Cart")
-        verbose_name_plural = ("Carts")
 
     # def __str__(self):
     #     if self.customer.full_name:
