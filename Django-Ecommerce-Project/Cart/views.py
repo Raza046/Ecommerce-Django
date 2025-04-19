@@ -2,6 +2,7 @@ import json
 from django.http import HttpResponse, JsonResponse, QueryDict
 from django.shortcuts import get_object_or_404, redirect, render
 from Cart.forms import AddItemToCartForm, CartUpdateForm
+from Cart.periodic_tasks import clear_inactive_cart_after_a_week
 from Products.models import ProductVariant, Category, SubCategory
 from django.views.decorators.cache import cache_page
 from django.core.cache import cache
@@ -39,9 +40,6 @@ class CartView(CreateView, CartMixin):
     def post(self, request, *args, **kwargs):
 
         form = AddItemToCartForm(request.POST)
-        print("----------------")
-        print(request.POST)
-        print("----------------")
 
         if form.is_valid():
             product_variant_id = form.cleaned_data['product_variant_id']
@@ -62,6 +60,8 @@ class CartView(CreateView, CartMixin):
 
             self.cart.Total_Price = self.cart.Total_Price + cart_item_price
             self.cart.save()
+
+            clear_inactive_cart_after_a_week(self.cart.id)
 
             return redirect('cart-view')
 

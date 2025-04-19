@@ -28,7 +28,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('user_admin/', admin.site.urls),
     path('home', home_views.HomePageView.as_view(), name="home"),
-    path('AllProducts/<str:search>/<str:id>/<str:pg_num>', prod_views.ViewProducts.as_view(), name="AllProducts"),
+    path('products/<str:search>/<str:id>/<str:pg_num>', prod_views.ViewProducts.as_view(), name="product-list"),
     path('product/<int:id>', prod_views.ProductDetailView.as_view(), name="product"),
     path('cart/view', cart_views.CartView.as_view(), name="cart-view"),
     path('update_cart', cart_views.CartUpdateView.as_view(), name="update_cart"),

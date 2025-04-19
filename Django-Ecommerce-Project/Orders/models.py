@@ -17,6 +17,7 @@ from UserAccount.models import Users
 
 # Create your models here.
 
+
 class OrderItem(models.Model):
 
     product_variant = models.ForeignKey(ProductVariant, related_name="product_variant", on_delete=models.CASCADE)
@@ -56,6 +57,7 @@ class Order(models.Model):
     delivery_option = models.CharField(
         max_length=3, choices=DeliveryOptions.choices, default=DeliveryOptions.CASH_ON_DELIVERY
         )
+    delivery_date = models.DateField(auto_now = True)
     status = models.CharField(max_length=100, choices=Status.choices, default=Status.CREATED)
     admin_note = models.CharField(blank=True, max_length=100)
     create_at = models.DateField(auto_now_add=True)
@@ -69,7 +71,7 @@ class Order(models.Model):
 
 
     @classmethod
-    def Order_Updation(self, email_opt, order_id, order_status):
+    def order_updation(self, email_opt, order_id, order_status):
 
         order = Order.objects.filter(id=order_id).first()
         order.status=order_status
@@ -80,36 +82,6 @@ class Order(models.Model):
             html_message = render_to_string('admin/email/order_update_mail.html', {'order':order,'order_status':order_status})
             # plain_message = strip_tags(html_message)
             send_mail("Order from Smart Shops","Order update notification", settings.EMAIL_HOST_USER, [order.email], fail_silently=False, html_message=html_message)
-
-
-@receiver(post_save, sender=Order)
-def Send_Mail(sender, instance, created=True, **kwargs):
-    pass
-#    cart = Cart.objects.filter(id = cart_id).first()
-#    cart_items = Cart.UserCartItems(cart, request=None)
-#    instance.customer
-    # if instance.customer:
-    #     coupon = Coupon.objects.filter(
-    #         user=instance.customer, active=True, valid_from__lte=datetime.date.today(),
-    #         valid_to__gte=datetime.date.today()
-    #         ).first()
-    #     Cart.Discount(coupon,cart)
-    # else:
-    #     coupon = None
-
-    # if coupon:
-    # html_message = render_to_string('email.html', {
-    #     "cart":cart_items,"dis":coupon,"Order":instance, "total_price":cart.Total_Price
-    #     })
-    #     # plain_message = strip_tags(html_message)
-    # # else:
-    # #     html_message = render_to_string('email.html', {"cart":cart_items, "Order":instance, "total_price":cart.Total_Price})
-    #     # plain_message = strip_tags(html_message)
-
-    # send_mail(
-    #     "Order from Smart Shops","Thankyou for your order...", settings.EMAIL_HOST_USER,
-    #     [instance.email], fail_silently=False, html_message=html_message
-    #     )
 
 @receiver(post_save, sender=Order)
 def clear_cart(sender, instance, created=True, **kwargs):

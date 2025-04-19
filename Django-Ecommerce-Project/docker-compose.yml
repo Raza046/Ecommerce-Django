@@ -1,0 +1,105 @@
+version: '3'
+
+services:
+  ecommerce-backend:
+    
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres_db
+      - redis
+
+    image: ecommerce-backend
+    container_name: ecommerce-backend
+    command: ["python", "manage.py", "runserver", "0.0.0.0:8000"]
+
+    volumes:
+      - .:/app
+
+    environment:
+      - PYTHONPATH=/app
+
+    env_file:
+      - .env
+
+
+  postgres_db:
+    image: postgres:17
+    environment:
+      - PYTHONPATH=/app
+    
+    container_name: postgres_db
+
+    ports:
+      - "5431:5432"
+    
+    volumes:
+      - ./data/db:/var/lib/postgresql/data
+    env_file:
+      - .env
+
+  celery:
+    image: celery:4
+    build: .
+    environment:
+      - PYTHONPATH=/app
+    working_dir: /app
+    command: celery -A Furniture_Ecom worker --loglevel=info
+    container_name: celery_worker
+
+    depends_on:
+      - redis
+      - ecommerce-backend
+
+    env_file:
+      - .env
+
+
+  celery-beats:
+    build: .
+    working_dir: /app
+    command: celery -A Furniture_Ecom beat --loglevel=info
+    container_name: celery_beats_worker
+
+    depends_on:
+      - redis
+      - ecommerce-backend
+
+    environment:
+      - PYTHONPATH=/app
+
+  flower:
+    image: mher/flower:latest
+    build: .
+
+    working_dir: /app
+    command: celery -A Furniture_Ecom flower --port=5555 --loglevel=info
+    container_name: flower
+
+    environment:
+      - FLOWER_PORT=5555
+    ports:
+      - 5555:5555
+    volumes:
+      - flower_data:/data
+
+    depends_on:
+      - celery
+      - celery-beats
+      - redis
+      - ecommerce-backend
+
+    env_file:
+      - .env
+
+
+
+  redis:
+    image: redis:8.0-rc1-alpine
+
+volumes:
+  postgres_data:
+  redis:
+  celery:
+  flower_data:

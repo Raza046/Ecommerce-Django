@@ -10,6 +10,8 @@ from django.template.loader import render_to_string
 from django.utils.html import strip_tags
 from django.conf import settings
 
+from UserAccount.emails import send_welcome_email
+
 
 class Users(models.Model):
 
@@ -36,22 +38,13 @@ class Users(models.Model):
     def __str__(self):
         return self.full_name
 
-    @property
-    def total_orders(self):
-        return Orders.models.Order.objects.filter(customer=self).count()
-
 
 @receiver(post_save, sender=Users)
-def RegistrationEmail(sender, instance, created=True, **kwargs):
+def registration_email(sender, instance, created=True, **kwargs):
     if instance.user:
-        html_message = render_to_string('reg_email.html', {"user":instance.user})
-        # plain_message = strip_tags(html_message)
-        send_mail(
-            "Welcome to Smart Shops","Thankyou for registration...",
-            settings.EMAIL_HOST_USER, [instance.user.email], fail_silently=False,
-            html_message=html_message
-            )
+        send_welcome_email.delay(instance.user.id)
+
 
 @receiver(post_save, sender=Users)
-def CreateCart(sender, instance, created=True, **kwargs):
+def create_cart(sender, instance, created=True, **kwargs):
     Cart.models.Cart.objects.get_or_create(customer=instance)

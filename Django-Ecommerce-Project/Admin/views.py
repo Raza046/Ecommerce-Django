@@ -309,7 +309,7 @@ def UpdateOrder(request):
     order.status=order_status
     order.save()
 
-#    Order.Order_Updation(email_opt, order_id, order_status)
+#    Order.order_updation(email_opt, order_id, order_status)
 
     return HttpResponse('Updated Successfully')
 

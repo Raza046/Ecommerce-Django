@@ -2,6 +2,7 @@ import ast
 import datetime
 import json
 
+from Orders.emails import send_order_confirmation_email
 import stripe
 from django.conf import settings
 from django.core.mail import send_mail
@@ -82,10 +83,6 @@ class PlaceOrderView(OrderMixin, View):
     def post(self, request, *args, **kwargs):
         order_form = OrderForm(self.request.session['form_data'])
         order = self.PlaceOrder(order_form, self.cart, self.cart.Total_Price)
-        html_message = render_to_string('email/email.html', {
-        "cart":self.cart_items, "discount":getattr(self.cart.coupon, 'discount', 0),
-        "order":order, "total_amount":order.total
-        })
 
         # checking if the coupon is applied in order. Then decrement the usage.
         if self.cart.coupon:
@@ -93,12 +90,7 @@ class PlaceOrderView(OrderMixin, View):
             self.cart.coupon.save(update_fields=['usage'])
             self.cart.coupon = None
             self.cart.save(update_fields=['coupon'])
-
-        send_mail(
-        "Order from Smart Shops","Thankyou for your order...", settings.EMAIL_HOST_USER,
-        [self.user.user.email], fail_silently=False, html_message=html_message
-        )
-
+        send_order_confirmation_email.delay(self.user.id, order.id)
         return redirect("thankyou", order.id)
 
 

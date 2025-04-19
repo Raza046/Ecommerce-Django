@@ -50,13 +50,13 @@
       <div class="row">
         <div class="col-md-6">
             <div class="left-column">
-                <img data-image="black" id="ColorImage" src="/{{p.Image_main}}" alt="">
+                <img data-image="black" id="ColorImage" src="/{{product.Image_main}}" alt="">
 
                 <!-- Carousel wrapper -->
                     <div id="carouselExampleIndicators" class="carousel slide carousel-fade" data-mdb-ride="carousel">
                         <div class="row" style="margin-top:0px;">
                             <!-- <button onclick="slideRight(this);"><i class="fa fa-angle-left" aria-hidden="true"></i></button> -->
-                        {% for i in P_Img.all %}
+                        {% for i in product_images.all %}
                             <span style="width:100px;" class="smalImgs" onclick="document.getElementById('ColorImage').src='/{{i.Image}}'">
                                 <img class="d-block w-100" src="/{{i.Image}}" />
                             </span>
@@ -79,41 +79,68 @@
                         <div class="product-description">
                           <div class="row">
                             <div class="col-md-3">
-                              <span>{{p.subcategory}}</span>
+                              <span>{{product.subcategory}}</span>
                             </div>
-                            {% if not p.availability %}
+                            {% if not product.availability %}
                             <div class="col-md-3 offset-6">
                               <span><img src="{% static 'sold-out.png' %}" height="70px"></span>
                             </div>
                             {% endif %}
                           </div>
                         
-                          <h2 style="font-family:bold">{{p.Name}}</h2>
-                        <h4 style="font-family:bold" id="p_price">${{p.Price}}</h4>
+                          <h2 style="font-family:bold">{{product.Name}}</h2>
+                        <h4 style="font-family:bold" id="p_price">${{product.Price}}</h4>
 
-                        <p>{{p.Description}}</p>
+                        <p>{{product.Description}}</p>
                         </div>
 
                           <!-- Product Configuration -->
                           <div class="product-configuration">
 
-                            {% for variation in p.variations.all %}
+                            {% for variation in product.variations.all %}
                               <span>{{ variation.name }}:</span>
 
                               <div id="variation_{{ variation.id }}">
-                                {% for variation_value in variation.value.all %}
-                                  <input 
-                                    type="radio" 
-                                    class="btn-check" 
+
+                                {% for product_variant in prod_variants.all %}
+
+                                    {% for variation_value in product_variant.variation.all %}
+
+                                      {% if variation_value.variation.name == variation.name %}
+
+                                          <input 
+                                          type="radio"
+                                          class="btn-check"
+                                          name="variation_{{ variation.id }}"
+                                          id="var_{{ variation_value.id }}"
+                                          value="{{ variation_value.id }}"
+                                          required
+                                        />
+                                        <label class="btn btn-light" for="var_{{ variation_value.id }}">
+                                          {{ variation_value.value }}
+                                        </label>
+  
+
+                                      {% endif %}
+
+                                    {% endfor %}
+                                {% endfor %}
+
+
+                              {% comment %} {% for variation_value in variation.value.all %}
+
+                                <input 
+                                    type="radio"
+                                    class="btn-check"
                                     name="variation_{{ variation.id }}"
-                                    id="var_{{ variation_value.id }}" 
-                                    value="{{ variation_value.id }}" 
+                                    id="var_{{ variation_value.id }}"
+                                    value="{{ variation_value.id }}"
                                     required
                                   />
                                   <label class="btn btn-light" for="var_{{ variation_value.id }}">
                                     {{ variation_value.value }}
                                   </label>
-                                {% endfor %}
+                              {% endfor %} {% endcomment %}
                               </div>
                               <br>
                             {% endfor %}
@@ -150,7 +177,7 @@
                         <button type="button" class="btn btn-light px-3 ms-2" onclick="this.parentNode.querySelector('input[type=number]').stepUp()">+</button>
                       </div>
 
-                  {% if not p.availability %}
+                  {% if not product.availability %}
                     <button id="SubmitCart" disabled style="background-color:#192552;color:white;height:50px;" class="btn btn-block" type="submit">
                             <b><i class="fa fa-shopping-cart" aria-hidden="true" style="margin-right:10px"></i>
                             Add to cart</b>
@@ -204,7 +231,7 @@
         role="tabpanel"
         aria-labelledby="ex2-tab-1"
         >
-        {{p.Description}}
+        {{product.Description}}
         </div>
         <div
         class="tab-pane fade"
@@ -257,7 +284,7 @@
         </div>
         <br>
 
-        <form action="{% url 'submit_review' p.id %}" method="post">
+        <form action="{% url 'submit_review' product.id %}" method="post">
 
           {% csrf_token %}
 
@@ -445,7 +472,7 @@
 
     let img_val = a.toString()
 
-    {% for i in P_Img.all %}
+    {% for i in product_images.all %}
 
     if("{{i.product_variation.id}}" == img_val){
         document.getElementById("ColorImage").src="/{{i.Image}}";
@@ -465,15 +492,15 @@
             document.getElementById("sizes_var").innerHTML=""
 
             {% for p in p_vars.all %}
-                // console.log("{{p.id}}");
-                if("{{p.color}}".toUpperCase() == options.toUpperCase()){
+                // console.log("{{product.id}}");
+                if("{{product.color}}".toUpperCase() == options.toUpperCase()){
 
-                    {% for pv in p.variation.all %}
+                    {% for pv in product.variation.all %}
 
                         if("{{pv.variation.name}}".toUpperCase() == "SIZE"){
                         console.log("{{pv}}");
 
-                        document.getElementById("sizes_var").innerHTML += '<input type="radio" onclick="ChangePrice({{p.price}})" class="btn-check" value="{{p.id}}" name="item_id" id="{{pv.id}}" autocomplete="off" required />'+
+                        document.getElementById("sizes_var").innerHTML += '<input type="radio" onclick="ChangePrice({{product.price}})" class="btn-check" value="{{product.id}}" name="item_id" id="{{pv.id}}" autocomplete="off" required />'+
                         '<label class="btn btn-light" style="margin:3px" for="{{pv.id}}">{{pv}}</label>'
                     }
 

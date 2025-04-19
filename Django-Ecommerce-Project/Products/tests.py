@@ -48,8 +48,8 @@ class ProductTest(TestCase):
 
     def test_product_list_view(self):
 
-        response_cat = self.client.get("/AllProducts/cat/1/1")
-        response_subcat = self.client.get("/AllProducts/cat/1/1")
+        response_cat = self.client.get("/products/cat/1/1")
+        response_subcat = self.client.get("/products/cat/1/1")
 
         products = Product.objects.all()
 
@@ -62,6 +62,6 @@ class ProductTest(TestCase):
         self.assertEqual(response_cat.status_code, 200)
         self.assertEqual(response_cat.context['p_var'].first(), self.product_variation)
         self.assertQuerysetEqual(response_cat.context['products'], products)
-        self.assertTemplateUsed(response_cat, "Products_AllProducts.html")
+        self.assertTemplateUsed(response_cat, "product/products_list.html")
         self.assertEqual(response_cat.status_code, 200)
 
