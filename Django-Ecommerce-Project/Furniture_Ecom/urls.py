@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, re_path
+from django.urls import include, path, re_path
 from Home import views as home_views
 from Products import views as prod_views
 from Cart import views as cart_views
@@ -26,6 +26,10 @@ from Admin import views as admin_views
 urlpatterns = [
     # path('__debug__/', include('debug_toolbar.urls')),
     path('admin/', admin.site.urls),
+    # Django health check view
+    path('', include('django_prometheus.urls')),
+
+
     path('user_admin/', admin.site.urls),
     path('home', home_views.HomePageView.as_view(), name="home"),
     path('products/<str:search>/<str:id>/<str:pg_num>', prod_views.ViewProducts.as_view(), name="product-list"),

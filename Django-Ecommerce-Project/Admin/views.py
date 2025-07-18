@@ -307,7 +307,7 @@ def UpdateOrder(request):
 
     order = Order.objects.filter(id=order_id).first()
     order.status=order_status
-    order.save()
+    order.save(update_fields=["status"])
 
 #    Order.order_updation(email_opt, order_id, order_status)
 
@@ -384,7 +384,7 @@ def EditProfile(request):
     user = User.objects.filter(id=request.user.id).first()
     user.username=username
     user.set_password(password)
-    user.save()
+    user.save(update_fields=["username", "password"])
 
     return render(request,"setting/settings_page.html")
 
@@ -412,7 +412,7 @@ def EditVariation(request, id):
 
     variation = Variation.objects.filter(id=id).first()
     variation.name=variantion_name
-    variation.save()
+    variation.save(update_fields=["name"])
 
     VariationValue.objects.get_or_create(
         value=variantion_value, variation = variation

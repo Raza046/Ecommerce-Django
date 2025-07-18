@@ -52,10 +52,12 @@ INSTALLED_APPS = [
     'colorfield',
     'django_redis',
     'celery',
-    'django_celery_beat'
+    'django_celery_beat',
+    'django_prometheus'
 ]
 
 MIDDLEWARE = [
+    'django_prometheus.middleware.PrometheusBeforeMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -65,7 +67,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     # 'debug_toolbar.middleware.DebugToolbarMiddleware',
-    "middleware.SimpleMiddleware",
+    'django_prometheus.middleware.PrometheusAfterMiddleware',
+#    "middleware.SimpleMiddleware",
 ]
 
 ROOT_URLCONF = 'Furniture_Ecom.urls'

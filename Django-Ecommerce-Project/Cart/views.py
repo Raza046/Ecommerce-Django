@@ -52,7 +52,7 @@ class CartView(CreateView, CartMixin):
             if cart_item:
                 cart_item.quantity += quantity
                 cart_item.price += cart_item_price
-                cart_item.save()
+                cart_item.save(update_fields=["quantity", "price"])
             else:
                 CartItem.objects.create(
                     product_variant=prod_variant, quantity=quantity, cart=self.cart, price=cart_item_price
