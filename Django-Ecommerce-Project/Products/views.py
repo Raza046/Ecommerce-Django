@@ -1,13 +1,10 @@
 from typing import Any, Dict
-from django.forms.models import BaseModelForm
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 
 from Cart.forms import CartItemsForm
 from Products.forms import ReviewForm
 from .models import *
-from django.http import HttpRequest, HttpResponse
-from django.core.paginator import Paginator
 from django.views.generic import ListView, CreateView, DetailView, FormView
 
 

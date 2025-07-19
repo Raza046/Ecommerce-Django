@@ -57,7 +57,7 @@ class Order(models.Model):
     delivery_option = models.CharField(
         max_length=3, choices=DeliveryOptions.choices, default=DeliveryOptions.CASH_ON_DELIVERY
         )
-    delivery_date = models.DateField(auto_now = True)
+    delivery_date = models.DateField(null=True)
     status = models.CharField(max_length=100, choices=Status.choices, default=Status.CREATED)
     admin_note = models.CharField(blank=True, max_length=100)
     create_at = models.DateField(auto_now_add=True)
