@@ -209,7 +209,6 @@ class CreateProductVariantView(CreateView):
         form = self.get_form()
 
         variation_values = []  # store VariationValue instances here
-
         for item in request.POST:
             if item.startswith("variation_"):
                 variation_id = item.split("variation_")[1]

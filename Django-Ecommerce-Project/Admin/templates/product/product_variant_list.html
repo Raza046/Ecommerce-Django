@@ -59,7 +59,7 @@
         </div>
         <div class="modal-body">Add Product Variation: <br><br><br>
 
-          <form action="/products/{{ product.id }}/variants/create" method="POST">
+          <form action="/product/{{ product.id }}/variants/create" method="POST">
             {% csrf_token %}
 
             <label for="formFileMultiple" class="form-label">Upload Images For Product:</label>
