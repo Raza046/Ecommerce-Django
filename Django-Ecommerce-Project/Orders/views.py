@@ -42,7 +42,9 @@ class OrderMixin(View):
             print(form.errors)
 
 class OrderDetailView(OrderMixin, TemplateView):
-
+    """
+    This view will return Order details to the customer.
+    """
     template_name = "order/view_order.html"
 
     def get_context_data(self, **kwargs):
@@ -54,6 +56,9 @@ class OrderDetailView(OrderMixin, TemplateView):
 
 
 class CheckoutPaymentView(OrderDetailView, FormView):
+    """
+    This view will return Order details to the customer.
+    """
 
     form_class = OrderForm
     template_name = "payment/payment_page.html"
