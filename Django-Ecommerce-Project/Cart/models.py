@@ -18,7 +18,7 @@ class CartItem(models.Model):
 class Cart(models.Model):
 
     customer = models.ForeignKey(Users, related_name="customer_cart", on_delete=models.CASCADE, null=True)
-    Total_Price = models.IntegerField(default=0)
+    total_price = models.IntegerField(default=0)
     coupon = models.ForeignKey("Coupon", verbose_name=("cart_coupon"), on_delete=models.CASCADE, null=True, blank=True)
 
     class Meta:

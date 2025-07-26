@@ -86,7 +86,7 @@ class Order(models.Model):
 @receiver(post_save, sender=Order)
 def clear_cart(sender, instance, created=True, **kwargs):
 
-    instance.cart.Total_Price = 0
+    instance.cart.total_price = 0
     instance.cart.save()
 
     for item in instance.cart.cart_items.all():

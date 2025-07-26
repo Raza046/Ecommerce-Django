@@ -90,7 +90,7 @@ def clear_inactive_cart_after_a_week(cart_id) -> bool:
 def clear_inactive_cart(cart_id):
 
     cart = Cart.objects.get(id=cart_id)
-    cart.Total_Price = 0
-    cart.save(update_fields=["Total_Price"])
+    cart.total_price = 0
+    cart.save(update_fields=["total_price"])
     cart.cart_items.all().delete()
 
