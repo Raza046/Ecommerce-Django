@@ -58,7 +58,7 @@ class CartView(CreateView, CartMixin):
                     product_variant=prod_variant, quantity=quantity, cart=self.cart, price=cart_item_price
                 )
 
-            self.cart.Total_Price = self.cart.Total_Price + cart_item_price
+            self.cart.total_price = self.cart.total_price + cart_item_price
             self.cart.save()
 
             clear_inactive_cart_after_a_week(self.cart.id)
@@ -72,7 +72,7 @@ class CartView(CreateView, CartMixin):
         item_id = self.request.GET.get('item_id')
         cart_item = get_object_or_404(CartItem, id=item_id)
         Cart.objects.filter(customer=self.user).update(
-            Total_Price = F('Total_Price') - cart_item.price
+            total_price = F('total_price') - cart_item.price
             )
         cart_item.delete()
         return HttpResponse('Removed From Cart Successfully..!')
@@ -96,13 +96,13 @@ class CartUpdateView(CartMixin):
                     price = product_price * (F('quantity') + 1),
                     quantity = F('quantity') + 1
                 )
-                self.cart.Total_Price = self.cart.Total_Price + product_price
+                self.cart.total_price = self.cart.total_price + product_price
 
             elif action == form.ActionTypes.DECREMENT and quantity >= 1:
                 cart_item.update(
                     price = product_price * (cart_item.first().quantity - 1),
                     quantity = F('quantity') - 1)
-                self.cart.Total_Price = self.cart.Total_Price - product_price
+                self.cart.total_price = self.cart.total_price - product_price
 
             self.cart.save()
             return HttpResponse('Updated Successfully')

@@ -21,7 +21,7 @@ class Users(models.Model):
         ('Rider', 'Rider'),
     )
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name="user")
     user_type = models.CharField(max_length = 100, choices=USER_TYPE, null=True, blank=True)
     full_name = models.CharField(max_length = 300)
     picture = models.FileField(upload_to="static")

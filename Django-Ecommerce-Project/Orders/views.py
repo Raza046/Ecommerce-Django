@@ -23,7 +23,7 @@ from .forms import OrderForm
 class OrderMixin(View):
 
     def dispatch(self, request, *args, **kwargs):
-        self.user = Users.objects.get(user=request.user)
+        self.user = request.user.user.first()
         self.cart = self.user.customer_cart.first()
         self.cart_items = self.cart.cart_items.all()
         return super().dispatch(request, *args, **kwargs)
@@ -49,7 +49,7 @@ class OrderDetailView(OrderMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = {
-            "cart":self.cart_items,"total_price":self.cart.Total_Price,
+            "cart":self.cart_items,"total_price":self.cart.total_price,
             "coupon_used":self.cart.coupon, "form":OrderForm()
             }
         return context
@@ -77,9 +77,7 @@ class ThankyouView(OrderMixin, TemplateView):
 
     def get_context_data(self, id, **kwargs):
         order = Order.objects.get(id=id)
-        context = {"order":order, "order_item":order.items, "Found":True}
-        if order is None:
-            context['Found'] = False
+        context = {"order":order, "order_item":order.items, "Found": (order is None)}
         return context
 
 
@@ -87,7 +85,7 @@ class PlaceOrderView(OrderMixin, View):
 
     def post(self, request, *args, **kwargs):
         order_form = OrderForm(self.request.session['form_data'])
-        order = self.PlaceOrder(order_form, self.cart, self.cart.Total_Price)
+        order = self.PlaceOrder(order_form, self.cart, self.cart.total_price)
 
         # checking if the coupon is applied in order. Then decrement the usage.
         if self.cart.coupon:
@@ -157,7 +155,7 @@ class OnlinePayment(OrderMixin, View):
                 mode='payment',
                 metadata = {
                     "order": str(self.request.session['form_data']),
-                    "order_total": self.cart.Total_Price,
+                    "order_total": self.cart.total_price,
                     "request_session":self.request,
                     "cart_id":self.cart.id
                 },
