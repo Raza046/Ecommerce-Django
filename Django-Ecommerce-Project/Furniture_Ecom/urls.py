@@ -29,6 +29,14 @@ urlpatterns = [
     # Django health check view
     path('', include('django_prometheus.urls')),
 
+    # path('admin-panel', include('Admin.urls')),
+    # path('order', include('Orders.urls')),
+    # path('product', include('Products.urls')),
+    # path('user', include('UserAccount.urls')),
+    # path('cart', include('Cart.urls')),
+
+
+
 
     path('user_admin/', admin.site.urls),
     path('home', home_views.HomePageView.as_view(), name="home"),
@@ -53,7 +61,7 @@ urlpatterns = [
     path('register', user_views.RegistrationView.as_view(), name="register"),
     path('Logout', user_views.Logout, name="Logout"),
     path('contact', home_views.ContactPage, name="contact"),
-    path('UserAccount', user_views.UserAccount, name="UserAccount"),
+    path('UserAccount', user_views.UserAccountView.as_view(), name="UserAccount"),
     path('coupon/apply', order_views.ApplyCoupon.as_view(), name="apply-coupon"),
     path('coupon/remove', order_views.RemoveCoupon.as_view(), name="remove-coupon"),
     path('onlinepayment', order_views.OnlinePayment.as_view(), name="onlinepayment"),
