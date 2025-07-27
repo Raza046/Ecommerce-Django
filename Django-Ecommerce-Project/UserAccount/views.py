@@ -8,7 +8,7 @@ from UserAccount.forms import LoginForm, RegistrationForm
 from UserAccount.models import Users
 # from django_ratelimit.decorators import ratelimit
 from django.template.response import TemplateResponse
-from django.views.generic import View, FormView
+from django.views.generic import View, FormView, TemplateView
 
 
 def UserAccount(request):
@@ -16,6 +16,13 @@ def UserAccount(request):
     user_acc = Users.objects.get(user=request.user)
     context = {"user":user_acc}
     return render(request,"user-acount.html",context)
+
+class UserAccountView(TemplateView):
+
+    template_name = "user-register.html"
+    form_class = RegistrationForm
+    success_url = "login"
+
 
 class RegistrationView(FormView):
 

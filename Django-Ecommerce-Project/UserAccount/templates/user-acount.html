@@ -17,27 +17,27 @@
                                 <tbody>
                                     <tr>
                                         <th class="first_item">My Name :</th>
-                                        <td>{{user.full_name|capfirst}}</td>
+                                        <td>{{request.user.user.full_name|capfirst}}</td>
                                     </tr>
                                     <tr>
                                         <th class="first_item">Username :</th>
-                                        <td>{{user.user.username}}</td>
+                                        <td>{{request.user.username}}</td>
                                     </tr>
                                     <tr>
                                         <th class="first_item">City :</th>
-                                        <td>{{user.city}}</td>
+                                        <td>{{request.user.user.city}}</td>
                                     </tr>
                                     <tr>
                                         <th class="first_item">Postal/Zip Code :</th>
-                                        <td>{{user.zip_code}}</td>
+                                        <td>{{request.user.user.zip_code}}</td>
                                     </tr>
                                     <tr>
                                         <th class="first_item">Phone :</th>
-                                        <td>{{user.phone}}</td>
+                                        <td>{{request.user.user.phone}}</td>
                                     </tr>
                                     <tr>
                                         <th class="first_item">Country:</th>
-                                        <td>{{user.phone}}</td>
+                                        <td>{{request.user.user.country}}</td>
                                     </tr>
                                 </tbody>
                             </table>
