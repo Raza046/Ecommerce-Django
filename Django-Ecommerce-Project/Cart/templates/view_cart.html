@@ -563,7 +563,7 @@ formdata.append("csrfmiddlewaretoken", "{{ csrf_token }}");
 
   $.ajax({
         method: "POST",
-        url: '/update_cart',
+        url: '/cart/update_cart',
         processData: false,
         contentType: false,
         mimeType: "multipart/form-data",

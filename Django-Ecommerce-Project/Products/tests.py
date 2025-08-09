@@ -31,7 +31,7 @@ class ProductTest(TestCase):
         data = { "name":"Test1", "email":"test@gmail.com", "comment":"Very Nice Dude",
                 "users":self.user }
 
-        response = self.client.post('/submit_review/1', data = data)
+        response = self.client.post('/product/submit_review/1', data = data)
         reviews = Reviews.objects.first()
 
         self.assertEqual(reviews, self.review)

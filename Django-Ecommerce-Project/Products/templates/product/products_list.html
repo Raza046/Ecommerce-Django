@@ -471,13 +471,13 @@ to{
                                                         <i class="zmdi zmdi-plus"></i>
                                                     </span>
 
-                                                    <a class="cateItem" href="{% url 'products' 'cat' category.id '1' %}" style="font-family:bold"><b>{{category.name}}</b></a>
+                                                    <a class="cateItem" href="{% url 'product' 'cat' category.id '1' %}" style="font-family:bold"><b>{{category.name}}</b></a>
                                                     <div class="subCategory collapse" id="{{category.name|cut:' '}}" aria-expanded="true" role="status">
 
                                                     {% for subcategory in subcat %}
                                                       {% if subcategory.category.id == category.id %}
                                                         <div class="cateTitle">
-                                                            <a href="{% url 'products' 'subcat' subcategory.id '1' %}" class="cateItem">{{subcategory.name}}</a>
+                                                            <a href="{% url 'product' 'subcat' subcategory.id '1' %}" class="cateItem">{{subcategory.name}}</a>
                                                         </div>
                                                       {% endif %}
                                                     {% endfor %}

@@ -34,5 +34,5 @@ class HomePageTest(TestCase):
 
     def test_contact_page(self):
 
-        response = self.client.get("/contact")
+        response = self.client.get("/home/contact")
         self.assertEqual(response.status_code, 200)
