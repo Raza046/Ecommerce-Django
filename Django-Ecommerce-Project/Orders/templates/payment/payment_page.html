@@ -516,7 +516,7 @@ function RemoveCoupon(user_id){
 
     $.ajax({
             'async': false,
-            url: '/coupon/remove',
+            url: '/order/coupon/remove',
             data : {
                 'coupon_code': code,
             },
@@ -555,7 +555,7 @@ function CouponApply(user_id){
 
     $.ajax({
             'async': false,
-            url: '/coupon/apply',
+            url: '/order/coupon/apply',
             data : {
                 'user_id': user_id,
                 'coupon_code': code,

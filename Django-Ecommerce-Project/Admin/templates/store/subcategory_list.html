@@ -124,7 +124,7 @@
                             <a href="#"><img src="{% static 'edit.png' %}" height="20px" alt=""></a>
                             <a href="{% url 'delete_subcat' sub.id %}"><img src="{% static 'trash.png' %}" style="margin-left:1vw" height="20px" alt=""></a>
                           </td>
-                          <td><a href="{% url 'products' sub.id %}"><button class="btn btn-primary">View</button></a></td>
+                          <td><a href="{% url 'product' sub.id %}"><button class="btn btn-primary">View</button></a></td>
                       </tr>
                   {% endfor %}
               </tbody>

@@ -19,7 +19,7 @@ def UserAccount(request):
 
 class UserAccountView(TemplateView):
 
-    template_name = "user-register.html"
+    template_name = "user-acount.html"
     form_class = RegistrationForm
     success_url = "login"
 
